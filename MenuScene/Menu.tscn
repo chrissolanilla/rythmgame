@@ -1,0 +1,81 @@
+[gd_scene load_steps=2 format=3 uid="uid://c2kbthwlyples"]
+
+[ext_resource type="Script" path="res://MenuScene/menu.gd" id="1_j1mvo"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_j1mvo")
+
+[node name="BoxContainer" type="BoxContainer" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -370.0
+offset_top = -183.0
+offset_right = 342.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 55
+text = "Edit Arrow Size"
+
+[node name="Button2" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -366.0
+offset_top = 91.0
+offset_right = 346.0
+offset_bottom = 238.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 55
+text = "Play Game"
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = -475.0
+offset_top = -298.0
+offset_right = 481.0
+offset_bottom = 266.0
+
+[node name="TextEdit" type="TextEdit" parent="Panel"]
+layout_mode = 0
+offset_left = 389.0
+offset_top = 53.0
+offset_right = 456.0
+offset_bottom = 100.0
+placeholder_text = "1.0"
+
+[node name="Button" type="Button" parent="Panel"]
+layout_mode = 0
+offset_left = 685.0
+offset_top = 32.0
+offset_right = 846.0
+offset_bottom = 107.0
+text = "Close"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Button2" to="." method="_on_button_2_pressed"]
+[connection signal="text_changed" from="Panel/TextEdit" to="." method="_on_text_edit_text_changed"]
+[connection signal="pressed" from="Panel/Button" to="." method="_on_hide_button_pressed"]

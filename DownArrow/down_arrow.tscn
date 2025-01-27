@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://lhi5y6mg4a2c"]
+
+[ext_resource type="PackedScene" uid="uid://q8v6jpnyw41" path="res://BaseArrow/arrow.tscn" id="1_fpi7h"]
+[ext_resource type="Script" path="res://DownArrow/down_arrow.gd" id="2_m4bre"]
+
+[node name="DownArrow" instance=ExtResource("1_fpi7h")]
+rotation = 3.14159
+script = ExtResource("2_m4bre")
+
+[node name="Polygon2D" parent="." index="1"]
+color = Color(0.901961, 0.4, 0, 1)
