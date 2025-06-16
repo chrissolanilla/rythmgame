@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bk374ib8x1sq4"]
+[gd_scene load_steps=6 format=3 uid="uid://bk374ib8x1sq4"]
 
 [ext_resource type="PackedScene" uid="uid://lhi5y6mg4a2c" path="res://DownArrow/down_arrow.tscn" id="1_0eyy2"]
 [ext_resource type="PackedScene" uid="uid://vmniglm0734s" path="res://LeftArrow/left_arrow.tscn" id="1_gox45"]
 [ext_resource type="PackedScene" uid="uid://24kddq1nwywr" path="res://RightArrow/right_arrow.tscn" id="3_c4c6w"]
 [ext_resource type="PackedScene" uid="uid://4trfkm441e3q" path="res://UpArrow/up_arrow.tscn" id="4_vjsbt"]
+[ext_resource type="PackedScene" uid="uid://cphe3rckx1m5q" path="res://Superman/superman.tscn" id="5_eravw"]
 
 [node name="Game" type="Node2D"]
 
@@ -18,3 +19,6 @@ position = Vector2(930, 169)
 
 [node name="UpArrow" parent="." instance=ExtResource("4_vjsbt")]
 position = Vector2(681, 159)
+
+[node name="Superman" parent="." instance=ExtResource("5_eravw")]
+position = Vector2(137, 463)

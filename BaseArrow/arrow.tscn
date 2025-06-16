@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://q8v6jpnyw41"]
 
-[ext_resource type="Shader" path="res://BaseArrow/fill.gdshader" id="1_4ywnc"]
-[ext_resource type="Script" path="res://BaseArrow/size.gd" id="1_a5iq3"]
+[ext_resource type="Shader" uid="uid://1xivjfqqfo2o" path="res://BaseArrow/fill.gdshader" id="1_4ywnc"]
+[ext_resource type="Script" uid="uid://ei3f6r0sr6d7" path="res://BaseArrow/size.gd" id="1_a5iq3"]
 [ext_resource type="Texture2D" uid="uid://b3i3tb8jb4scm" path="res://BaseArrow/croppedArrow.png" id="2_qyxdl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yxpkn"]

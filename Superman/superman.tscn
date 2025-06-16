@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://cphe3rckx1m5q"]
+
+[ext_resource type="Script" uid="uid://cc5snyx5oapib" path="res://Superman/superman.gd" id="1_2w43m"]
+[ext_resource type="Texture2D" uid="uid://bmi2n2i61f64j" path="res://Superman/test.png" id="1_rwfdp"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_egih0"]
+radius = 142.77
+height = 479.36
+
+[node name="Superman" type="CharacterBody2D"]
+script = ExtResource("1_2w43m")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-6, -24)
+shape = SubResource("CapsuleShape2D_egih0")
+
+[node name="Test" type="Sprite2D" parent="."]
+position = Vector2(18, -78)
+texture = ExtResource("1_rwfdp")

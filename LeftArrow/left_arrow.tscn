@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://vmniglm0734s"]
 
 [ext_resource type="PackedScene" uid="uid://q8v6jpnyw41" path="res://BaseArrow/arrow.tscn" id="1_cd3cu"]
-[ext_resource type="Script" path="res://LeftArrow/left_arrow.gd" id="2_4skfg"]
+[ext_resource type="Script" uid="uid://d0ul0a7jx4ofm" path="res://LeftArrow/left_arrow.gd" id="2_4skfg"]
 
 [node name="LeftArrow" instance=ExtResource("1_cd3cu")]
 rotation = -1.5708
