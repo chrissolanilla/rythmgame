@@ -1,0 +1,36 @@
+[gd_scene load_steps=2 format=3 uid="uid://d2y0c2bk4txkk"]
+
+[ext_resource type="Script" uid="uid://bpew8jq6tq0ea" path="res://Victory.gd" id="1_bybqu"]
+
+[node name="Victory" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_bybqu")
+
+[node name="TextEdit" type="TextEdit" parent="."]
+layout_mode = 0
+offset_left = 184.0
+offset_top = 190.0
+offset_right = 955.0
+offset_bottom = 436.0
+theme_override_font_sizes/font_size = 91
+text = "GAME CLEAR!!!"
+
+[node name="playAgain" type="Button" parent="."]
+layout_mode = 0
+offset_left = 91.0
+offset_top = 499.0
+offset_right = 375.0
+offset_bottom = 603.0
+text = "Play again"
+
+[node name="mainMenu" type="Button" parent="."]
+layout_mode = 0
+offset_left = 780.0
+offset_top = 493.0
+offset_right = 1064.0
+offset_bottom = 597.0
+text = "Main Menu"
+
+[connection signal="pressed" from="playAgain" to="." method="_on_play_again_pressed"]
+[connection signal="pressed" from="mainMenu" to="." method="_on_main_menu_pressed"]

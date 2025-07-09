@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bk374ib8x1sq4"]
+[gd_scene load_steps=11 format=3 uid="uid://bk374ib8x1sq4"]
 
 [ext_resource type="PackedScene" uid="uid://lhi5y6mg4a2c" path="res://DownArrow/down_arrow.tscn" id="1_0eyy2"]
 [ext_resource type="Script" uid="uid://cuywlyticl7bt" path="res://ClassicFour/game.gd" id="1_2gnyf"]
@@ -10,7 +10,6 @@
 [ext_resource type="Script" uid="uid://c5lpv6r38lqo8" path="res://DownRight/DownRight.gd" id="7_xxp3w"]
 [ext_resource type="Script" uid="uid://c7uggyweqivhu" path="res://DownLeft/DownLeft.gd" id="8_2gnyf"]
 [ext_resource type="PackedScene" uid="uid://dt4htqpir74id" path="res://middleNote/middleNote.tscn" id="10_2gnyf"]
-[ext_resource type="PackedScene" uid="uid://bma1i81i6xsn2" path="res://ClassicFour/map1.tscn" id="11_qytyx"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_2gnyf")
@@ -18,47 +17,52 @@ script = ExtResource("1_2gnyf")
 [node name="UpArrow" parent="." instance=ExtResource("4_vjsbt")]
 position = Vector2(1274, 417)
 scale = Vector2(0.2, 0.2)
+press_delay = 0.1
 
 [node name="DownArrow" parent="." instance=ExtResource("1_0eyy2")]
 position = Vector2(941, 417)
 scale = Vector2(0.2, 0.2)
+press_delay = 0.1
 
 [node name="LeftArrow" parent="." instance=ExtResource("1_gox45")]
 position = Vector2(690, 417)
 scale = Vector2(0.2, 0.2)
+press_delay = 0.1
 
 [node name="RightArrow" parent="." instance=ExtResource("3_c4c6w")]
 position = Vector2(1510, 417)
 scale = Vector2(0.2, 0.2)
+press_delay = 0.1
 
 [node name="UpRightArrow" parent="." instance=ExtResource("5_hoyt5")]
 position = Vector2(1398, 417)
 scale = Vector2(0.2, 0.2)
+press_delay = 0.1
 
 [node name="UpLeftArrow" parent="." instance=ExtResource("5_hoyt5")]
 position = Vector2(807, 417)
 rotation = -1.5708
 scale = Vector2(0.2, 0.2)
 script = ExtResource("6_yaici")
+press_delay = 0.1
 
 [node name="DownRightArrow" parent="." instance=ExtResource("5_hoyt5")]
 position = Vector2(1608, 417)
 rotation = 1.5708
 scale = Vector2(0.2, 0.2)
 script = ExtResource("7_xxp3w")
+press_delay = 0.1
 
 [node name="DownLeftArrow" parent="." instance=ExtResource("5_hoyt5")]
 position = Vector2(588, 417)
 rotation = 3.14159
 scale = Vector2(0.2, 0.2)
 script = ExtResource("8_2gnyf")
+press_delay = 0.1
 
 [node name="MiddleNote" parent="." instance=ExtResource("10_2gnyf")]
 position = Vector2(1100, 417)
 scale = Vector2(0.1, 0.1)
-
-[node name="Map1" parent="." instance=ExtResource("11_qytyx")]
-position = Vector2(555, 1123)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(1100, 640)

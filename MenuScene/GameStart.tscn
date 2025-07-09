@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://b0ui78rl76bke"]
+[gd_scene load_steps=2 format=3 uid="uid://dwmsagl0eqmnk"]
 
-[ext_resource type="Script" uid="uid://befbuee00lggn" path="res://MenuScene/game_over.gd" id="1_pvetj"]
+[ext_resource type="Script" uid="uid://befbuee00lggn" path="res://MenuScene/Lost.gd" id="1_yhw6k"]
 
 [node name="GameOver" type="Control"]
 layout_mode = 3
@@ -9,7 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_pvetj")
+script = ExtResource("1_yhw6k")
 
 [node name="TextEdit" type="TextEdit" parent="."]
 layout_mode = 0

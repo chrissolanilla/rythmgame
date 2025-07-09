@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://q8v6jpnyw41"]
 
 [ext_resource type="Shader" uid="uid://1xivjfqqfo2o" path="res://BaseArrow/fill.gdshader" id="1_4ywnc"]
-[ext_resource type="Script" uid="uid://ei3f6r0sr6d7" path="res://BaseArrow/size.gd" id="1_a5iq3"]
+[ext_resource type="Script" uid="uid://ei3f6r0sr6d7" path="res://BaseArrow/baseArrow.gd" id="1_a5iq3"]
 [ext_resource type="Texture2D" uid="uid://b3i3tb8jb4scm" path="res://BaseArrow/croppedArrow.png" id="2_qyxdl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yxpkn"]
@@ -17,3 +17,4 @@ texture = ExtResource("2_qyxdl")
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 polygon = PackedVector2Array(-57, 189, 0, 193, 56, 190, 62, 6, 141, 1, 0, -180, -140, -1, -65, 3)
+uv = PackedVector2Array(-57, 189, 0, 193, 56, 190, 62, 6, 141, 1, 0, -180, -140, -1, -65, 3)

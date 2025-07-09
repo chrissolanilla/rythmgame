@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://dt4htqpir74id"]
+
+[ext_resource type="Script" uid="uid://cm1ld1pbxplnf" path="res://middleNote/middle_note.gd" id="1_ya3rj"]
+[ext_resource type="Texture2D" uid="uid://b8q3alg1a4l37" path="res://middleNote/circle.png" id="2_8gs82"]
+
+[node name="MiddleNote" type="Node2D"]
+script = ExtResource("1_ya3rj")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_8gs82")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-51, -509, 253, -411, 361, -312, 450, -89, 424, 153, 298, 332, 56, 431, -150, 413, -320, 314, -445, 117, -454, -124, -356, -312, -212, -429)

@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0ui78rl76bke"]
+
+[ext_resource type="Script" uid="uid://befbuee00lggn" path="res://MenuScene/Lost.gd" id="1_upmsx"]
+
+[node name="GameOver" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_upmsx")
+
+[node name="TextEdit" type="TextEdit" parent="."]
+layout_mode = 0
+offset_left = 184.0
+offset_top = 190.0
+offset_right = 955.0
+offset_bottom = 436.0
+theme_override_font_sizes/font_size = 91
+text = "GAME OVER"
+
+[node name="playAgain" type="Button" parent="."]
+layout_mode = 0
+offset_left = 91.0
+offset_top = 499.0
+offset_right = 375.0
+offset_bottom = 603.0
+text = "Play again"
+
+[node name="mainMenu" type="Button" parent="."]
+layout_mode = 0
+offset_left = 780.0
+offset_top = 493.0
+offset_right = 1064.0
+offset_bottom = 597.0
+text = "Main Menu"
+
+[connection signal="pressed" from="playAgain" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="mainMenu" to="." method="_on_main_menu_pressed"]

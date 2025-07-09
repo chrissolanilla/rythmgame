@@ -1,3 +1,3 @@
 extends Node
 
-var arrow_scale: float = 1.0
+var arrow_scale: float = 0.2
