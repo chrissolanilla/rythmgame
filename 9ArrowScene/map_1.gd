@@ -5,6 +5,35 @@ extends Node2D
 @export var chart_path := "res://MapsJson/simple_chart.json"
 @onready var notes_layer := $NotesLayer
 @onready var music := $"../AudioStreamPlayer"
+var judgement_label_scene = preload("res://judgementLabel/JudgementLabel.tscn")
+@onready var judgement_layer := $"UI/Judgements"
+
+func show_judgement(text: String, position: Vector2):
+	var label = judgement_label_scene.instantiate()
+	label.text = text
+	label.position = position + Vector2(0, -40)
+
+	# set custom color
+	match text:
+		"Perfect!":
+			label.modulate = Color("34cfeb") # bright blue
+		"Good!":
+			label.modulate = Color("00c92c") # greenish
+		"Bad!":
+			label.modulate = Color("03005c") # dark blue
+		"Miss":
+			label.modulate = Color("ff1900") # red
+
+	judgement_layer.add_child(label)
+
+	if label.has_node("AnimationPlayer"):
+		label.get_node("AnimationPlayer").play("fade_out")
+
+	await get_tree().create_timer(1.0).timeout
+	if label.is_inside_tree():
+		label.queue_free()
+
+
 
 var chart_data = []
 var spawn_index = 0
@@ -63,7 +92,8 @@ func _process(delta):
 		#print("note position y: ", note.position.y)
 		#miss detection
 		if note.note_time < song_time -0.2:
-			print("Miss")
+			print("Miss HERE")
+			show_judgement("Miss", receptor_positions.get(note.direction,note.position))
 			note.queue_free()
 
 func get_lead_time() -> float:
@@ -80,7 +110,11 @@ func spawn_note(note_data: Dictionary):
 	arrow.direction = dir
 	arrow.inputAction = ""  # disables input for scrolling arrows
 	arrow.is_receptor = false
-	arrow.scale = Vector2(0.2, 0.2)
+	if dir == "center":
+		arrow.scale = Vector2(0.1, 0.1) 
+	else:
+		arrow.scale = Vector2(0.2, 0.2)
+
 	arrow.baseColor = get_color_for_direction(dir)
 	arrow.note_time = note_data["time"]  # assign for hit detection
 	notes_layer.add_child(arrow)
@@ -94,7 +128,7 @@ func get_color_for_direction(dir: String) -> Color:
 		"right": return Color("fcf003")
 		"down": return Color("e66600")
 		"up": return Color("e66600")
-		"center": return Color("c671ff")
+		"center", "middleNote": return Color("c671ff")
 		"downLeft", "upRight": return Color("c671ff")
 		_:
 			print("WTFFFF")
@@ -107,6 +141,8 @@ func check_hits(direction: String):
 	var closest_diff = INF
 
 	for note in notes_layer.get_children():
+		if not note is BaseArrow:
+			continue
 		if note.direction != direction:
 			continue
 
@@ -120,12 +156,16 @@ func check_hits(direction: String):
 
 	if closest_diff <= 0.050:
 		print("Perfect!")
+		show_judgement("Perfect!", closest_note.position)
 		closest_note.queue_free()
 	elif closest_diff <= 0.1:
 		print("Good!")
+		show_judgement("Good!", closest_note.position)
 		closest_note.queue_free()
 	elif closest_diff <= 0.2:
 		print("Bad!")
+		show_judgement("Bad!", closest_note.position)
 		closest_note.queue_free()
 	else:
-		print("Too early/late, no hit")
+		print("Miss")
+		show_judgement("Miss", receptor_positions[direction])

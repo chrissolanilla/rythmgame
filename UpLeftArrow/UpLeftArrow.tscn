@@ -4,4 +4,5 @@
 [ext_resource type="Script" uid="uid://nipyyycnctrq" path="res://UpLeftArrow/UpLeft.gd" id="2_iqel6"]
 
 [node name="Arrow" instance=ExtResource("1_b45dn")]
+rotation = -0.959931
 script = ExtResource("2_iqel6")

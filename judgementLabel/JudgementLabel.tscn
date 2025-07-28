@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://8rdvdatfth13"]
+
+[node name="JudgementLabel" type="Label"]
+text = "Perfect!"
+horizontal_alignment = 1
+vertical_alignment = 1

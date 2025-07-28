@@ -6,3 +6,7 @@
 script = ExtResource("1_6jn7u")
 
 [node name="NotesLayer" type="Node2D" parent="."]
+
+[node name="UI" type="Node2D" parent="."]
+
+[node name="Judgements" type="Node2D" parent="UI"]
