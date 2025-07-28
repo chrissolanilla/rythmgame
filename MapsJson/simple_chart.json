@@ -1,0 +1,10 @@
+[
+  { "time": 1.0, "direction": "left" },
+  { "time": 2.0, "direction": "down" },
+  { "time": 3.0, "direction": "up" },
+  { "time": 4.0, "direction": "right" },
+  { "time": 5.0, "direction": "left" },
+  { "time": 6.0, "direction": "down" },
+  { "time": 7.0, "direction": "up" },
+  { "time": 8.0, "direction": "right" }
+]
