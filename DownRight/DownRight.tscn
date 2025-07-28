@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://c5oq1qinxs4dj"]
+
+[ext_resource type="PackedScene" uid="uid://q8v6jpnyw41" path="res://BaseArrow/arrow.tscn" id="1_ixm5i"]
+[ext_resource type="Script" uid="uid://c5lpv6r38lqo8" path="res://DownRight/DownRight.gd" id="2_7w5pe"]
+
+[node name="Arrow" instance=ExtResource("1_ixm5i")]
+script = ExtResource("2_7w5pe")

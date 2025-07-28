@@ -26,10 +26,10 @@ var arrow_scenes = {
 	"down": preload("res://DownArrow/down_arrow.tscn"),
 	"left": preload("res://LeftArrow/left_arrow.tscn"),
 	"right": preload("res://RightArrow/right_arrow.tscn"),
-	"upLeft": preload("res://UpLeftArrow/UpLeft.gd"),
+	"upLeft": preload("res://UpLeftArrow/UpLeftArrow.tscn"),
 	"upRight": preload("res://UpRightArrow/UpRightArrow.tscn"),
-	"downRight": preload("res://DownArrow/down_arrow.tscn"),
-	"downLeft": preload("res://DownLeft/DownLeft.gd"),
+	"downRight": preload("res://DownRight/DownRight.tscn"),
+	"downLeft": preload("res://DownLeft/DownLeft.tscn"),
 	"center": preload("res://middleNote/middleNote.tscn")
 }
 
@@ -70,7 +70,7 @@ func get_lead_time() -> float:
 	return 1.5 # seconds to reach the receptor from spawn point
 
 func spawn_note(note_data: Dictionary):
-	print("note data: ", note_data)
+	#print("note data: ", note_data)
 	var dir = note_data["direction"]
 	var arrow = arrow_scenes[dir].instantiate()
 
@@ -80,12 +80,12 @@ func spawn_note(note_data: Dictionary):
 	arrow.direction = dir
 	arrow.inputAction = ""  # disables input for scrolling arrows
 	arrow.is_receptor = false
-	arrow.scale = Vector2(0.1, 0.1)
+	arrow.scale = Vector2(0.2, 0.2)
 	arrow.baseColor = get_color_for_direction(dir)
 	arrow.note_time = note_data["time"]  # assign for hit detection
 	notes_layer.add_child(arrow)
 	
-	print("Final spawn position:", arrow.position)
+	#print("Final spawn position:", arrow.position)
 
 func get_color_for_direction(dir: String) -> Color:
 	match dir:

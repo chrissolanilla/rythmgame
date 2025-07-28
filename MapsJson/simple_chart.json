@@ -1,10 +1,178 @@
 [
-  { "time": 1.0, "direction": "left" },
-  { "time": 2.0, "direction": "down" },
-  { "time": 3.0, "direction": "up" },
-  { "time": 4.0, "direction": "right" },
-  { "time": 5.0, "direction": "left" },
-  { "time": 6.0, "direction": "down" },
-  { "time": 7.0, "direction": "up" },
-  { "time": 8.0, "direction": "right" }
+	{
+		"direction": "right",
+		"time": 2.698
+	},
+	{
+		"direction": "left",
+		"time": 2.795
+	},
+	{
+		"direction": "right",
+		"time": 2.892
+	},
+	{
+		"direction": "left",
+		"time": 2.976
+	},
+	{
+		"direction": "right",
+		"time": 3.085
+	},
+	{
+		"direction": "left",
+		"time": 3.485
+	},
+	{
+		"direction": "right",
+		"time": 3.952
+	},
+	{
+		"direction": "right",
+		"time": 4.401
+	},
+	{
+		"direction": "right",
+		"time": 4.613
+	},
+	{
+		"direction": "right",
+		"time": 4.831
+	},
+	{
+		"direction": "right",
+		"time": 5.28
+	},
+	{
+		"direction": "right",
+		"time": 5.71
+	},
+	{
+		"direction": "left",
+		"time": 6.182
+	},
+	{
+		"direction": "right",
+		"time": 6.279
+	},
+	{
+		"direction": "left",
+		"time": 6.383
+	},
+	{
+		"direction": "right",
+		"time": 6.486
+	},
+	{
+		"direction": "left",
+		"time": 6.576
+	},
+	{
+		"direction": "right",
+		"time": 6.97
+	},
+	{
+		"direction": "left",
+		"time": 7.395
+	},
+	{
+		"direction": "right",
+		"time": 7.855
+	},
+	{
+		"direction": "right",
+		"time": 8.08
+	},
+	{
+		"direction": "right",
+		"time": 8.298
+	},
+	{
+		"direction": "left",
+		"time": 8.71
+	},
+	{
+		"direction": "left",
+		"time": 9.183
+	},
+	{
+		"direction": "right",
+		"time": 9.613
+	},
+	{
+		"direction": "left",
+		"time": 9.686
+	},
+	{
+		"direction": "right",
+		"time": 9.819
+	},
+	{
+		"direction": "left",
+		"time": 9.922
+	},
+	{
+		"direction": "right",
+		"time": 10.043
+	},
+	{
+		"direction": "left",
+		"time": 10.449
+	},
+	{
+		"direction": "left",
+		"time": 10.922
+	},
+	{
+		"direction": "right",
+		"time": 11.346
+	},
+	{
+		"direction": "right",
+		"time": 11.564
+	},
+	{
+		"direction": "right",
+		"time": 11.783
+	},
+	{
+		"direction": "right",
+		"time": 12.237
+	},
+	{
+		"direction": "right",
+		"time": 12.649
+	},
+	{
+		"direction": "left",
+		"time": 13.08
+	},
+	{
+		"direction": "right",
+		"time": 13.195
+	},
+	{
+		"direction": "left",
+		"time": 13.304
+	},
+	{
+		"direction": "right",
+		"time": 13.431
+	},
+	{
+		"direction": "left",
+		"time": 13.522
+	},
+	{
+		"direction": "right",
+		"time": 13.934
+	},
+	{
+		"direction": "left",
+		"time": 14.401
+	},
+	{
+		"direction": "left",
+		"time": 14.813
+	}
 ]

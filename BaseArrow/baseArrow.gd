@@ -21,8 +21,8 @@ signal arrow_pressed(direction: String)
 func _ready() -> void:
 	if inputAction == "":
 		inputAction = direction
-		if is_receptor:
-			print("Set inputAction = ", inputAction)
+		#if is_receptor:
+			#print("Set inputAction = ", inputAction)
 
 func _process(delta: float) -> void:
 	if not is_receptor:
