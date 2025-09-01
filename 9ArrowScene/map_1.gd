@@ -88,8 +88,15 @@ func _process(delta):
 		spawn_index += 1
 
 	for note in notes_layer.get_children():
+		print("-------------------------------------------------------------------------------------------")
+		debug_print_properties(note)
 		note.position.y -= scroll_speed * delta
 		#print("note position y: ", note.position.y)
+		
+		#Function for holding note
+		#Check if note is a type hold
+		#Create boolean of if type hold
+		
 		#miss detection
 		if note.note_time < song_time -0.2:
 			print("Miss HERE")
@@ -114,6 +121,14 @@ func spawn_note(note_data: Dictionary):
 		arrow.scale = Vector2(0.1, 0.1) 
 	else:
 		arrow.scale = Vector2(0.2, 0.2)
+		
+	#Hold Note Creation
+	if note_data.has("end_Time"):
+		arrow.is_Hold = true
+		arrow.end_Time = note_data["end_Time"]
+		arrow.note_time = note_data["time"]
+		debug_print_properties(arrow)
+		
 
 	arrow.baseColor = get_color_for_direction(dir)
 	arrow.note_time = note_data["time"]  # assign for hit detection
@@ -169,3 +184,8 @@ func check_hits(direction: String):
 	else:
 		print("Miss")
 		show_judgement("Miss", receptor_positions[direction])
+		
+func debug_print_properties(node: Object) -> void:
+	var props = node.get_property_list()
+	for p in props:
+		print(p.name, " (", p.type, ") = ", node.get(p.name))

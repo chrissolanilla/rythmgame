@@ -9,6 +9,8 @@ var direction: String = ""
 var inputAction: String = ""
 var transitionSpeed: float = 5.0
 var note_time: float
+var is_Hold: bool = false
+var end_Time: float
 
 @export var press_delay: float = 0.1
 var press_timer: float = 0.0
