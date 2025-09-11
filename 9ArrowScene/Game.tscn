@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://bk374ib8x1sq4"]
+[gd_scene load_steps=15 format=3 uid="uid://bk374ib8x1sq4"]
 
 [ext_resource type="PackedScene" uid="uid://lhi5y6mg4a2c" path="res://DownArrow/down_arrow.tscn" id="1_0eyy2"]
 [ext_resource type="PackedScene" uid="uid://vmniglm0734s" path="res://LeftArrow/left_arrow.tscn" id="1_gox45"]
+[ext_resource type="Script" uid="uid://cuywlyticl7bt" path="res://9ArrowScene/game.gd" id="1_sh2q5"]
 [ext_resource type="PackedScene" uid="uid://24kddq1nwywr" path="res://RightArrow/right_arrow.tscn" id="3_c4c6w"]
 [ext_resource type="PackedScene" uid="uid://4trfkm441e3q" path="res://UpArrow/up_arrow.tscn" id="4_vjsbt"]
 [ext_resource type="PackedScene" uid="uid://bfs5xobp27hpq" path="res://UpRightArrow/UpRightArrow.tscn" id="5_hoyt5"]
@@ -12,43 +13,45 @@
 [ext_resource type="PackedScene" uid="uid://q8v6jpnyw41" path="res://BaseArrow/arrow.tscn" id="11_5h82b"]
 [ext_resource type="PackedScene" uid="uid://bma1i81i6xsn2" path="res://9ArrowScene/map1.tscn" id="11_qytyx"]
 [ext_resource type="AudioStream" uid="uid://c3wvxnuwgdrqu" path="res://mp3files/bad_apple.mp3" id="12_a8lej"]
+[ext_resource type="Script" uid="uid://ce4tupnoxkkum" path="res://9ArrowScene/pause_menu.gd" id="14_fxsq8"]
 
 [node name="Game" type="Node2D"]
+script = ExtResource("1_sh2q5")
 
 [node name="UpArrow" parent="." instance=ExtResource("4_vjsbt")]
-position = Vector2(1274, 417)
+position = Vector2(1204, 406)
 scale = Vector2(0.2, 0.2)
 
 [node name="DownArrow" parent="." instance=ExtResource("1_0eyy2")]
-position = Vector2(941, 417)
+position = Vector2(996, 406)
 scale = Vector2(0.2, 0.2)
 
 [node name="LeftArrow" parent="." instance=ExtResource("1_gox45")]
-position = Vector2(690, 417)
+position = Vector2(803, 406)
 scale = Vector2(0.2, 0.2)
 
 [node name="RightArrow" parent="." instance=ExtResource("3_c4c6w")]
-position = Vector2(1510, 417)
+position = Vector2(1389, 406)
 scale = Vector2(0.2, 0.2)
 
 [node name="UpRightArrow" parent="." instance=ExtResource("5_hoyt5")]
-position = Vector2(1398, 417)
+position = Vector2(1296, 406)
 scale = Vector2(0.2, 0.2)
 
 [node name="UpLeftArrow" parent="." instance=ExtResource("5_hoyt5")]
-position = Vector2(807, 417)
+position = Vector2(898, 406)
 rotation = -1.5708
 scale = Vector2(0.2, 0.2)
 script = ExtResource("6_yaici")
 
 [node name="DownRightArrow" parent="." instance=ExtResource("5_hoyt5")]
-position = Vector2(1608, 417)
+position = Vector2(1477, 406)
 rotation = 1.5708
 scale = Vector2(0.2, 0.2)
 script = ExtResource("7_xxp3w")
 
 [node name="DownLeftArrow" parent="." instance=ExtResource("5_hoyt5")]
-position = Vector2(588, 417)
+position = Vector2(711, 406)
 rotation = 3.14159
 scale = Vector2(0.2, 0.2)
 script = ExtResource("8_2gnyf")
@@ -66,3 +69,50 @@ position = Vector2(1100, 640)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("12_a8lej")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PauseMenu" type="Control" parent="CanvasLayer"]
+process_mode = 2
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("14_fxsq8")
+
+[node name="Exit" type="Button" parent="CanvasLayer/PauseMenu"]
+layout_mode = 0
+offset_left = 67.0
+offset_top = 59.0
+offset_right = 338.0
+offset_bottom = 218.0
+text = "Exit"
+
+[node name="Main Menu" type="Button" parent="CanvasLayer/PauseMenu"]
+layout_mode = 0
+offset_left = 71.0
+offset_top = 310.0
+offset_right = 342.0
+offset_bottom = 469.0
+text = "Main Menu"
+
+[node name="Resume" type="Button" parent="CanvasLayer/PauseMenu"]
+layout_mode = 0
+offset_left = 539.0
+offset_top = 331.0
+offset_right = 810.0
+offset_bottom = 490.0
+text = "Resume"
+
+[node name="Restart" type="Button" parent="CanvasLayer/PauseMenu"]
+layout_mode = 0
+offset_left = 564.0
+offset_top = 55.0
+offset_right = 835.0
+offset_bottom = 214.0
+text = "Restart"
+
+[connection signal="pressed" from="CanvasLayer/PauseMenu/Exit" to="CanvasLayer/PauseMenu" method="_on_exit_pressed"]
+[connection signal="pressed" from="CanvasLayer/PauseMenu/Main Menu" to="CanvasLayer/PauseMenu" method="_on_main_menu_pressed"]
+[connection signal="pressed" from="CanvasLayer/PauseMenu/Resume" to="CanvasLayer/PauseMenu" method="_on_resume_pressed"]
+[connection signal="pressed" from="CanvasLayer/PauseMenu/Restart" to="CanvasLayer/PauseMenu" method="_on_restart_pressed"]

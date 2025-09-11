@@ -25,3 +25,8 @@ func _on_quit_pressed() -> void:
 func _on_play_game_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://9ArrowScene/Game.tscn")
 	pass # Replace with function body.
+
+
+func _on_settings_pressed() -> void:
+	get_tree().change_scene_to_file("res://Settings/globalSettings.tscn")
+	pass # Replace with function body.
