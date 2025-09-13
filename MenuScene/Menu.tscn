@@ -40,6 +40,7 @@ text = "Quit
 "
 
 [node name="Settings" type="Button" parent="."]
+layout_mode = 0
 offset_left = 211.0
 offset_top = -160.0
 offset_right = 372.0

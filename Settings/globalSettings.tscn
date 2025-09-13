@@ -8,12 +8,14 @@ anchors_preset = 0
 script = ExtResource("2_ljqr7")
 
 [node name="HSlider" type="HSlider" parent="."]
+layout_mode = 0
 offset_left = 461.0
 offset_top = 283.0
 offset_right = 695.0
 offset_bottom = 299.0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
 offset_left = 447.0
 offset_top = 236.0
 offset_right = 709.0
@@ -26,6 +28,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Cancel" type="Button" parent="."]
+layout_mode = 0
 offset_left = 280.0
 offset_top = 150.0
 offset_right = 424.0
@@ -33,6 +36,7 @@ offset_bottom = 214.0
 text = "Cancel"
 
 [node name="Confirm" type="Button" parent="."]
+layout_mode = 0
 offset_left = 40.0
 offset_top = 193.0
 offset_right = 224.0
@@ -40,13 +44,14 @@ offset_bottom = 245.0
 text = "Confirm"
 
 [node name="Exit" type="Button" parent="."]
+layout_mode = 0
 offset_left = 45.0
 offset_top = 56.0
 offset_right = 222.0
 offset_bottom = 97.0
 text = "Exit"
 
-[connection signal="value_changed" from="HSlider" to="HSlider" method="_on_value_changed"]
+[connection signal="value_changed" from="HSlider" to="." method="_on_value_changed"]
 [connection signal="pressed" from="Cancel" to="." method="_on_cancel_pressed"]
 [connection signal="pressed" from="Confirm" to="." method="_on_confirm_pressed"]
 [connection signal="pressed" from="Exit" to="." method="_on_exit_pressed"]

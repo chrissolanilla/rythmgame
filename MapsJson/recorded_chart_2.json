@@ -1,0 +1,202 @@
+[
+	{
+		"direction": "center",
+		"time": 3.185
+	},
+	{
+		"direction": "up",
+		"time": 3.607
+	},
+	{
+		"direction": "left",
+		"time": 4.066
+	},
+	{
+		"direction": "right",
+		"time": 4.447
+	},
+	{
+		"direction": "down",
+		"time": 4.926
+	},
+	{
+		"direction": "downRight",
+		"time": 5.363
+	},
+	{
+		"direction": "center",
+		"time": 5.821
+	},
+	{
+		"direction": "upRight",
+		"time": 6.245
+	},
+	{
+		"direction": "center",
+		"time": 6.633
+	},
+	{
+		"direction": "downLeft",
+		"time": 7.098
+	},
+	{
+		"direction": "downRight",
+		"time": 7.507
+	},
+	{
+		"direction": "right",
+		"time": 7.917
+	},
+	{
+		"direction": "down",
+		"time": 8.382
+	},
+	{
+		"direction": "left",
+		"time": 8.861
+	},
+	{
+		"direction": "up",
+		"time": 9.305
+	},
+	{
+		"direction": "center",
+		"time": 9.673
+	},
+	{
+		"direction": "right",
+		"time": 10.096
+	},
+	{
+		"direction": "up",
+		"time": 10.526
+	},
+	{
+		"direction": "left",
+		"time": 10.97
+	},
+	{
+		"direction": "center",
+		"time": 11.358
+	},
+	{
+		"direction": "right",
+		"time": 11.817
+	},
+	{
+		"direction": "up",
+		"time": 12.263
+	},
+	{
+		"direction": "left",
+		"time": 12.684
+	},
+	{
+		"direction": "down",
+		"time": 13.101
+	},
+	{
+		"direction": "downRight",
+		"time": 13.566
+	},
+	{
+		"direction": "center",
+		"time": 13.99
+	},
+	{
+		"direction": "downRight",
+		"time": 14.44
+	},
+	{
+		"direction": "down",
+		"time": 14.877
+	},
+	{
+		"direction": "downLeft",
+		"time": 15.293
+	},
+	{
+		"direction": "right",
+		"time": 15.689
+	},
+	{
+		"direction": "center",
+		"time": 16.14
+	},
+	{
+		"direction": "down",
+		"time": 16.563
+	},
+	{
+		"direction": "right",
+		"time": 17.028
+	},
+	{
+		"direction": "upRight",
+		"time": 17.486
+	},
+	{
+		"direction": "up",
+		"time": 17.903
+	},
+	{
+		"direction": "downRight",
+		"time": 18.319
+	},
+	{
+		"direction": "center",
+		"time": 18.763
+	},
+	{
+		"direction": "left",
+		"time": 19.228
+	},
+	{
+		"direction": "downLeft",
+		"time": 19.673
+	},
+	{
+		"direction": "right",
+		"time": 20.047
+	},
+	{
+		"direction": "upLeft",
+		"time": 20.52
+	},
+	{
+		"direction": "downRight",
+		"time": 20.894
+	},
+	{
+		"direction": "center",
+		"time": 21.372
+	},
+	{
+		"direction": "downLeft",
+		"time": 21.823
+	},
+	{
+		"direction": "upRight",
+		"time": 22.281
+	},
+	{
+		"direction": "down",
+		"time": 22.712
+	},
+	{
+		"direction": "right",
+		"time": 23.1
+	},
+	{
+		"direction": "left",
+		"time": 23.586
+	},
+	{
+		"direction": "up",
+		"time": 23.995
+	},
+	{
+		"direction": "center",
+		"time": 24.425
+	}
+]

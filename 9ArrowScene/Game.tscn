@@ -11,7 +11,7 @@
 [ext_resource type="Script" uid="uid://c7uggyweqivhu" path="res://DownLeft/DownLeft.gd" id="8_2gnyf"]
 [ext_resource type="PackedScene" uid="uid://dt4htqpir74id" path="res://middleNote/middleNote.tscn" id="10_2gnyf"]
 [ext_resource type="PackedScene" uid="uid://q8v6jpnyw41" path="res://BaseArrow/arrow.tscn" id="11_5h82b"]
-[ext_resource type="PackedScene" uid="uid://bma1i81i6xsn2" path="res://9ArrowScene/map1.tscn" id="11_qytyx"]
+[ext_resource type="PackedScene" uid="uid://bma1i81i6xsn2" path="res://9ArrowScene/sceneSpawner.tscn" id="11_qytyx"]
 [ext_resource type="AudioStream" uid="uid://c3wvxnuwgdrqu" path="res://mp3files/bad_apple.mp3" id="12_a8lej"]
 [ext_resource type="Script" uid="uid://ce4tupnoxkkum" path="res://9ArrowScene/pause_menu.gd" id="14_fxsq8"]
 
@@ -19,56 +19,57 @@
 script = ExtResource("1_sh2q5")
 
 [node name="UpArrow" parent="." instance=ExtResource("4_vjsbt")]
-position = Vector2(1204, 406)
+position = Vector2(1875, 94.0001)
 scale = Vector2(0.2, 0.2)
 
 [node name="DownArrow" parent="." instance=ExtResource("1_0eyy2")]
-position = Vector2(996, 406)
+position = Vector2(1667, 94.0001)
 scale = Vector2(0.2, 0.2)
 
 [node name="LeftArrow" parent="." instance=ExtResource("1_gox45")]
-position = Vector2(803, 406)
+position = Vector2(1474, 94.0001)
 scale = Vector2(0.2, 0.2)
 
 [node name="RightArrow" parent="." instance=ExtResource("3_c4c6w")]
-position = Vector2(1389, 406)
+position = Vector2(2060, 94.0001)
 scale = Vector2(0.2, 0.2)
 
 [node name="UpRightArrow" parent="." instance=ExtResource("5_hoyt5")]
-position = Vector2(1296, 406)
+position = Vector2(1967, 94.0001)
 scale = Vector2(0.2, 0.2)
 
 [node name="UpLeftArrow" parent="." instance=ExtResource("5_hoyt5")]
-position = Vector2(898, 406)
+position = Vector2(1569, 94.0001)
 rotation = -1.5708
 scale = Vector2(0.2, 0.2)
 script = ExtResource("6_yaici")
 
 [node name="DownRightArrow" parent="." instance=ExtResource("5_hoyt5")]
-position = Vector2(1477, 406)
+position = Vector2(2148, 94.0001)
 rotation = 1.5708
 scale = Vector2(0.2, 0.2)
 script = ExtResource("7_xxp3w")
 
 [node name="DownLeftArrow" parent="." instance=ExtResource("5_hoyt5")]
-position = Vector2(711, 406)
+position = Vector2(1382, 94.0001)
 rotation = 3.14159
 scale = Vector2(0.2, 0.2)
 script = ExtResource("8_2gnyf")
 
 [node name="MiddleNote" parent="." instance=ExtResource("10_2gnyf")]
-position = Vector2(1100, 417)
+position = Vector2(1771, 105)
 scale = Vector2(0.1, 0.1)
 
-[node name="Map1" parent="." instance=ExtResource("11_qytyx")]
+[node name="Map1 Example" parent="." instance=ExtResource("11_qytyx")]
 position = Vector2(555, 1123)
 arrow_scene = ExtResource("11_5h82b")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(1100, 640)
+position = Vector2(1771, 328)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("12_a8lej")
+volume_db = -28.67
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -82,35 +83,68 @@ script = ExtResource("14_fxsq8")
 
 [node name="Exit" type="Button" parent="CanvasLayer/PauseMenu"]
 layout_mode = 0
-offset_left = 67.0
-offset_top = 59.0
-offset_right = 338.0
-offset_bottom = 218.0
+offset_left = 236.0
+offset_top = 57.0
+offset_right = 507.0
+offset_bottom = 216.0
 text = "Exit"
 
 [node name="Main Menu" type="Button" parent="CanvasLayer/PauseMenu"]
 layout_mode = 0
-offset_left = 71.0
-offset_top = 310.0
-offset_right = 342.0
-offset_bottom = 469.0
+offset_left = 227.0
+offset_top = 374.0
+offset_right = 498.0
+offset_bottom = 533.0
 text = "Main Menu"
 
 [node name="Resume" type="Button" parent="CanvasLayer/PauseMenu"]
 layout_mode = 0
-offset_left = 539.0
-offset_top = 331.0
-offset_right = 810.0
-offset_bottom = 490.0
+offset_left = 766.0
+offset_top = 389.0
+offset_right = 1037.0
+offset_bottom = 548.0
 text = "Resume"
 
 [node name="Restart" type="Button" parent="CanvasLayer/PauseMenu"]
 layout_mode = 0
-offset_left = 564.0
-offset_top = 55.0
-offset_right = 835.0
-offset_bottom = 214.0
+offset_left = 759.0
+offset_top = 51.0
+offset_right = 1030.0
+offset_bottom = 210.0
 text = "Restart"
+
+[node name="NoteScore" type="RichTextLabel" parent="."]
+offset_left = 1630.0
+offset_top = 284.0
+offset_right = 1912.0
+offset_bottom = 375.0
+bbcode_enabled = true
+text = "[b][color=green] 0 [/color][/b]
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ComboScoring" type="RichTextLabel" parent="."]
+offset_left = 1901.0
+offset_top = 276.0
+offset_right = 2183.0
+offset_bottom = 367.0
+bbcode_enabled = true
+text = "[b][color=green] 0 [/color][/b]
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GlobalScoring" type="RichTextLabel" parent="."]
+offset_left = 1635.0
+offset_top = 416.0
+offset_right = 1917.0
+offset_bottom = 507.0
+bbcode_enabled = true
+text = "[b][color=green] 0 [/color][/b]
+"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Exit" to="CanvasLayer/PauseMenu" method="_on_exit_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Main Menu" to="CanvasLayer/PauseMenu" method="_on_main_menu_pressed"]

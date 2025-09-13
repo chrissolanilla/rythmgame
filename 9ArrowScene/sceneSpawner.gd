@@ -2,11 +2,18 @@ extends Node2D
 
 @export var arrow_scene: PackedScene
 @export var scroll_speed := 300.0 # pixels per second
-@export var chart_path := "res://MapsJson/simple_chart.json"
+@export var chart_path: String = GlobalSettings.startingChartPath
 @onready var notes_layer := $NotesLayer
 @onready var music := $"../AudioStreamPlayer"
 var judgement_label_scene = preload("res://judgementLabel/JudgementLabel.tscn")
 @onready var judgement_layer := $"UI/Judgements"
+@onready var ScoreLabel := $"../NoteScore"
+@onready var globalScoring := $"../GlobalScoring"
+@onready var comboTracker := $"../ComboScoring"
+
+var globalScore: int = 0
+var globalCombo: int = 0
+
 
 func show_judgement(text: String, position: Vector2):
 	var label = judgement_label_scene.instantiate()
@@ -63,7 +70,10 @@ var arrow_scenes = {
 }
 
 func _ready():
+	
+	print(chart_path)
 	# connect signals manually or via editor
+		
 	var receptors = get_parent().get_children()
 	for node in receptors:
 		if node is BaseArrow and node.is_receptor:
@@ -88,8 +98,6 @@ func _process(delta):
 		spawn_index += 1
 
 	for note in notes_layer.get_children():
-		print("-------------------------------------------------------------------------------------------")
-		debug_print_properties(note)
 		note.position.y -= scroll_speed * delta
 		#print("note position y: ", note.position.y)
 		
@@ -101,6 +109,7 @@ func _process(delta):
 		if note.note_time < song_time -0.2:
 			print("Miss HERE")
 			show_judgement("Miss", receptor_positions.get(note.direction,note.position))
+			reset_Combo()
 			note.queue_free()
 
 func get_lead_time() -> float:
@@ -127,7 +136,6 @@ func spawn_note(note_data: Dictionary):
 		arrow.is_Hold = true
 		arrow.end_Time = note_data["end_Time"]
 		arrow.note_time = note_data["time"]
-		debug_print_properties(arrow)
 		
 
 	arrow.baseColor = get_color_for_direction(dir)
@@ -172,20 +180,46 @@ func check_hits(direction: String):
 	if closest_diff <= 0.050:
 		print("Perfect!")
 		show_judgement("Perfect!", closest_note.position)
+		update_Shown_Acc(10)
+		update_Score(10)
+		update_Combo()
 		closest_note.queue_free()
 	elif closest_diff <= 0.1:
 		print("Good!")
 		show_judgement("Good!", closest_note.position)
+		update_Shown_Acc(5)
+		update_Score(5)
+		update_Combo()
 		closest_note.queue_free()
 	elif closest_diff <= 0.2:
 		print("Bad!")
 		show_judgement("Bad!", closest_note.position)
+		update_Shown_Acc(1)
+		update_Score(1)
+		reset_Combo()
 		closest_note.queue_free()
 	else:
 		print("Miss")
+		reset_Combo()
 		show_judgement("Miss", receptor_positions[direction])
 		
-func debug_print_properties(node: Object) -> void:
-	var props = node.get_property_list()
-	for p in props:
-		print(p.name, " (", p.type, ") = ", node.get(p.name))
+func update_Shown_Acc(x):
+	if x is int:
+		ScoreLabel.text = "[b][color=green] %s [/color][/b]" % x
+	else:
+		ScoreLabel.text = "[b][color=green] 0 [/color][/b]"
+
+func update_Score(x):
+	globalScore += x
+	globalScoring.text = "[b][color=green] %s [/color][/b]" % globalScore
+	
+	#Could add to updating the score of based on the 2 parameters scoring and combo, total score could be the following formula
+	#globalscore = (shown acc score * globalCombo) + globalScore
+	
+func update_Combo():
+	globalCombo += 1
+	comboTracker.text = "[b][color=green] %s [/color][/b]" % globalCombo
+	
+func reset_Combo():
+	globalCombo = 0
+	comboTracker.text = "[b][color=green] %s [/color][/b]" % globalCombo
