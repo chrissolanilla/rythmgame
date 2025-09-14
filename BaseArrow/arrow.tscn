@@ -18,3 +18,8 @@ texture = ExtResource("2_qyxdl")
 [node name="Polygon2D" type="Polygon2D" parent="."]
 polygon = PackedVector2Array(-57, 189, 0, 193, 56, 190, 62, 6, 141, 1, 0, -180, -140, -1, -65, 3)
 uv = PackedVector2Array(-57, 189, 0, 193, 56, 190, 62, 6, 141, 1, 0, -180, -140, -1, -65, 3)
+
+[node name="Tail" type="Polygon2D" parent="."]
+position = Vector2(104, 292)
+polygon = PackedVector2Array(-160.5, -83, -160.5, 83.5, -43.5, 83.5, -43.5117, -82.4695)
+uv = PackedVector2Array(-160.5, -83, -160.5, 83.5, -43.5, 83.5, -44.7431, -87.7548)

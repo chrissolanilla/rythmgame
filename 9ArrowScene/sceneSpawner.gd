@@ -57,6 +57,18 @@ var receptor_positions = {
 	"downRight": Vector2(1608, 417)
 }
 
+#state vars for our hold notes
+var pressed := {
+	"upLeft": false, "left": false, "downLeft": false,
+	"down": false, "center": false, "up": false,
+	"upRight": false, "right": false, "downRight": false
+}
+var active_holds := {}
+# Tunables
+const START_WINDOW := 0.1   # seconds to hit the head
+const END_WINDOW   := 0.12  # seconds tolerance at the tail
+const BREAK_GRACE  := 0.05  # brief grace for micro unholds
+
 var arrow_scenes = {
 	"up": preload("res://UpArrow/up_arrow.tscn"),
 	"down": preload("res://DownArrow/down_arrow.tscn"),
@@ -70,16 +82,17 @@ var arrow_scenes = {
 }
 
 func _ready():
-	
+
 	print(chart_path)
 	# connect signals manually or via editor
-		
+
 	var receptors = get_parent().get_children()
 	for node in receptors:
 		if node is BaseArrow and node.is_receptor:
 			node.arrow_pressed.connect(check_hits)
+			node.arrow_released.connect(_on_arrow_released)
 			# use global_position
-			receptor_positions[node.direction] = node.global_position  
+			receptor_positions[node.direction] = node.global_position
 
 	var file = FileAccess.open(chart_path, FileAccess.READ)
 	if file:
@@ -87,11 +100,11 @@ func _ready():
 		chart_data = JSON.parse_string(json_text)
 		chart_data.sort_custom(func(a, b): return a["time"] < b["time"])
 		music.play()
-		
+
 	scroll_speed = GlobalSettings.scrollSpeed
 	print("scroll speed: ", scroll_speed)
-	
-	
+
+
 
 func _process(delta):
 	var song_time = music.get_playback_position()
@@ -103,11 +116,11 @@ func _process(delta):
 	for note in notes_layer.get_children():
 		note.position.y -= scroll_speed * delta
 		#print("note position y: ", note.position.y)
-		
+
 		#Function for holding note
 		#Check if note is a type hold
 		#Create boolean of if type hold
-		
+
 		#miss detection
 		if note.note_time < song_time -0.2:
 			print("Miss HERE")
@@ -130,21 +143,21 @@ func spawn_note(note_data: Dictionary):
 	arrow.inputAction = ""  # disables input for scrolling arrows
 	arrow.is_receptor = false
 	if dir == "center":
-		arrow.scale = Vector2(0.1, 0.1) 
+		arrow.scale = Vector2(0.1, 0.1)
 	else:
 		arrow.scale = Vector2(0.2, 0.2)
-		
+
 	#Hold Note Creation
 	if note_data.has("end_Time"):
 		arrow.is_Hold = true
 		arrow.end_Time = note_data["end_Time"]
 		arrow.note_time = note_data["time"]
-		
+
 
 	arrow.baseColor = get_color_for_direction(dir)
 	arrow.note_time = note_data["time"]  # assign for hit detection
 	notes_layer.add_child(arrow)
-	
+
 	#print("Final spawn position:", arrow.position)
 
 func get_color_for_direction(dir: String) -> Color:
@@ -165,6 +178,7 @@ func check_hits(direction: String):
 	var song_time = music.get_playback_position()
 	var closest_note = null
 	var closest_diff = INF
+	pressed[direction] = true
 
 	for note in notes_layer.get_children():
 		if not note is BaseArrow:
@@ -205,7 +219,11 @@ func check_hits(direction: String):
 		print("Miss")
 		reset_Combo()
 		show_judgement("Miss", receptor_positions[direction])
-		
+
+func _on_arrow_released(direction: String) -> void:
+	pressed[direction] = false
+
+
 func update_Shown_Acc(x):
 	if x is int:
 		ScoreLabel.text = "[b][color=green] %s [/color][/b]" % x
@@ -215,14 +233,14 @@ func update_Shown_Acc(x):
 func update_Score(x):
 	globalScore += x
 	globalScoring.text = "[b][color=green] %s [/color][/b]" % globalScore
-	
+
 	#Could add to updating the score of based on the 2 parameters scoring and combo, total score could be the following formula
 	#globalscore = (shown acc score * globalCombo) + globalScore
-	
+
 func update_Combo():
 	globalCombo += 1
 	comboTracker.text = "[b][color=green] %s [/color][/b]" % globalCombo
-	
+
 func reset_Combo():
 	globalCombo = 0
 	comboTracker.text = "[b][color=green] %s [/color][/b]" % globalCombo

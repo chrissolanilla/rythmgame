@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://h6glhurxpt0x"]
+[gd_scene load_steps=14 format=3 uid="uid://h6glhurxpt0x"]
 
 [ext_resource type="PackedScene" uid="uid://4trfkm441e3q" path="res://UpArrow/up_arrow.tscn" id="1_8ooev"]
 [ext_resource type="Script" uid="uid://bpigphm7qkbog" path="res://chartRecorder/chart_recorder.gd" id="1_oq0h7"]
@@ -11,54 +11,60 @@
 [ext_resource type="Script" uid="uid://c7uggyweqivhu" path="res://DownLeft/DownLeft.gd" id="8_wguca"]
 [ext_resource type="PackedScene" uid="uid://dt4htqpir74id" path="res://middleNote/middleNote.tscn" id="9_k3y7t"]
 [ext_resource type="AudioStream" uid="uid://c3wvxnuwgdrqu" path="res://mp3files/bad_apple.mp3" id="10_dbkj3"]
+[ext_resource type="PackedScene" uid="uid://bma1i81i6xsn2" path="res://9ArrowScene/sceneSpawner.tscn" id="12_74rl6"]
+[ext_resource type="PackedScene" uid="uid://q8v6jpnyw41" path="res://BaseArrow/arrow.tscn" id="13_skv3n"]
 
 [node name="ChartRecorder" type="Node2D"]
 script = ExtResource("1_oq0h7")
-
-[node name="UpArrow" parent="." instance=ExtResource("1_8ooev")]
-position = Vector2(750, 98)
-scale = Vector2(0.2, 0.2)
-
-[node name="DownArrow" parent="." instance=ExtResource("2_oq0h7")]
-position = Vector2(417, 98)
-scale = Vector2(0.2, 0.2)
-
-[node name="LeftArrow" parent="." instance=ExtResource("3_o0280")]
-position = Vector2(166, 98)
-scale = Vector2(0.2, 0.2)
-
-[node name="RightArrow" parent="." instance=ExtResource("4_74rl6")]
-position = Vector2(986, 98)
-scale = Vector2(0.2, 0.2)
-
-[node name="UpRightArrow" parent="." instance=ExtResource("5_skv3n")]
-position = Vector2(874, 98)
-scale = Vector2(0.2, 0.2)
-
-[node name="UpLeftArrow" parent="." instance=ExtResource("5_skv3n")]
-position = Vector2(283, 98)
-rotation = -1.5708
-scale = Vector2(0.2, 0.2)
-script = ExtResource("6_pdce3")
-
-[node name="DownRightArrow" parent="." instance=ExtResource("5_skv3n")]
-position = Vector2(1084, 98)
-rotation = 1.5708
-scale = Vector2(0.2, 0.2)
-script = ExtResource("7_3oht5")
-
-[node name="DownLeftArrow" parent="." instance=ExtResource("5_skv3n")]
-position = Vector2(64.0001, 98)
-rotation = 3.14159
-scale = Vector2(0.2, 0.2)
-script = ExtResource("8_wguca")
-
-[node name="MiddleNote" parent="." instance=ExtResource("9_k3y7t")]
-position = Vector2(576, 98)
-scale = Vector2(0.1, 0.1)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(576, 321)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_dbkj3")
+
+[node name="UpArrow" parent="." instance=ExtResource("1_8ooev")]
+position = Vector2(678, 94)
+scale = Vector2(0.2, 0.2)
+
+[node name="DownArrow" parent="." instance=ExtResource("2_oq0h7")]
+position = Vector2(470, 94)
+scale = Vector2(0.2, 0.2)
+
+[node name="LeftArrow" parent="." instance=ExtResource("3_o0280")]
+position = Vector2(277, 94)
+scale = Vector2(0.2, 0.2)
+
+[node name="RightArrow" parent="." instance=ExtResource("4_74rl6")]
+position = Vector2(863, 94)
+scale = Vector2(0.2, 0.2)
+
+[node name="UpRightArrow" parent="." instance=ExtResource("5_skv3n")]
+position = Vector2(770, 94)
+scale = Vector2(0.2, 0.2)
+
+[node name="UpLeftArrow" parent="." instance=ExtResource("5_skv3n")]
+position = Vector2(372, 94)
+rotation = -1.5708
+scale = Vector2(0.2, 0.2)
+script = ExtResource("6_pdce3")
+
+[node name="DownRightArrow" parent="." instance=ExtResource("5_skv3n")]
+position = Vector2(951, 94)
+rotation = 1.5708
+scale = Vector2(0.2, 0.2)
+script = ExtResource("7_3oht5")
+
+[node name="DownLeftArrow" parent="." instance=ExtResource("5_skv3n")]
+position = Vector2(185, 94)
+rotation = 3.14159
+scale = Vector2(0.2, 0.2)
+script = ExtResource("8_wguca")
+
+[node name="MiddleNote" parent="." instance=ExtResource("9_k3y7t")]
+position = Vector2(574, 105)
+scale = Vector2(0.1, 0.1)
+
+[node name="Map1 Example" parent="." instance=ExtResource("12_74rl6")]
+position = Vector2(-642, 1123)
+arrow_scene = ExtResource("13_skv3n")
