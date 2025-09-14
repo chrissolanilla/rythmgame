@@ -14,6 +14,16 @@ offset_top = 283.0
 offset_right = 695.0
 offset_bottom = 299.0
 
+[node name="ScrollSpeedSlider" type="HSlider" parent="."]
+layout_mode = 0
+offset_left = 461.0
+offset_top = 216.0
+offset_right = 695.0
+offset_bottom = 232.0
+min_value = 1.0
+max_value = 1000.0
+value = 300.0
+
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0
 offset_left = 447.0
@@ -23,6 +33,19 @@ offset_bottom = 276.0
 pivot_offset = Vector2(311, 14)
 bbcode_enabled = true
 text = "[b][color=green]Game Volume[/color][/b]
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 447.0
+offset_top = 173.0
+offset_right = 709.0
+offset_bottom = 213.0
+pivot_offset = Vector2(311, 14)
+bbcode_enabled = true
+text = "[b][color=green]Scroll Speed[/color][/b]
 "
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -52,6 +75,7 @@ offset_bottom = 97.0
 text = "Exit"
 
 [connection signal="value_changed" from="HSlider" to="." method="_on_value_changed"]
+[connection signal="value_changed" from="ScrollSpeedSlider" to="." method="_on_scroll_speed_slider_value_changed"]
 [connection signal="pressed" from="Cancel" to="." method="_on_cancel_pressed"]
 [connection signal="pressed" from="Confirm" to="." method="_on_confirm_pressed"]
 [connection signal="pressed" from="Exit" to="." method="_on_exit_pressed"]

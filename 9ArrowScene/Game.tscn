@@ -115,22 +115,22 @@ text = "Restart"
 
 [node name="NoteScore" type="RichTextLabel" parent="."]
 offset_left = 1630.0
-offset_top = 284.0
+offset_top = -17.0
 offset_right = 1912.0
-offset_bottom = 375.0
+offset_bottom = 74.0
 bbcode_enabled = true
-text = "[b][color=green] 0 [/color][/b]
+text = "[b][color=white] 0 [/color][/b]
 "
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ComboScoring" type="RichTextLabel" parent="."]
-offset_left = 1901.0
+offset_left = 1899.0
 offset_top = 276.0
-offset_right = 2183.0
+offset_right = 2181.0
 offset_bottom = 367.0
 bbcode_enabled = true
-text = "[b][color=green] 0 [/color][/b]
+text = "[b][color=white] 0 [/color][/b]
 "
 horizontal_alignment = 1
 vertical_alignment = 1

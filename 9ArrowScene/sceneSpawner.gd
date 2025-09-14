@@ -1,7 +1,7 @@
 extends Node2D
 
 @export var arrow_scene: PackedScene
-@export var scroll_speed := 300.0 # pixels per second
+var scroll_speed
 @export var chart_path: String = GlobalSettings.startingChartPath
 @onready var notes_layer := $NotesLayer
 @onready var music := $"../AudioStreamPlayer"
@@ -87,6 +87,9 @@ func _ready():
 		chart_data = JSON.parse_string(json_text)
 		chart_data.sort_custom(func(a, b): return a["time"] < b["time"])
 		music.play()
+		
+	scroll_speed = GlobalSettings.scrollSpeed
+	print("scroll speed: ", scroll_speed)
 	
 	
 
