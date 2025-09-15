@@ -104,7 +104,12 @@ func _ready():
 	scroll_speed = GlobalSettings.scrollSpeed
 	print("scroll speed: ", scroll_speed)
 
-
+func _active_hold_notes() -> Array:
+	var arr: Array = []
+	for d in active_holds.keys():
+		var n = active_holds[d].get("note", null)
+		if n != null: arr.append(n)
+	return arr
 
 func _process(delta):
 	var song_time = music.get_playback_position()
@@ -115,18 +120,58 @@ func _process(delta):
 
 	for note in notes_layer.get_children():
 		note.position.y -= scroll_speed * delta
-		#print("note position y: ", note.position.y)
-
-		#Function for holding note
-		#Check if note is a type hold
-		#Create boolean of if type hold
-
-		#miss detection
-		if note.note_time < song_time -0.2:
-			print("Miss HERE")
-			show_judgement("Miss", receptor_positions.get(note.direction,note.position))
-			reset_Combo()
-			note.queue_free()
+		if note.note_time < song_time -0.2 and not note in _active_hold_notes():
+			if note.is_Hold:
+				if note.end_Time < song_time - 0.2:
+					print("freeing")
+					print("missed")
+					show_judgement("Miss", receptor_positions.get(note.direction,note.position))
+					reset_Combo()
+					note.queue_free()
+				#we dont want them to constantly miss if they miss a hold
+				
+			else:
+				print("Miss HERE")
+				show_judgement("Miss", receptor_positions.get(note.direction,note.position))
+				reset_Combo()
+				#dont queue free the hold notes until the end time. 
+				if not note.is_Hold:
+					note.queue_free()
+			#queue free after the hold is over
+		#holds
+		for dir in active_holds.keys():
+			var data = active_holds[dir]
+			var hold_note: BaseArrow = data["note"]
+			if hold_note == null or not is_instance_valid(hold_note):
+				continue
+			print("checking hold notes")
+			#if before the tail end, require holding but with gracde
+			if song_time < hold_note.end_Time - END_WINDOW:
+				print("break timer is: ", data["break_timer"])
+				if pressed[dir]:
+					data["break_timer"] = 0.0
+				else:
+					data["break_timer"]  += delta
+					if data["break_timer"] > BREAK_GRACE:
+						show_judgement("Miss", receptor_positions.get(dir,hold_note.position))
+						reset_Combo()
+						print("queueing free cause it was bigger than break grace")
+						hold_note.queue_free()
+						active_holds.erase(dir)
+			#whenw e reafh tthen end
+			else:
+				print("we reached the end")
+				print("condition value is : ", song_time-hold_note.end_Time)
+				if abs(song_time - hold_note.end_Time) <= END_WINDOW and pressed[dir]:
+					show_judgement("Perfect", receptor_positions.get(dir, hold_note.position))
+					update_Shown_Acc(10)
+					update_Score(10)
+				else:
+					show_judgement("Miss", receptor_positions.get(dir, hold_note.position))
+					reset_Combo()
+				if is_instance_valid(hold_note):
+					hold_note.queue_free()
+				active_holds.erase(dir)
 
 func get_lead_time() -> float:
 	return 1.5 # seconds to reach the receptor from spawn point
@@ -149,6 +194,19 @@ func spawn_note(note_data: Dictionary):
 
 	#Hold Note Creation
 	if note_data.has("end_Time"):
+		print("this is a hold note")
+		var tail = arrow.get_node_or_null("Tail") as Polygon2D
+		if tail:
+			tail.color = get_color_for_direction(dir)
+			var duration := float(note_data["end_Time"]) - float(note_data["time"])
+			var desired_px = duration * scroll_speed
+
+			var base_len := _poly_height(tail.polygon)
+			if base_len <= 0.0:
+				base_len = 1.0  # avoid div-by-zero if polygon is degenerate
+			# Tail grows downward; ensure the polygon's "top" is at y=0 in local space
+			tail.position = Vector2(0, 0)
+			tail.scale = Vector2(1.0, desired_px / base_len)
 		arrow.is_Hold = true
 		arrow.end_Time = note_data["end_Time"]
 		arrow.note_time = note_data["time"]
@@ -173,52 +231,106 @@ func get_color_for_direction(dir: String) -> Color:
 			print("WTFFFF")
 			return Color(1, 1, 1)
 
-#this should run when we recieve some sort of signal?
 func check_hits(direction: String):
 	var song_time = music.get_playback_position()
-	var closest_note = null
-	var closest_diff = INF
+	var closest_note: BaseArrow = null
+	var closest_diff := INF
 	pressed[direction] = true
 
 	for note in notes_layer.get_children():
-		if not note is BaseArrow:
-			continue
-		if note.direction != direction:
-			continue
-
+		if not note is BaseArrow: continue
+		if note.direction != direction: continue
 		var diff = abs(note.note_time - song_time)
 		if diff < closest_diff:
 			closest_note = note
 			closest_diff = diff
 
 	if closest_note == null:
-		return  # no matching note
+		return
 
+	# HEAD judgement window
 	if closest_diff <= 0.050:
-		print("Perfect!")
 		show_judgement("Perfect!", closest_note.position)
-		update_Shown_Acc(10)
-		update_Score(10)
-		update_Combo()
-		closest_note.queue_free()
+		update_Shown_Acc(10); update_Score(10); update_Combo()
+
+		if closest_note.is_Hold:
+			# start tracking hold; hide the head if you want
+			active_holds[direction] = {"note": closest_note, "break_timer": 0.0}
+			var head_poly := closest_note.get_node_or_null("Polygon2D") as Polygon2D
+			if head_poly:
+				head_poly.visible = false
+		else:
+			closest_note.queue_free()
+
 	elif closest_diff <= 0.1:
-		print("Good!")
 		show_judgement("Good!", closest_note.position)
-		update_Shown_Acc(5)
-		update_Score(5)
-		update_Combo()
-		closest_note.queue_free()
+		update_Shown_Acc(5); update_Score(5); update_Combo()
+		if closest_note.is_Hold:
+			active_holds[direction] = {"note": closest_note, "break_timer": 0.0}
+			var head_poly := closest_note.get_node_or_null("Polygon2D") as Polygon2D
+			if head_poly:
+				head_poly.visible = false
+		else:
+			closest_note.queue_free()
+
 	elif closest_diff <= 0.2:
-		print("Bad!")
 		show_judgement("Bad!", closest_note.position)
-		update_Shown_Acc(1)
-		update_Score(1)
-		reset_Combo()
+		update_Shown_Acc(1); update_Score(1); reset_Combo()
 		closest_note.queue_free()
 	else:
-		print("Miss")
 		reset_Combo()
 		show_judgement("Miss", receptor_positions[direction])
+
+
+#func check_hits(direction: String):
+	#var song_time = music.get_playback_position()
+	#var closest_note = null
+	#var closest_diff = INF
+	#pressed[direction] = true
+#
+	#for note in notes_layer.get_children():
+		#if not note is BaseArrow:
+			#continue
+		#if note.is_Hold:
+			#print("we are a hold") #this activates when i presss. 
+		#if note.direction != direction:
+			#continue
+#
+		#var diff = abs(note.note_time - song_time)
+		#if diff < closest_diff:
+			#closest_note = note
+			#closest_diff = diff
+#
+	#if closest_note == null:
+		#return  # no matching note
+	#
+#
+		#print("we are a hold")
+	#if closest_diff <= 0.050:
+		#print("Perfect!")
+		#show_judgement("Perfect!", closest_note.position)
+		#update_Shown_Acc(10)
+		#update_Score(10)
+		#update_Combo()
+		#closest_note.queue_free()
+	#elif closest_diff <= 0.1:
+		#print("Good!")
+		#show_judgement("Good!", closest_note.position)
+		#update_Shown_Acc(5)
+		#update_Score(5)
+		#update_Combo()
+		#closest_note.queue_free()
+	#elif closest_diff <= 0.2:
+		#print("Bad!")
+		#show_judgement("Bad!", closest_note.position)
+		#update_Shown_Acc(1)
+		#update_Score(1)
+		#reset_Combo()
+		#closest_note.queue_free()
+	#else:
+		#print("Miss")
+		#reset_Combo()
+		#show_judgement("Miss", receptor_positions[direction])
 
 func _on_arrow_released(direction: String) -> void:
 	pressed[direction] = false
@@ -244,3 +356,11 @@ func update_Combo():
 func reset_Combo():
 	globalCombo = 0
 	comboTracker.text = "[b][color=green] %s [/color][/b]" % globalCombo
+
+func _poly_height(poly: PackedVector2Array) -> float:
+	var miny := INF
+	var maxy := -INF
+	for p in poly:
+		miny = min(miny, p.y)
+		maxy = max(maxy, p.y)
+	return maxy - miny

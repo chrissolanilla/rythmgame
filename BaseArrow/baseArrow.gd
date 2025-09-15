@@ -2,7 +2,7 @@ extends Node2D
 class_name BaseArrow
 # true = stationary arrow that listens for input
 @export var is_receptor: bool = false
-
+@onready var tail: Polygon2D = $Tail
 var baseColor: Color = Color(1, 1, 1, 0.35)
 var pressedColor: Color = Color(1, 1, 1, 1)
 var direction: String = ""
@@ -22,7 +22,7 @@ signal arrow_pressed(direction: String)
 signal arrow_released(direction: String)
 
 func _ready() -> void:
-	if $Tail:
+	if $Tail and not is_Hold:
 		$Tail.visible = false
 	if inputAction == "":
 		inputAction = direction
