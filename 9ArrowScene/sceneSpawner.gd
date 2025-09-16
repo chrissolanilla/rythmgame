@@ -119,7 +119,11 @@ func _process(delta):
 		spawn_index += 1
 
 	for note in notes_layer.get_children():
-		note.position.y -= scroll_speed * delta
+		if note is BaseArrow:
+			if not _is_frozen_hold(note):
+				note.position.y -= scroll_speed * delta
+		else:
+			continue
 		if note.note_time < song_time -0.2 and not note in _active_hold_notes():
 			if note.is_Hold:
 				if note.end_Time < song_time - 0.2:
@@ -144,6 +148,11 @@ func _process(delta):
 			var hold_note: BaseArrow = data["note"]
 			if hold_note == null or not is_instance_valid(hold_note):
 				continue
+			var tail = hold_note.get_node_or_null("Tail") as Sprite2D
+			if tail:
+				#var song_time = music.get_playback_position() song time already declared
+				var remaining_px = max(0.0, (hold_note.end_Time - song_time) * scroll_speed)
+				_set_tail_length_px(hold_note, tail, remaining_px)
 			print("checking hold notes")
 			#if before the tail end, require holding but with gracde
 			if song_time < hold_note.end_Time - END_WINDOW:
@@ -163,7 +172,7 @@ func _process(delta):
 				print("we reached the end")
 				print("condition value is : ", song_time-hold_note.end_Time)
 				if abs(song_time - hold_note.end_Time) <= END_WINDOW and pressed[dir]:
-					show_judgement("Perfect", receptor_positions.get(dir, hold_note.position))
+					show_judgement("Perfect!", receptor_positions.get(dir, hold_note.position))
 					update_Shown_Acc(10)
 					update_Score(10)
 				else:
@@ -195,18 +204,18 @@ func spawn_note(note_data: Dictionary):
 	#Hold Note Creation
 	if note_data.has("end_Time"):
 		print("this is a hold note")
-		var tail = arrow.get_node_or_null("Tail") as Polygon2D
+		var tail := arrow.get_node_or_null("Tail") as Sprite2D
 		if tail:
-			tail.color = get_color_for_direction(dir)
-			var duration := float(note_data["end_Time"]) - float(note_data["time"])
-			var desired_px = duration * scroll_speed
+			tail.centered = false
+			tail.position = Vector2.ZERO
+			tail.visible = true
+			tail.self_modulate = get_color_for_direction(dir)
 
-			var base_len := _poly_height(tail.polygon)
-			if base_len <= 0.0:
-				base_len = 1.0  # avoid div-by-zero if polygon is degenerate
-			# Tail grows downward; ensure the polygon's "top" is at y=0 in local space
-			tail.position = Vector2(0, 0)
-			tail.scale = Vector2(1.0, desired_px / base_len)
+			var duration := float(note_data["end_Time"]) - float(note_data["time"])
+			var total_px = duration * scroll_speed
+			_set_tail_length_px(arrow, tail, total_px)
+
+			#
 		arrow.is_Hold = true
 		arrow.end_Time = note_data["end_Time"]
 		arrow.note_time = note_data["time"]
@@ -231,7 +240,7 @@ func get_color_for_direction(dir: String) -> Color:
 		_:
 			print("WTFFFF")
 			return Color(1, 1, 1)
-
+			
 func check_hits(direction: String):
 	var song_time = music.get_playback_position()
 	var closest_note: BaseArrow = null
@@ -255,22 +264,24 @@ func check_hits(direction: String):
 		update_Shown_Acc(10); update_Score(10); update_Combo()
 
 		if closest_note.is_Hold:
-			# start tracking hold; hide the head if you want
-			active_holds[direction] = {"note": closest_note, "break_timer": 0.0}
+			active_holds[direction] = {"note": closest_note, "break_timer": 0.0, "frozen": true}
 			var head_poly := closest_note.get_node_or_null("Polygon2D") as Polygon2D
-			if head_poly:
-				head_poly.visible = false
+			var head_sprite := closest_note.get_node_or_null("Sprite2D") as Sprite2D
+			if head_poly:   head_poly.visible = false
+			if head_sprite: head_sprite.visible = false
 		else:
 			closest_note.queue_free()
 
 	elif closest_diff <= 0.1:
 		show_judgement("Good!", closest_note.position)
 		update_Shown_Acc(5); update_Score(5); update_Combo()
+
 		if closest_note.is_Hold:
-			active_holds[direction] = {"note": closest_note, "break_timer": 0.0}
+			active_holds[direction] = {"note": closest_note, "break_timer": 0.0, "frozen": true}
 			var head_poly := closest_note.get_node_or_null("Polygon2D") as Polygon2D
-			if head_poly:
-				head_poly.visible = false
+			var head_sprite := closest_note.get_node_or_null("Sprite2D") as Sprite2D
+			if head_poly:   head_poly.visible = false
+			if head_sprite: head_sprite.visible = false
 		else:
 			closest_note.queue_free()
 
@@ -282,56 +293,6 @@ func check_hits(direction: String):
 		reset_Combo()
 		show_judgement("Miss", receptor_positions[direction])
 
-
-#func check_hits(direction: String):
-	#var song_time = music.get_playback_position()
-	#var closest_note = null
-	#var closest_diff = INF
-	#pressed[direction] = true
-#
-	#for note in notes_layer.get_children():
-		#if not note is BaseArrow:
-			#continue
-		#if note.is_Hold:
-			#print("we are a hold") #this activates when i presss. 
-		#if note.direction != direction:
-			#continue
-#
-		#var diff = abs(note.note_time - song_time)
-		#if diff < closest_diff:
-			#closest_note = note
-			#closest_diff = diff
-#
-	#if closest_note == null:
-		#return  # no matching note
-	#
-#
-		#print("we are a hold")
-	#if closest_diff <= 0.050:
-		#print("Perfect!")
-		#show_judgement("Perfect!", closest_note.position)
-		#update_Shown_Acc(10)
-		#update_Score(10)
-		#update_Combo()
-		#closest_note.queue_free()
-	#elif closest_diff <= 0.1:
-		#print("Good!")
-		#show_judgement("Good!", closest_note.position)
-		#update_Shown_Acc(5)
-		#update_Score(5)
-		#update_Combo()
-		#closest_note.queue_free()
-	#elif closest_diff <= 0.2:
-		#print("Bad!")
-		#show_judgement("Bad!", closest_note.position)
-		#update_Shown_Acc(1)
-		#update_Score(1)
-		#reset_Combo()
-		#closest_note.queue_free()
-	#else:
-		#print("Miss")
-		#reset_Combo()
-		#show_judgement("Miss", receptor_positions[direction])
 
 func _on_arrow_released(direction: String) -> void:
 	pressed[direction] = false
@@ -358,10 +319,27 @@ func reset_Combo():
 	globalCombo = 0
 	comboTracker.text = "[b][color=green] %s [/color][/b]" % globalCombo
 
-func _poly_height(poly: PackedVector2Array) -> float:
-	var miny := INF
-	var maxy := -INF
-	for p in poly:
-		miny = min(miny, p.y)
-		maxy = max(maxy, p.y)
-	return maxy - miny
+func _sprite_base_height(s: Sprite2D) -> float:
+	if s == null or s.texture == null: return 1.0
+	if s.region_enabled: return max(1.0, s.region_rect.size.y)
+	var sz := s.texture.get_size()
+	if s.hframes > 1: sz.x /= s.hframes
+	if s.vframes > 1: sz.y /= s.vframes
+	return max(1.0, sz.y)
+
+func _set_tail_length_px(arrow: Node2D, tail: Sprite2D, length_px: float) -> void:
+	# Convert desired pixel length into a local Y scale for the tail,
+	# compensating for *parent* (arrow) scaling so on-screen pixels match.
+	var base_h := _sprite_base_height(tail)
+	var parent_sy := arrow.scale.y
+	if base_h <= 0.0: base_h = 1.0
+	if parent_sy == 0.0: parent_sy = 1.0
+	# scale.y_local = desired_pixels / (base_h * parent_world_scale_y)
+	tail.scale = Vector2(tail.scale.x, length_px / (base_h * parent_sy))
+	
+func _is_frozen_hold(note: BaseArrow) -> bool:
+	for d in active_holds.keys():
+		var data = active_holds[d]
+		if data.get("note") == note and data.get("frozen", false):
+			return true
+	return false

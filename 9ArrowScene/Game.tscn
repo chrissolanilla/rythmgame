@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bk374ib8x1sq4"]
+[gd_scene load_steps=15 format=3 uid="uid://bk374ib8x1sq4"]
 
 [ext_resource type="PackedScene" uid="uid://lhi5y6mg4a2c" path="res://DownArrow/down_arrow.tscn" id="1_0eyy2"]
 [ext_resource type="PackedScene" uid="uid://vmniglm0734s" path="res://LeftArrow/left_arrow.tscn" id="1_gox45"]
@@ -8,7 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://dkyb0c0hu67gy" path="res://UpRightArrow/UpRightArrow.tscn" id="5_hoyt5"]
 [ext_resource type="PackedScene" uid="uid://byuqe4dvwseil" path="res://UpLeftArrow/UpLeftArrow.tscn" id="7_sh2q5"]
 [ext_resource type="PackedScene" uid="uid://c5oq1qinxs4dj" path="res://DownRight/DownRight.tscn" id="8_fxsq8"]
-[ext_resource type="Script" uid="uid://dnxryp5iwvmml" path="res://UpRightArrow/UpRightArrow.gd" id="8_rs42x"]
 [ext_resource type="PackedScene" uid="uid://dhhg4g05gwjpu" path="res://DownLeft/DownLeft.tscn" id="9_rs42x"]
 [ext_resource type="PackedScene" uid="uid://dt4htqpir74id" path="res://middleNote/middleNote.tscn" id="10_2gnyf"]
 [ext_resource type="PackedScene" uid="uid://q8v6jpnyw41" path="res://BaseArrow/arrow.tscn" id="11_5h82b"]
@@ -42,7 +41,6 @@ scale = Vector2(0.2, 0.2)
 [node name="UpRightArrow" parent="." instance=ExtResource("5_hoyt5")]
 position = Vector2(1937, 94)
 scale = Vector2(0.2, 0.2)
-script = ExtResource("8_rs42x")
 
 [node name="DownRightArrow" parent="." instance=ExtResource("8_fxsq8")]
 position = Vector2(2087, 94)
