@@ -6,3 +6,8 @@
 [node name="Arrow" instance=ExtResource("1_xjm7x")]
 rotation = -2.22681
 script = ExtResource("2_qdpm3")
+
+[node name="Tail" parent="." index="2"]
+position = Vector2(-261.731, -55.0791)
+rotation = 2.21709
+scale = Vector2(3.10009, 1.98123)

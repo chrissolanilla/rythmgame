@@ -177,7 +177,7 @@ func get_lead_time() -> float:
 	return 1.5 # seconds to reach the receptor from spawn point
 
 func spawn_note(note_data: Dictionary):
-	#print("note data: ", note_data)
+	print("note data: ", note_data)
 	var dir = note_data["direction"]
 	var arrow = arrow_scenes[dir].instantiate()
 
@@ -213,6 +213,7 @@ func spawn_note(note_data: Dictionary):
 
 
 	arrow.baseColor = get_color_for_direction(dir)
+	print("arrow base color is ", arrow.baseColor)
 	arrow.note_time = note_data["time"]  # assign for hit detection
 	notes_layer.add_child(arrow)
 
@@ -226,7 +227,7 @@ func get_color_for_direction(dir: String) -> Color:
 		"down": return Color("e66600")
 		"up": return Color("e66600")
 		"center", "middleNote": return Color("c671ff")
-		"downLeft", "upRight": return Color("c671ff")
+		"downLeft", "downRight": return Color("c671ff")
 		_:
 			print("WTFFFF")
 			return Color(1, 1, 1)

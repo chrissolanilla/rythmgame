@@ -9,3 +9,8 @@ script = ExtResource("2_m4bre")
 
 [node name="Polygon2D" parent="." index="1"]
 color = Color(0.901961, 0.4, 0, 1)
+
+[node name="Tail" parent="." index="2"]
+position = Vector2(2.00084, -330)
+rotation = 3.14159
+scale = Vector2(3.4527, 2.17059)

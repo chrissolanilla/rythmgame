@@ -11,6 +11,6 @@ script = ExtResource("2_4skfg")
 color = Color(0.777521, 0.443015, 1, 1)
 
 [node name="Tail" parent="." index="2"]
-position = Vector2(-215.001, 307.999)
+position = Vector2(-234.911, 125.441)
 rotation = 1.5708
-scale = Vector2(1.78603, 1.29834)
+scale = Vector2(2.89302, 3.08446)

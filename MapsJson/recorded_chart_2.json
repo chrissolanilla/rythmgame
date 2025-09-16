@@ -1,4 +1,25 @@
 [
+		{
+		"direction": "upRight",
+		"time": 1
+	},
+		{
+		"direction": "upRight",
+		"time": 2
+	},
+		{
+		"direction": "upRight",
+		"time": 3
+	},
+		{
+		"direction": "upRight",
+		"time": 3.4
+	},
+		{
+		"direction": "upRight",
+		"time": 3.6
+	},
+	
 	{
 		"direction": "center",
 		"time": 3.185

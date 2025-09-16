@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://q8v6jpnyw41"]
+[gd_scene load_steps=6 format=3 uid="uid://q8v6jpnyw41"]
 
 [ext_resource type="Shader" uid="uid://1xivjfqqfo2o" path="res://BaseArrow/fill.gdshader" id="1_4ywnc"]
 [ext_resource type="Script" uid="uid://ei3f6r0sr6d7" path="res://BaseArrow/baseArrow.gd" id="1_a5iq3"]
 [ext_resource type="Texture2D" uid="uid://b3i3tb8jb4scm" path="res://BaseArrow/croppedArrow.png" id="2_qyxdl"]
+[ext_resource type="Texture2D" uid="uid://b7ykie8fjdmnb" path="res://art/Tail.png" id="4_1p51b"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yxpkn"]
 shader = ExtResource("1_4ywnc")
@@ -19,7 +20,7 @@ texture = ExtResource("2_qyxdl")
 polygon = PackedVector2Array(-57, 189, 0, 193, 56, 190, 62, 6, 141, 1, 0, -180, -140, -1, -65, 3)
 uv = PackedVector2Array(-57, 189, 0, 193, 56, 190, 62, 6, 141, 1, 0, -180, -140, -1, -65, 3)
 
-[node name="Tail" type="Polygon2D" parent="."]
-position = Vector2(104, 292)
-polygon = PackedVector2Array(-160.5, -83, -160.5, 83.5, -43.5, 83.5, -43.5117, -82.4695)
-uv = PackedVector2Array(-160.5, -83, -160.5, 83.5, -43.5, 83.5, -44.7431, -87.7548)
+[node name="Tail" type="Sprite2D" parent="."]
+position = Vector2(3, 322)
+scale = Vector2(2.4, 2.17059)
+texture = ExtResource("4_1p51b")
