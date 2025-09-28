@@ -5,7 +5,9 @@ var default_volume := 0.0
 var scroll_speed = 300.0
 var default_text := "[b][color=green]Game Volume[/color][/b]"
 var arrow_scale: float = 0.2
+var globalMapArray = []
 var globalMapPath: String = ""
+var startingIndex = 0
 var volume: int = 0
 
 
@@ -20,7 +22,8 @@ func _load_settings() -> void:
 
 	if err == OK:
 		# Read values from the file (with defaults in case they are missing)
-		globalMapPath = config.get_value("game", "chartPath", "Empty")
+		globalMapArray = config.get_value("game", "chartPath", [])
+		globalMapPath = globalMapArray[config.get_value("game","chartIndex", 0)]
 		volume = config.get_value("game", "volume", 0)	
 		scroll_speed = config.get_value("game","scrollSpeed", 1)
 		$ScrollSpeedSlider.value = scroll_speed
@@ -36,6 +39,9 @@ func _load_defaults() -> void:
 # Save settings to file
 func _save_settings() -> void:
 	var config = ConfigFile.new()
+	var err = config.load("user://Settings.cfg")
+	if err != OK:
+			return
 	config.set_value("game", "volume", $HSlider.value)
 	config.set_value("game", "scrollSpeed", $ScrollSpeedSlider.value)
 	config.save("user://Settings.cfg")

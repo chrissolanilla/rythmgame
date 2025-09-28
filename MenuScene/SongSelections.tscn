@@ -30,16 +30,16 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 55
 text = "Play Game"
 
-[node name="Song1" type="Button" parent="."]
+[node name="next" type="Button" parent="."]
 layout_mode = 0
-offset_left = 125.0
-offset_top = -235.0
-offset_right = 286.0
-offset_bottom = -160.0
+offset_left = 170.0
+offset_top = -232.0
+offset_right = 331.0
+offset_bottom = -157.0
 text = "Quit
 "
 
-[node name="Song2" type="Button" parent="."]
+[node name="prev" type="Button" parent="."]
 layout_mode = 0
 offset_left = -325.0
 offset_top = -232.0
@@ -47,6 +47,24 @@ offset_right = -164.0
 offset_bottom = -157.0
 text = "Settings"
 
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -95.0
+offset_top = -237.0
+offset_right = 102.0
+offset_bottom = -106.0
+expand_mode = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = -145.0
+offset_top = -68.0
+offset_right = 161.0
+offset_bottom = -28.0
+bbcode_enabled = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [connection signal="pressed" from="PlayMap" to="." method="_on_play_map_pressed"]
-[connection signal="pressed" from="Song1" to="." method="_on_song_1_pressed"]
-[connection signal="pressed" from="Song2" to="." method="_on_song_2_pressed"]
+[connection signal="pressed" from="next" to="." method="_on_next_pressed"]
+[connection signal="pressed" from="prev" to="." method="_on_prev_pressed"]
