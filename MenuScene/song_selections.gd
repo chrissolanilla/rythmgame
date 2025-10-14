@@ -1,6 +1,8 @@
 extends Control
 
+@onready var Next: Button = $"next"
 func _ready() -> void:
+	Next.grab_focus()
 	var config = ConfigFile.new()
 	var err = config.load("user://Settings.cfg")
 	
@@ -14,6 +16,8 @@ func _ready() -> void:
 		GlobalSettings.startingChartPath = chartPathList[chartIndex]
 		$TextureRect.texture = load(loadedImage)
 		$RichTextLabel.text = loadedSong.split(".")[0]
+		
+	
 
 func _on_play_map_pressed() -> void:
 	get_tree().change_scene_to_file("res://9ArrowScene/Game.tscn")
@@ -88,3 +92,7 @@ func get_Next_Song() -> String:
 	$RichTextLabel.text = nextSongName.split(".")[0]
 	$TextureRect.texture = load(nextChartImage)
 	return nextSongChart
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_accept"):
+		get_viewport().gui_get_focus_owner().emit_signal("pressed")

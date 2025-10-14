@@ -27,6 +27,7 @@ offset_bottom = 238.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../prev")
 theme_override_font_sizes/font_size = 55
 text = "Play Game"
 
@@ -36,7 +37,9 @@ offset_left = 170.0
 offset_top = -232.0
 offset_right = 331.0
 offset_bottom = -157.0
-text = "Quit
+focus_neighbor_left = NodePath("../prev")
+focus_neighbor_bottom = NodePath("../PlayMap")
+text = "Next
 "
 
 [node name="prev" type="Button" parent="."]
@@ -45,7 +48,9 @@ offset_left = -325.0
 offset_top = -232.0
 offset_right = -164.0
 offset_bottom = -157.0
-text = "Settings"
+focus_neighbor_right = NodePath("../next")
+focus_neighbor_bottom = NodePath("../PlayMap")
+text = "Previous"
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 0

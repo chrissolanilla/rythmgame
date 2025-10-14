@@ -9,11 +9,13 @@ var globalMapArray = []
 var globalMapPath: String = ""
 var startingIndex = 0
 var volume: int = 0
+@onready var Confirm: Button = $"Confirm"
 
 
 func _ready() -> void:
 	# Load saved settings if available
 	_load_settings()
+	Confirm.grab_focus()
 
 # Load settings from file, fallback to defaults
 func _load_settings() -> void:
@@ -45,6 +47,11 @@ func _save_settings() -> void:
 	config.set_value("game", "volume", $HSlider.value)
 	config.set_value("game", "scrollSpeed", $ScrollSpeedSlider.value)
 	config.save("user://Settings.cfg")
+	
+	
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_accept"):
+		get_viewport().gui_get_focus_owner().emit_signal("pressed")
 
 # Confirm button pressed
 func _on_confirm_pressed() -> void:
