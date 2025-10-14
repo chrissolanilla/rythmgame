@@ -13,6 +13,26 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_j1mvo")
 
+[node name="Quit" type="Button" parent="."]
+layout_mode = 0
+offset_left = 210.0
+offset_top = -266.0
+offset_right = 371.0
+offset_bottom = -191.0
+focus_neighbor_bottom = NodePath("../Settings")
+text = "Quit
+"
+
+[node name="Settings" type="Button" parent="."]
+layout_mode = 0
+offset_left = 211.0
+offset_top = -160.0
+offset_right = 372.0
+offset_bottom = -85.0
+focus_neighbor_top = NodePath("../Quit")
+focus_neighbor_bottom = NodePath("../Play Game Button")
+text = "Settings"
+
 [node name="Play Game Button" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -27,26 +47,10 @@ offset_bottom = 238.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../Settings")
 theme_override_font_sizes/font_size = 55
 text = "Play Game"
 
-[node name="Quit" type="Button" parent="."]
-layout_mode = 0
-offset_left = 210.0
-offset_top = -266.0
-offset_right = 371.0
-offset_bottom = -191.0
-text = "Quit
-"
-
-[node name="Settings" type="Button" parent="."]
-layout_mode = 0
-offset_left = 211.0
-offset_top = -160.0
-offset_right = 372.0
-offset_bottom = -85.0
-text = "Settings"
-
-[connection signal="pressed" from="Play Game Button" to="." method="_on_play_game_button_pressed"]
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Play Game Button" to="." method="_on_play_game_button_pressed"]
