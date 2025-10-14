@@ -133,12 +133,12 @@ func _process(delta):
 					reset_Combo()
 					note.queue_free()
 				#we dont want them to constantly miss if they miss a hold
-				
+
 			else:
-				print("Miss HERE")
+				# print("Miss HERE")
 				show_judgement("Miss", receptor_positions.get(note.direction,note.position))
 				reset_Combo()
-				#dont queue free the hold notes until the end time. 
+				#dont queue free the hold notes until the end time.
 				if not note.is_Hold:
 					note.queue_free()
 			#queue free after the hold is over
@@ -186,7 +186,7 @@ func get_lead_time() -> float:
 	return 1.5 # seconds to reach the receptor from spawn point
 
 func spawn_note(note_data: Dictionary):
-	print("note data: ", note_data)
+	# print("note data: ", note_data)
 	var dir = note_data["direction"]
 	var arrow = arrow_scenes[dir].instantiate()
 
@@ -222,7 +222,7 @@ func spawn_note(note_data: Dictionary):
 
 
 	arrow.baseColor = get_color_for_direction(dir)
-	print("arrow base color is ", arrow.baseColor)
+	# print("arrow base color is ", arrow.baseColor)
 	arrow.note_time = note_data["time"]  # assign for hit detection
 	notes_layer.add_child(arrow)
 
@@ -240,7 +240,7 @@ func get_color_for_direction(dir: String) -> Color:
 		_:
 			print("WTFFFF")
 			return Color(1, 1, 1)
-			
+
 func check_hits(direction: String):
 	var song_time = music.get_playback_position()
 	var closest_note: BaseArrow = null
@@ -336,7 +336,7 @@ func _set_tail_length_px(arrow: Node2D, tail: Sprite2D, length_px: float) -> voi
 	if parent_sy == 0.0: parent_sy = 1.0
 	# scale.y_local = desired_pixels / (base_h * parent_world_scale_y)
 	tail.scale = Vector2(tail.scale.x, length_px / (base_h * parent_sy))
-	
+
 func _is_frozen_hold(note: BaseArrow) -> bool:
 	for d in active_holds.keys():
 		var data = active_holds[d]
