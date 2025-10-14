@@ -1,68 +1,146 @@
-[gd_scene load_steps=13 format=3 uid="uid://bk374ib8x1sq4"]
+[gd_scene load_steps=15 format=3 uid="uid://bk374ib8x1sq4"]
 
 [ext_resource type="PackedScene" uid="uid://lhi5y6mg4a2c" path="res://DownArrow/down_arrow.tscn" id="1_0eyy2"]
 [ext_resource type="PackedScene" uid="uid://vmniglm0734s" path="res://LeftArrow/left_arrow.tscn" id="1_gox45"]
+[ext_resource type="Script" uid="uid://cuywlyticl7bt" path="res://9ArrowScene/game.gd" id="1_sh2q5"]
 [ext_resource type="PackedScene" uid="uid://24kddq1nwywr" path="res://RightArrow/right_arrow.tscn" id="3_c4c6w"]
 [ext_resource type="PackedScene" uid="uid://4trfkm441e3q" path="res://UpArrow/up_arrow.tscn" id="4_vjsbt"]
-[ext_resource type="PackedScene" uid="uid://bfs5xobp27hpq" path="res://UpRightArrow/UpRightArrow.tscn" id="5_hoyt5"]
-[ext_resource type="Script" uid="uid://nipyyycnctrq" path="res://UpLeftArrow/UpLeft.gd" id="6_yaici"]
-[ext_resource type="Script" uid="uid://c5lpv6r38lqo8" path="res://DownRight/DownRight.gd" id="7_xxp3w"]
-[ext_resource type="Script" uid="uid://c7uggyweqivhu" path="res://DownLeft/DownLeft.gd" id="8_2gnyf"]
+[ext_resource type="PackedScene" uid="uid://dkyb0c0hu67gy" path="res://UpRightArrow/UpRightArrow.tscn" id="5_hoyt5"]
+[ext_resource type="PackedScene" uid="uid://byuqe4dvwseil" path="res://UpLeftArrow/UpLeftArrow.tscn" id="7_sh2q5"]
+[ext_resource type="PackedScene" uid="uid://c5oq1qinxs4dj" path="res://DownRight/DownRight.tscn" id="8_fxsq8"]
+[ext_resource type="PackedScene" uid="uid://dhhg4g05gwjpu" path="res://DownLeft/DownLeft.tscn" id="9_rs42x"]
 [ext_resource type="PackedScene" uid="uid://dt4htqpir74id" path="res://middleNote/middleNote.tscn" id="10_2gnyf"]
 [ext_resource type="PackedScene" uid="uid://q8v6jpnyw41" path="res://BaseArrow/arrow.tscn" id="11_5h82b"]
-[ext_resource type="PackedScene" uid="uid://bma1i81i6xsn2" path="res://9ArrowScene/map1.tscn" id="11_qytyx"]
+[ext_resource type="PackedScene" uid="uid://bma1i81i6xsn2" path="res://9ArrowScene/sceneSpawner.tscn" id="11_qytyx"]
 [ext_resource type="AudioStream" uid="uid://c3wvxnuwgdrqu" path="res://mp3files/bad_apple.mp3" id="12_a8lej"]
+[ext_resource type="Script" uid="uid://ce4tupnoxkkum" path="res://9ArrowScene/pause_menu.gd" id="14_fxsq8"]
 
 [node name="Game" type="Node2D"]
+script = ExtResource("1_sh2q5")
 
 [node name="UpArrow" parent="." instance=ExtResource("4_vjsbt")]
-position = Vector2(1274, 417)
+position = Vector2(1861, 94)
 scale = Vector2(0.2, 0.2)
 
 [node name="DownArrow" parent="." instance=ExtResource("1_0eyy2")]
-position = Vector2(941, 417)
+position = Vector2(1683, 94)
 scale = Vector2(0.2, 0.2)
 
 [node name="LeftArrow" parent="." instance=ExtResource("1_gox45")]
-position = Vector2(690, 417)
+position = Vector2(1522, 94)
 scale = Vector2(0.2, 0.2)
 
 [node name="RightArrow" parent="." instance=ExtResource("3_c4c6w")]
-position = Vector2(1510, 417)
+position = Vector2(2016, 94)
+scale = Vector2(0.2, 0.2)
+
+[node name="UpLeftArrow" parent="." instance=ExtResource("7_sh2q5")]
+position = Vector2(1603.4, 94)
 scale = Vector2(0.2, 0.2)
 
 [node name="UpRightArrow" parent="." instance=ExtResource("5_hoyt5")]
-position = Vector2(1398, 417)
+position = Vector2(1937, 94)
 scale = Vector2(0.2, 0.2)
 
-[node name="UpLeftArrow" parent="." instance=ExtResource("5_hoyt5")]
-position = Vector2(807, 417)
-rotation = -1.5708
+[node name="DownRightArrow" parent="." instance=ExtResource("8_fxsq8")]
+position = Vector2(2087, 94)
 scale = Vector2(0.2, 0.2)
-script = ExtResource("6_yaici")
 
-[node name="DownRightArrow" parent="." instance=ExtResource("5_hoyt5")]
-position = Vector2(1608, 417)
-rotation = 1.5708
+[node name="DownLeftArrow" parent="." instance=ExtResource("9_rs42x")]
+position = Vector2(1448, 94)
 scale = Vector2(0.2, 0.2)
-script = ExtResource("7_xxp3w")
-
-[node name="DownLeftArrow" parent="." instance=ExtResource("5_hoyt5")]
-position = Vector2(588, 417)
-rotation = 3.14159
-scale = Vector2(0.2, 0.2)
-script = ExtResource("8_2gnyf")
 
 [node name="MiddleNote" parent="." instance=ExtResource("10_2gnyf")]
-position = Vector2(1100, 417)
+position = Vector2(1771, 105)
 scale = Vector2(0.1, 0.1)
 
-[node name="Map1" parent="." instance=ExtResource("11_qytyx")]
-position = Vector2(555, 1123)
+[node name="sceneSpawner" parent="." instance=ExtResource("11_qytyx")]
+position = Vector2(553, 1123)
 arrow_scene = ExtResource("11_5h82b")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(1100, 640)
+position = Vector2(1771, 328)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("12_a8lej")
+volume_db = -28.67
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PauseMenu" type="Control" parent="CanvasLayer"]
+process_mode = 2
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("14_fxsq8")
+
+[node name="Exit" type="Button" parent="CanvasLayer/PauseMenu"]
+layout_mode = 0
+offset_left = 236.0
+offset_top = 57.0
+offset_right = 507.0
+offset_bottom = 216.0
+text = "Exit"
+
+[node name="Main Menu" type="Button" parent="CanvasLayer/PauseMenu"]
+layout_mode = 0
+offset_left = 227.0
+offset_top = 374.0
+offset_right = 498.0
+offset_bottom = 533.0
+text = "Main Menu"
+
+[node name="Resume" type="Button" parent="CanvasLayer/PauseMenu"]
+layout_mode = 0
+offset_left = 766.0
+offset_top = 389.0
+offset_right = 1037.0
+offset_bottom = 548.0
+text = "Resume"
+
+[node name="Restart" type="Button" parent="CanvasLayer/PauseMenu"]
+layout_mode = 0
+offset_left = 759.0
+offset_top = 51.0
+offset_right = 1030.0
+offset_bottom = 210.0
+text = "Restart"
+
+[node name="NoteScore" type="RichTextLabel" parent="."]
+offset_left = 1630.0
+offset_top = -17.0
+offset_right = 1912.0
+offset_bottom = 74.0
+bbcode_enabled = true
+text = "[b][color=white] 0 [/color][/b]
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ComboScoring" type="RichTextLabel" parent="."]
+offset_left = 1899.0
+offset_top = 276.0
+offset_right = 2181.0
+offset_bottom = 367.0
+bbcode_enabled = true
+text = "[b][color=white] 0 [/color][/b]
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GlobalScoring" type="RichTextLabel" parent="."]
+offset_left = 1635.0
+offset_top = 416.0
+offset_right = 1917.0
+offset_bottom = 507.0
+bbcode_enabled = true
+text = "[b][color=green] 0 [/color][/b]
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="CanvasLayer/PauseMenu/Exit" to="CanvasLayer/PauseMenu" method="_on_exit_pressed"]
+[connection signal="pressed" from="CanvasLayer/PauseMenu/Main Menu" to="CanvasLayer/PauseMenu" method="_on_main_menu_pressed"]
+[connection signal="pressed" from="CanvasLayer/PauseMenu/Resume" to="CanvasLayer/PauseMenu" method="_on_resume_pressed"]
+[connection signal="pressed" from="CanvasLayer/PauseMenu/Restart" to="CanvasLayer/PauseMenu" method="_on_restart_pressed"]

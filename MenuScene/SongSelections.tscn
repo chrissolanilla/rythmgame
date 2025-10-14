@@ -1,0 +1,70 @@
+[gd_scene load_steps=2 format=3 uid="uid://0vvhlblbt4wc"]
+
+[ext_resource type="Script" uid="uid://dhl6170xt1dvf" path="res://MenuScene/song_selections.gd" id="1_243wc"]
+
+[node name="SongSelection" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_243wc")
+
+[node name="PlayMap" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -366.0
+offset_top = 91.0
+offset_right = 346.0
+offset_bottom = 238.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 55
+text = "Play Game"
+
+[node name="next" type="Button" parent="."]
+layout_mode = 0
+offset_left = 170.0
+offset_top = -232.0
+offset_right = 331.0
+offset_bottom = -157.0
+text = "Quit
+"
+
+[node name="prev" type="Button" parent="."]
+layout_mode = 0
+offset_left = -325.0
+offset_top = -232.0
+offset_right = -164.0
+offset_bottom = -157.0
+text = "Settings"
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -95.0
+offset_top = -237.0
+offset_right = 102.0
+offset_bottom = -106.0
+expand_mode = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = -145.0
+offset_top = -68.0
+offset_right = 161.0
+offset_bottom = -28.0
+bbcode_enabled = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="PlayMap" to="." method="_on_play_map_pressed"]
+[connection signal="pressed" from="next" to="." method="_on_next_pressed"]
+[connection signal="pressed" from="prev" to="." method="_on_prev_pressed"]

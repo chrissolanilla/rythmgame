@@ -1,14 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://bfs5xobp27hpq"]
+[gd_scene load_steps=3 format=3 uid="uid://dkyb0c0hu67gy"]
 
-[ext_resource type="PackedScene" uid="uid://4trfkm441e3q" path="res://UpArrow/up_arrow.tscn" id="1_j8x8i"]
+[ext_resource type="PackedScene" uid="uid://q8v6jpnyw41" path="res://BaseArrow/arrow.tscn" id="1_j8x8i"]
 [ext_resource type="Script" uid="uid://dnxryp5iwvmml" path="res://UpRightArrow/UpRightArrow.gd" id="2_v345r"]
 
 [node name="UpRightArrow" instance=ExtResource("1_j8x8i")]
 script = ExtResource("2_v345r")
 
 [node name="Sprite2D" parent="." index="0"]
-rotation = 0.785398
+rotation = 0.959931
 
 [node name="Polygon2D" parent="." index="1"]
-rotation = 0.785398
-uv = PackedVector2Array()
+rotation = 0.959931
+
+[node name="Tail" parent="." index="2"]
+position = Vector2(-17, 277)

@@ -9,3 +9,7 @@ script = ExtResource("2_uo6ex")
 
 [node name="Polygon2D" parent="." index="1"]
 color = Color(0.776471, 0.443137, 1, 1)
+
+[node name="Tail" parent="." index="2"]
+position = Vector2(195.169, 103.683)
+rotation = -1.5708

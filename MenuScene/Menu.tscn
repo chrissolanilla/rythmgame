@@ -39,5 +39,14 @@ offset_bottom = -191.0
 text = "Quit
 "
 
+[node name="Settings" type="Button" parent="."]
+layout_mode = 0
+offset_left = 211.0
+offset_top = -160.0
+offset_right = 372.0
+offset_bottom = -85.0
+text = "Settings"
+
 [connection signal="pressed" from="Play Game Button" to="." method="_on_play_game_button_pressed"]
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Settings" to="." method="_on_settings_pressed"]

@@ -7,9 +7,9 @@ This project started as a simple Godot 2D scene featuring a Superman sprite and 
 
 ## Features So Far
 
-	Basic directional arrows (up, down, left, right)
+	9 directional arrows (up, down, left, right middle, upright, downright, upleft, downleft)
 
-	Superman character that must stay on screen
+	4 types of 
 
 	Loss condition if the player flies out of the screen
 
