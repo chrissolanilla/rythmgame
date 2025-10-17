@@ -13,6 +13,15 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_243wc")
 
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -2
+layout_mode = 0
+offset_left = -579.0
+offset_top = -324.0
+offset_right = 576.0
+offset_bottom = 324.0
+color = Color(0.192157, 0.196078, 0.266667, 1)
+
 [node name="PlayMap" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = 8

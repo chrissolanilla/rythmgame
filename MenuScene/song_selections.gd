@@ -92,7 +92,3 @@ func get_Next_Song() -> String:
 	$RichTextLabel.text = nextSongName.split(".")[0]
 	$TextureRect.texture = load(nextChartImage)
 	return nextSongChart
-
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept"):
-		get_viewport().gui_get_focus_owner().emit_signal("pressed")
