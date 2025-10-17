@@ -14,6 +14,23 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_243wc")
 
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -2
+layout_mode = 0
+offset_left = -579.0
+offset_top = -324.0
+offset_right = 619.0
+offset_bottom = 350.0
+color = Color(0.192157, 0.196078, 0.266667, 1)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -95.0
+offset_top = -237.0
+offset_right = 102.0
+offset_bottom = -106.0
+expand_mode = 3
+
 [node name="PlayMap" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -56,14 +73,6 @@ focus_neighbor_bottom = NodePath("../PlayMap")
 theme_override_fonts/font = ExtResource("2_mq6oa")
 text = "Previous"
 
-[node name="TextureRect" type="TextureRect" parent="."]
-layout_mode = 0
-offset_left = -95.0
-offset_top = -237.0
-offset_right = 102.0
-offset_bottom = -106.0
-expand_mode = 3
-
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0
 offset_left = -145.0
@@ -74,15 +83,6 @@ theme_override_fonts/normal_font = ExtResource("2_mq6oa")
 bbcode_enabled = true
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="ColorRect" type="ColorRect" parent="."]
-z_index = -2
-layout_mode = 0
-offset_left = -579.0
-offset_top = -324.0
-offset_right = 619.0
-offset_bottom = 350.0
-color = Color(0.192157, 0.196078, 0.266667, 1)
 
 [connection signal="pressed" from="PlayMap" to="." method="_on_play_map_pressed"]
 [connection signal="pressed" from="next" to="." method="_on_next_pressed"]

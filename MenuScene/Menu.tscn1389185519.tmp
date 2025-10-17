@@ -15,25 +15,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_j1mvo")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-z_index = -3
-layout_mode = 0
-offset_left = -579.0
-offset_top = -324.0
-offset_right = 619.0
-offset_bottom = 350.0
-color = Color(0.192157, 0.196078, 0.266667, 1)
-
-[node name="TextureRect" type="TextureRect" parent="."]
-z_index = -2
-layout_mode = 1
-offset_left = -403.0
-offset_top = -276.0
-offset_right = 2714.0
-offset_bottom = 1509.0
-scale = Vector2(0.205, 0.205)
-texture = ExtResource("3_vfo63")
-
 [node name="Quit" type="Button" parent="."]
 layout_mode = 0
 offset_left = 210.0
@@ -74,6 +55,24 @@ focus_neighbor_top = NodePath("../Settings")
 theme_override_fonts/font = ExtResource("2_qtwcp")
 theme_override_font_sizes/font_size = 55
 text = "Play Game"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -3
+offset_left = -579.0
+offset_top = -324.0
+offset_right = 619.0
+offset_bottom = 350.0
+color = Color(0.192157, 0.196078, 0.266667, 1)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+z_index = -2
+layout_mode = 1
+offset_left = -403.0
+offset_top = -276.0
+offset_right = 2714.0
+offset_bottom = 1509.0
+scale = Vector2(0.205, 0.205)
+texture = ExtResource("3_vfo63")
 
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="Settings" to="." method="_on_settings_pressed"]
