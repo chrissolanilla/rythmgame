@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://c2kbthwlyples"]
+[gd_scene load_steps=4 format=3 uid="uid://c2kbthwlyples"]
 
 [ext_resource type="Script" uid="uid://buy408k8jbr78" path="res://MenuScene/menu.gd" id="1_j1mvo"]
 [ext_resource type="FontFile" uid="uid://c5onj8ox0dd42" path="res://Fonts/Johnny Fever.otf" id="2_qtwcp"]
+[ext_resource type="Texture2D" uid="uid://cydcmhb1mh35n" path="res://art/StepsLogo.png" id="3_vfo63"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -54,6 +55,24 @@ focus_neighbor_top = NodePath("../Settings")
 theme_override_fonts/font = ExtResource("2_qtwcp")
 theme_override_font_sizes/font_size = 55
 text = "Play Game"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -3
+offset_left = -579.0
+offset_top = -324.0
+offset_right = 619.0
+offset_bottom = 350.0
+color = Color(0.192157, 0.196078, 0.266667, 1)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+z_index = -2
+layout_mode = 1
+offset_left = -403.0
+offset_top = -276.0
+offset_right = 2714.0
+offset_bottom = 1509.0
+scale = Vector2(0.205, 0.205)
+texture = ExtResource("3_vfo63")
 
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="Settings" to="." method="_on_settings_pressed"]

@@ -148,6 +148,14 @@ vertical_alignment = 1
 
 [node name="UDP" parent="." instance=ExtResource("15_fxsq8")]
 
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -2
+offset_left = 1186.0
+offset_top = -9.0
+offset_right = 2384.0
+offset_bottom = 665.0
+color = Color(0.192157, 0.196078, 0.266667, 1)
+
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Exit" to="CanvasLayer/PauseMenu" method="_on_exit_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Main Menu" to="CanvasLayer/PauseMenu" method="_on_main_menu_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Resume" to="CanvasLayer/PauseMenu" method="_on_resume_pressed"]

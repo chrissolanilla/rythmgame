@@ -75,6 +75,15 @@ bbcode_enabled = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -2
+layout_mode = 0
+offset_left = -579.0
+offset_top = -324.0
+offset_right = 619.0
+offset_bottom = 350.0
+color = Color(0.192157, 0.196078, 0.266667, 1)
+
 [connection signal="pressed" from="PlayMap" to="." method="_on_play_map_pressed"]
 [connection signal="pressed" from="next" to="." method="_on_next_pressed"]
 [connection signal="pressed" from="prev" to="." method="_on_prev_pressed"]

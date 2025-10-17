@@ -82,6 +82,14 @@ focus_neighbor_bottom = NodePath("../Cancel")
 theme_override_fonts/font = ExtResource("2_ds7ha")
 text = "Exit"
 
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -2
+offset_left = -26.0
+offset_top = -1.0
+offset_right = 1172.0
+offset_bottom = 673.0
+color = Color(0.192157, 0.196078, 0.266667, 1)
+
 [connection signal="value_changed" from="HSlider" to="." method="_on_value_changed"]
 [connection signal="value_changed" from="ScrollSpeedSlider" to="." method="_on_scroll_speed_slider_value_changed"]
 [connection signal="pressed" from="Cancel" to="." method="_on_cancel_pressed"]
