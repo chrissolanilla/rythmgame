@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://0vvhlblbt4wc"]
+[gd_scene load_steps=3 format=3 uid="uid://0vvhlblbt4wc"]
 
 [ext_resource type="Script" uid="uid://dhl6170xt1dvf" path="res://MenuScene/song_selections.gd" id="1_243wc"]
+[ext_resource type="FontFile" uid="uid://c5onj8ox0dd42" path="res://Fonts/Johnny Fever.otf" id="2_mq6oa"]
 
 [node name="SongSelection" type="Control"]
 layout_mode = 3
@@ -28,6 +29,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 focus_neighbor_top = NodePath("../prev")
+theme_override_fonts/font = ExtResource("2_mq6oa")
 theme_override_font_sizes/font_size = 55
 text = "Play Game"
 
@@ -39,6 +41,7 @@ offset_right = 331.0
 offset_bottom = -157.0
 focus_neighbor_left = NodePath("../prev")
 focus_neighbor_bottom = NodePath("../PlayMap")
+theme_override_fonts/font = ExtResource("2_mq6oa")
 text = "Next
 "
 
@@ -50,6 +53,7 @@ offset_right = -164.0
 offset_bottom = -157.0
 focus_neighbor_right = NodePath("../next")
 focus_neighbor_bottom = NodePath("../PlayMap")
+theme_override_fonts/font = ExtResource("2_mq6oa")
 text = "Previous"
 
 [node name="TextureRect" type="TextureRect" parent="."]
@@ -66,6 +70,7 @@ offset_left = -145.0
 offset_top = -68.0
 offset_right = 161.0
 offset_bottom = -28.0
+theme_override_fonts/normal_font = ExtResource("2_mq6oa")
 bbcode_enabled = true
 horizontal_alignment = 1
 vertical_alignment = 1

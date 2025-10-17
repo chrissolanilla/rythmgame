@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://c2kbthwlyples"]
+[gd_scene load_steps=3 format=3 uid="uid://c2kbthwlyples"]
 
 [ext_resource type="Script" uid="uid://buy408k8jbr78" path="res://MenuScene/menu.gd" id="1_j1mvo"]
+[ext_resource type="FontFile" uid="uid://c5onj8ox0dd42" path="res://Fonts/Johnny Fever.otf" id="2_qtwcp"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -20,6 +21,7 @@ offset_top = -266.0
 offset_right = 371.0
 offset_bottom = -191.0
 focus_neighbor_bottom = NodePath("../Settings")
+theme_override_fonts/font = ExtResource("2_qtwcp")
 text = "Quit
 "
 
@@ -31,6 +33,7 @@ offset_right = 372.0
 offset_bottom = -85.0
 focus_neighbor_top = NodePath("../Quit")
 focus_neighbor_bottom = NodePath("../Play Game Button")
+theme_override_fonts/font = ExtResource("2_qtwcp")
 text = "Settings"
 
 [node name="Play Game Button" type="Button" parent="."]
@@ -48,6 +51,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 focus_neighbor_top = NodePath("../Settings")
+theme_override_fonts/font = ExtResource("2_qtwcp")
 theme_override_font_sizes/font_size = 55
 text = "Play Game"
 

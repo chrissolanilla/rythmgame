@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://bi87g2mr7ol7r"]
+[gd_scene load_steps=3 format=3 uid="uid://bi87g2mr7ol7r"]
 
+[ext_resource type="FontFile" uid="uid://c5onj8ox0dd42" path="res://Fonts/Johnny Fever.otf" id="2_ds7ha"]
 [ext_resource type="Script" uid="uid://dblc43ykvrw81" path="res://Settings/changeSettings.gd" id="2_ljqr7"]
 
 [node name="GlobalSettings" type="Control"]
@@ -58,6 +59,7 @@ offset_right = 424.0
 offset_bottom = 214.0
 focus_neighbor_top = NodePath("../Exit")
 focus_neighbor_bottom = NodePath("../Confirm")
+theme_override_fonts/font = ExtResource("2_ds7ha")
 text = "Cancel"
 
 [node name="Confirm" type="Button" parent="."]
@@ -67,6 +69,7 @@ offset_top = 193.0
 offset_right = 224.0
 offset_bottom = 245.0
 focus_neighbor_top = NodePath("../Cancel")
+theme_override_fonts/font = ExtResource("2_ds7ha")
 text = "Confirm"
 
 [node name="Exit" type="Button" parent="."]
@@ -76,6 +79,7 @@ offset_top = 56.0
 offset_right = 222.0
 offset_bottom = 97.0
 focus_neighbor_bottom = NodePath("../Cancel")
+theme_override_fonts/font = ExtResource("2_ds7ha")
 text = "Exit"
 
 [connection signal="value_changed" from="HSlider" to="." method="_on_value_changed"]

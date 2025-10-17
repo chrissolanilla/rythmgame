@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dwmsagl0eqmnk"]
+[gd_scene load_steps=3 format=3 uid="uid://dwmsagl0eqmnk"]
 
 [ext_resource type="Script" uid="uid://befbuee00lggn" path="res://MenuScene/Lost.gd" id="1_yhw6k"]
+[ext_resource type="FontFile" uid="uid://c5onj8ox0dd42" path="res://Fonts/Johnny Fever.otf" id="2_vp0mw"]
 
 [node name="GameOver" type="Control"]
 layout_mode = 3
@@ -11,21 +12,25 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_yhw6k")
 
-[node name="TextEdit" type="TextEdit" parent="."]
-layout_mode = 0
-offset_left = 184.0
-offset_top = 190.0
-offset_right = 955.0
-offset_bottom = 436.0
-theme_override_font_sizes/font_size = 91
-text = "GAME OVER"
-
 [node name="Button" type="Button" parent="."]
 layout_mode = 0
 offset_left = 373.0
 offset_top = 491.0
 offset_right = 657.0
 offset_bottom = 595.0
+theme_override_fonts/font = ExtResource("2_vp0mw")
 text = "Play again"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 217.0
+offset_top = 217.0
+offset_right = 898.0
+offset_bottom = 386.0
+theme_override_fonts/normal_font = ExtResource("2_vp0mw")
+theme_override_font_sizes/normal_font_size = 136
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
