@@ -20,8 +20,8 @@ z_index = -3
 layout_mode = 0
 offset_left = -579.0
 offset_top = -324.0
-offset_right = 619.0
-offset_bottom = 350.0
+offset_right = 574.0
+offset_bottom = 323.0
 color = Color(0.192157, 0.196078, 0.266667, 1)
 
 [node name="TextureRect" type="TextureRect" parent="."]

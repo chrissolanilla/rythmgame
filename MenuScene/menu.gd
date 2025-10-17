@@ -6,10 +6,6 @@ func _ready() -> void:
 	# Set up neighbors manually (you can also do this in the Inspector)
 	Play.grab_focus()
 	
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept"):
-		get_viewport().gui_get_focus_owner().emit_signal("pressed")
-
 func _on_quit_pressed() -> void: 
 	get_tree().quit() 
 	pass 

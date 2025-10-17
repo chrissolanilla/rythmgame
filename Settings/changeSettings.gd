@@ -47,11 +47,6 @@ func _save_settings() -> void:
 	config.set_value("game", "volume", $HSlider.value)
 	config.set_value("game", "scrollSpeed", $ScrollSpeedSlider.value)
 	config.save("user://Settings.cfg")
-	
-	
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept"):
-		get_viewport().gui_get_focus_owner().emit_signal("pressed")
 
 # Confirm button pressed
 func _on_confirm_pressed() -> void:
