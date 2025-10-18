@@ -10,6 +10,24 @@ var judgement_label_scene = preload("res://judgementLabel/JudgementLabel.tscn")
 @onready var ScoreLabel := $"../NoteScore"
 @onready var globalScoring := $"../GlobalScoring"
 @onready var comboTracker := $"../ComboScoring"
+@export var pose_prompt_scene: PackedScene = preload("res://Poses/PosePrompter.tscn")
+@onready var pose_layer: Node2D = $UI/PoseLayer
+@onready var sfx_success: AudioStreamPlayer = $UI/SFXSuccess
+@onready var sfx_fail: AudioStreamPlayer = $UI/SFXFail
+@onready var correct: Sprite2D = $UI/Judgements/Correct
+@onready var wrong: Sprite2D = $UI/Judgements/Wrong
+@onready var timer: Timer = $UI/Judgements/Timer
+
+
+var pose_icons := {
+	"Samurai Pose": preload("res://art/uniform_samurai.png"),
+	"Stop Pose": preload("res://art/uniform_stop.png"),
+	"What? Pose": preload("res://art/uniform_what.png"),
+	"Muscle Man Pose": preload("res://art/uniform_muscleman.png"),
+	"Tough Guy Pose": preload("res://art/uniform_toughguy.png"),
+	"Point Up Pose (L)": preload("res://art/uniform_pointup.png"),
+	"Point Up Pose (R)": preload("res://art/uniform_pointup.png")
+}
 
 var globalScore: int = 0
 var globalCombo: int = 0
@@ -113,11 +131,25 @@ func _active_hold_notes() -> Array:
 
 func _process(delta):
 	var song_time = music.get_playback_position()
-
-	while spawn_index < chart_data.size() and chart_data[spawn_index]["time"] <= song_time + get_lead_time():
-		spawn_note(chart_data[spawn_index])
-		spawn_index += 1
-
+	while spawn_index < chart_data.size():
+	#while spawn_index < chart_data.size() and chart_data[spawn_index]["time"] <= song_time + get_lead_time():
+		var nd = chart_data[spawn_index]
+		var t: float = float(nd["time"])
+		if nd.get("type", "arrow") == "pose":
+			var cd := float(nd.get("countdown", 5.0))
+			if song_time + 0.01 >= t- cd:
+				_spawn_pose(nd)
+				spawn_index +=1
+			else:
+				break
+		else:
+			if song_time + get_lead_time() >= t:
+				spawn_note(nd)
+				spawn_index += 1
+			else:
+				break
+		#spawn_note(chart_data[spawn_index])
+		#spawn_index += 1
 	for note in notes_layer.get_children():
 		if note is BaseArrow:
 			if not _is_frozen_hold(note):
@@ -127,8 +159,8 @@ func _process(delta):
 		if note.note_time < song_time -0.2 and not note in _active_hold_notes():
 			if note.is_Hold:
 				if note.end_Time < song_time - 0.2:
-					print("freeing")
-					print("missed")
+					# print("freeing")
+					# print("missed")
 					show_judgement("Miss", receptor_positions.get(note.direction,note.position))
 					reset_Combo()
 					note.queue_free()
@@ -182,6 +214,11 @@ func _process(delta):
 					hold_note.queue_free()
 				active_holds.erase(dir)
 
+	var latest_udp: Dictionary = $"../UDP".latest
+	for p in pose_layer.get_children():
+		if p.has_method("drive"):
+			p.drive(song_time, latest_udp)
+
 func get_lead_time() -> float:
 	return 1.5 # seconds to reach the receptor from spawn point
 
@@ -203,7 +240,7 @@ func spawn_note(note_data: Dictionary):
 
 	#Hold Note Creation
 	if note_data.has("end_Time"):
-		print("this is a hold note")
+		# print("this is a hold note")
 		var tail := arrow.get_node_or_null("Tail") as Sprite2D
 		if tail:
 			tail.centered = false
@@ -343,3 +380,57 @@ func _is_frozen_hold(note: BaseArrow) -> bool:
 		if data.get("note") == note and data.get("frozen", false):
 			return true
 	return false
+
+func _spawn_pose(nd: Dictionary):
+	var pose_name := String(nd["pose"])
+	var countdown := float(nd.get("countdown", 5.0))
+	var window := float(nd.get("window", 0.25))
+	var pts := int(nd.get("points", 10))
+
+	var p = pose_prompt_scene.instantiate()
+	p.modulate.a = 0.5
+	p.target_pose   = pose_name
+	p.target_time   = float(nd["time"])
+	p.countdown_len = countdown
+	p.window        = window
+	p.points        = pts
+	p.udp_node      = NodePath("../UDP")  # optional; we also pass latest in drive()
+
+	if pose_icons.has(pose_name):
+		p.icon = pose_icons[pose_name]
+
+	# position UI
+	p.position = Vector2( (get_viewport_rect().size.x - p.size.x)/2.0, 120 )
+	pose_layer.add_child(p)
+	p.global_position = get_viewport_rect().size / 2.0 -p.size /2.0
+	p.global_position.x+= 1000
+	#p.pose_judged.connect(_on_pose_judged)
+	p.pose_judged.connect(Callable(self, "_on_pose_judged"))
+
+func _on_pose_judged(success: bool, at_position: Vector2, points: int):
+	print("[POSE] judged: ", success, " pts=", points)
+	var center = globalScoring.global_position
+	if success:
+		show_judgement("Perfect!", at_position)
+		sfx_success.play()
+		#correct.global_position =get_viewport_rect().size / 2.0 -correct.size /2.0
+		correct.global_position = center +Vector2(500, -120)
+		correct.visible = true
+		timer.start()
+		update_Shown_Acc(points)
+		update_Score(points)
+		update_Combo()
+	else:
+		sfx_fail.play()
+		#wrong.global_position = get_viewport_rect().size / 2.0 - wrong.size /2.0
+		wrong.global_position = center+ Vector2(500,-120)
+		wrong.visible = true
+		timer.start()
+		show_judgement("Miss", at_position)
+		reset_Combo()
+
+
+func _on_timer_timeout() -> void:
+	correct.visible = false
+	wrong.visible = false
+	pass # Replace with function body.
