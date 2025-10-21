@@ -17,6 +17,7 @@ var judgement_label_scene = preload("res://judgementLabel/JudgementLabel.tscn")
 @onready var correct: Sprite2D = $UI/Judgements/Correct
 @onready var wrong: Sprite2D = $UI/Judgements/Wrong
 @onready var timer: Timer = $UI/Judgements/Timer
+@export var beatbar: PackedScene = preload("res://beatbar/beatbar.tscn")
 
 
 var pose_icons := {
@@ -86,7 +87,10 @@ var active_holds := {}
 const START_WINDOW := 0.1   # seconds to hit the head
 const END_WINDOW   := 0.12  # seconds tolerance at the tail
 const BREAK_GRACE  := 0.05  # brief grace for micro unholds
-
+var bar_interval: float
+var next_bar_time: float
+@export var bar_offset :float =0.0
+ 
 var arrow_scenes = {
 	"up": preload("res://UpArrow/up_arrow.tscn"),
 	"down": preload("res://DownArrow/down_arrow.tscn"),
@@ -121,6 +125,10 @@ func _ready():
 
 	scroll_speed = GlobalSettings.scrollSpeed
 	print("scroll speed: ", scroll_speed)
+	bar_interval = (60.0 / scroll_speed) *4.0
+	next_bar_time = bar_offset+bar_interval
+	
+	
 
 func _active_hold_notes() -> Array:
 	var arr: Array = []
@@ -131,6 +139,8 @@ func _active_hold_notes() -> Array:
 
 func _process(delta):
 	var song_time = music.get_playback_position()
+	var song_time_int = int(song_time)
+
 	while spawn_index < chart_data.size():
 	#while spawn_index < chart_data.size() and chart_data[spawn_index]["time"] <= song_time + get_lead_time():
 		var nd = chart_data[spawn_index]
@@ -148,71 +158,38 @@ func _process(delta):
 				spawn_index += 1
 			else:
 				break
-		#spawn_note(chart_data[spawn_index])
-		#spawn_index += 1
-	for note in notes_layer.get_children():
-		if note is BaseArrow:
-			if not _is_frozen_hold(note):
-				note.position.y -= scroll_speed * delta
-		else:
+
+	
+	while song_time + get_lead_time() >= next_bar_time:
+		spawn_bar_at_time(next_bar_time)
+		next_bar_time += (60.0 / scroll_speed) * 4.0
+	# move + cleanup (bars first, then notes)
+	for child in notes_layer.get_children():
+		# ----- BAR BRANCH-----
+		if child.has_meta("is_bar"):
+			child.position.y -= scroll_speed * delta
+			if song_time > float(child.get_meta("bar_time", -1.0)) + 0.2:
+				child.queue_free()
 			continue
-		if note.note_time < song_time -0.2 and not note in _active_hold_notes():
+
+		# -----NOTE BRANCH-----
+		var note := child as BaseArrow
+		if note == null:
+			continue
+
+		if not _is_frozen_hold(note):
+			note.position.y -= scroll_speed * delta
+		# miss handling (only for real notes)
+		if note.note_time < song_time - 0.2 and not note in _active_hold_notes():
 			if note.is_Hold:
 				if note.end_Time < song_time - 0.2:
-					# print("freeing")
-					# print("missed")
-					show_judgement("Miss", receptor_positions.get(note.direction,note.position))
+					show_judgement("Miss", receptor_positions.get(note.direction, note.position))
 					reset_Combo()
 					note.queue_free()
-				#we dont want them to constantly miss if they miss a hold
-
 			else:
-				# print("Miss HERE")
-				show_judgement("Miss", receptor_positions.get(note.direction,note.position))
+				show_judgement("Miss", receptor_positions.get(note.direction, note.position))
 				reset_Combo()
-				#dont queue free the hold notes until the end time.
-				if not note.is_Hold:
-					note.queue_free()
-			#queue free after the hold is over
-		#holds
-		for dir in active_holds.keys():
-			var data = active_holds[dir]
-			var hold_note: BaseArrow = data["note"]
-			if hold_note == null or not is_instance_valid(hold_note):
-				continue
-			var tail = hold_note.get_node_or_null("Tail") as Sprite2D
-			if tail:
-				#var song_time = music.get_playback_position() song time already declared
-				var remaining_px = max(0.0, (hold_note.end_Time - song_time) * scroll_speed)
-				_set_tail_length_px(hold_note, tail, remaining_px)
-			print("checking hold notes")
-			#if before the tail end, require holding but with gracde
-			if song_time < hold_note.end_Time - END_WINDOW:
-				print("break timer is: ", data["break_timer"])
-				if pressed[dir]:
-					data["break_timer"] = 0.0
-				else:
-					data["break_timer"]  += delta
-					if data["break_timer"] > BREAK_GRACE:
-						show_judgement("Miss", receptor_positions.get(dir,hold_note.position))
-						reset_Combo()
-						print("queueing free cause it was bigger than break grace")
-						hold_note.queue_free()
-						active_holds.erase(dir)
-			#whenw e reafh tthen end
-			else:
-				print("we reached the end")
-				print("condition value is : ", song_time-hold_note.end_Time)
-				if abs(song_time - hold_note.end_Time) <= END_WINDOW and pressed[dir]:
-					show_judgement("Perfect!", receptor_positions.get(dir, hold_note.position))
-					update_Shown_Acc(10)
-					update_Score(10)
-				else:
-					show_judgement("Miss", receptor_positions.get(dir, hold_note.position))
-					reset_Combo()
-				if is_instance_valid(hold_note):
-					hold_note.queue_free()
-				active_holds.erase(dir)
+				note.queue_free()
 
 	var latest_udp: Dictionary = $"../UDP".latest
 	for p in pose_layer.get_children():
@@ -223,7 +200,6 @@ func get_lead_time() -> float:
 	return 1.5 # seconds to reach the receptor from spawn point
 
 func spawn_note(note_data: Dictionary):
-	# print("note data: ", note_data)
 	var dir = note_data["direction"]
 	var arrow = arrow_scenes[dir].instantiate()
 
@@ -233,6 +209,7 @@ func spawn_note(note_data: Dictionary):
 	arrow.direction = dir
 	arrow.inputAction = ""  # disables input for scrolling arrows
 	arrow.is_receptor = false
+	arrow.z_index = 2
 	if dir == "center":
 		arrow.scale = Vector2(0.1, 0.1)
 	else:
@@ -251,8 +228,6 @@ func spawn_note(note_data: Dictionary):
 			var duration := float(note_data["end_Time"]) - float(note_data["time"])
 			var total_px = duration * scroll_speed
 			_set_tail_length_px(arrow, tail, total_px)
-
-			#
 		arrow.is_Hold = true
 		arrow.end_Time = note_data["end_Time"]
 		arrow.note_time = note_data["time"]
@@ -434,3 +409,38 @@ func _on_timer_timeout() -> void:
 	correct.visible = false
 	wrong.visible = false
 	pass # Replace with function body.
+	
+
+
+func spawn_bar_at_time(t: float) -> void:
+	var bar := beatbar.instantiate() as Sprite2D
+	if bar == null:
+		return
+	bar.set_meta("is_bar", true)
+	bar.set_meta("bar_time", t)
+	bar.z_index = 0
+	bar.centered = false 
+	# compute lane span from receptor Xs
+	var xs: Array = []
+	for k in receptor_positions.keys():
+		xs.append(receptor_positions[k].x)
+	xs.sort()
+	var left_x  := float(xs.front())
+	var right_x := float(xs.back())
+	var width_px := right_x - left_x
+
+	# spawn Y = receptor line + travel distance for lead time
+	var spawn_y = receptor_positions["center"].y + scroll_speed * get_lead_time()
+
+	# place in notes_layer space at left edge
+	bar.position = notes_layer.to_local(Vector2(left_x, spawn_y))
+
+	# stretch the sprite horizontally to match lane width
+	var tex_w := 1.0
+	if bar.texture:
+		tex_w = max(1.0, float(bar.texture.get_size().x))
+	bar.scale.x = width_px / tex_w
+	# tweak thickness if needed:
+	# bar.scale.y = 1.5
+
+	notes_layer.add_child(bar)
