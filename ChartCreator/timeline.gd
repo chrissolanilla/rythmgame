@@ -20,6 +20,19 @@ var active_lane := "up"
 var recording := false
 var pending_hold := {}         # lane -> start_time
 
+func _ready() -> void:
+	mouse_filter = Control.MOUSE_FILTER_STOP
+	focus_mode = Control.FOCUS_ALL
+	size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	size_flags_vertical = Control.SIZE_FILL
+	set_anchors_preset(Control.PRESET_FULL_RECT)
+
+	if custom_minimum_size.y < 1.0:
+		custom_minimum_size.y = 3000.0
+	# optional: ensure it has some width too
+	if custom_minimum_size.x < 1.0:
+		custom_minimum_size.x = 1200.0
+
 # ---------- mapping ----------
 func get_top_time() -> float:
 	if scroll_container == null: return 0.0
@@ -54,6 +67,7 @@ func snap_time(t: float) -> float:
 
 # ---------- drawing ----------
 func _draw():
+	draw_rect(Rect2(Vector2.ZERO, size), Color(0.12, 0.12, 0.12, 1.0))  # background
 	_draw_grid()
 	_draw_events()
 	_draw_playhead()

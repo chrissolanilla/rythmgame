@@ -3,7 +3,7 @@ extends Control
 @onready var audio: AudioStreamPlayer = $AudioStreamPlayer
 @onready var play_button: Button = $BottomBar/PlayButton
 @onready var current_time: Label = $BottomBar/CurrentTime
-@onready var timeline: Control = $Main/Center/TimelineScroll/Timeline
+@onready var timeline: Timeline = $Main/Center/TimelineScroll/Timeline
 @onready var seek: HSlider = $Seek
 @onready var zoom: HSlider = $Zoom
 @onready var record_mode: Button = $TopBar/RecordMode
@@ -94,12 +94,40 @@ func _on_open_audio_pressed() -> void:
 	
 
 func _on_audio_file_selected(path: String) -> void:
-	var stream := ResourceLoader.load(path)
-	if stream is AudioStream:
+	var stream := _load_audio_any(path)
+	#var stream := ResourceLoader.load(path)
+	if stream:
 		audio.stream = stream
 		seek.max_value = stream.get_length()
 		seek.value = 0.0
+		_resize_timeline_canvas()
+	else:
+		push_error("Unsupported or failed to load audio %s" % path)
 		
+func _load_audio_any(path: String) -> AudioStream:
+	var ext := path.get_extension().to_lower()
+
+	if ext == "mp3":
+		var s := AudioStreamMP3.new()
+		s.data = FileAccess.get_file_as_bytes(path)
+		return s
+
+	if ext == "wav":
+		var s := AudioStreamWAV.new()
+		# Works for uncompressed PCM WAV
+		s.data = FileAccess.get_file_as_bytes(path)
+		return s
+
+	if ext == "ogg" or ext == "oga":
+		var s := AudioStreamOggVorbis.new()
+		if s.has_method("load_from_file"):
+			s.load_from_file(path)
+			return s
+		# Fallback: external OGG-bytes not supported on this build
+		return null
+
+	return null
+
 func _on_open_chart_pressed() -> void:
 	var fd := $Chart
 	fd.filters = PackedStringArray(["*.json ; Chart JSON"])
@@ -122,9 +150,15 @@ func _on_save_chart_pressed() -> void:
 func _on_zoom_value_changed(value: float) -> void:
 	#scale the vedrtical zoom
 	timeline.seconds_per_pixel = 0.02 / clamp(value, 0.1, 10.0)
-	timeline.queue_redraw()
+	_resize_timeline_canvas()
 
 
 func _on_seek_value_changed(value: float) -> void:
 	if audio.stream and is_dragging:
 		audio.seek(value)
+
+#misc
+func _resize_timeline_canvas():
+	var length: float = (audio.stream != null) if audio.stream.get_length() else 120.0
+	timeline.custom_minimum_size.y = max(2000.0, length / timeline.seconds_per_pixel)
+	timeline.queue_redraw()

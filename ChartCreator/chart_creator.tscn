@@ -175,13 +175,13 @@ text = "BPM Change Marker"
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
 [node name="Audio" type="FileDialog" parent="."]
-title = "Select audio"
+title = "Open a File"
 ok_button_text = "Open"
 file_mode = 0
 access = 2
 
 [node name="Chart" type="FileDialog" parent="."]
-title = "Select an existing chart"
+title = "Open a File"
 ok_button_text = "Open"
 file_mode = 0
 
