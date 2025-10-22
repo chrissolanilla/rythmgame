@@ -1,0 +1,209 @@
+[gd_scene load_steps=3 format=3 uid="uid://dubyp30ucpky4"]
+
+[ext_resource type="Script" uid="uid://qvw0rp3u5eia" path="res://ChartCreator/chart_creator.gd" id="1_8r2ge"]
+[ext_resource type="Script" uid="uid://daoysi08p58yj" path="res://ChartCreator/timeline.gd" id="2_u4snj"]
+
+[node name="ChartCreator" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_8r2ge")
+
+[node name="TopBar" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.574
+offset_left = 960.0
+offset_top = 15.0
+offset_right = 960.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="OpenAudio" type="Button" parent="TopBar"]
+layout_mode = 2
+text = "Open audio"
+
+[node name="OpenChart" type="Button" parent="TopBar"]
+layout_mode = 2
+text = "Open Chart"
+
+[node name="SaveChart" type="Button" parent="TopBar"]
+layout_mode = 2
+text = "Save Chart"
+
+[node name="RecordMode" type="Button" parent="TopBar"]
+layout_mode = 2
+text = "Record Mode"
+
+[node name="Snap" type="Label" parent="TopBar"]
+layout_mode = 2
+text = "Snap:"
+
+[node name="Option" type="OptionButton" parent="TopBar"]
+layout_mode = 2
+selected = 0
+item_count = 4
+popup/item_0/text = "1/4"
+popup/item_0/id = 0
+popup/item_1/text = "1/8"
+popup/item_1/id = 1
+popup/item_2/text = "1/12"
+popup/item_2/id = 2
+popup/item_3/text = "1/16"
+popup/item_3/id = 3
+
+[node name="Main" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 40.0
+offset_top = 82.0
+offset_right = 1880.0
+offset_bottom = 952.0
+
+[node name="Leftbar" type="VBoxContainer" parent="Main"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Lanes" type="Label" parent="Main/Leftbar"]
+layout_mode = 2
+text = "Lanes"
+
+[node name="ToggleButtons" type="GridContainer" parent="Main/Leftbar"]
+layout_mode = 2
+
+[node name="PoseTrack" type="Button" parent="Main/Leftbar"]
+layout_mode = 2
+text = "Pose Track"
+
+[node name="Erase" type="Button" parent="Main/Leftbar"]
+layout_mode = 2
+text = "Erase"
+
+[node name="Center" type="VBoxContainer" parent="Main"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Waveform" type="Control" parent="Main/Center"]
+layout_mode = 2
+
+[node name="TimelineScroll" type="ScrollContainer" parent="Main/Center"]
+layout_mode = 2
+
+[node name="Timeline" type="Control" parent="Main/Center/TimelineScroll"]
+layout_mode = 2
+script = ExtResource("2_u4snj")
+
+[node name="Label" type="Label" parent="Main/Center"]
+layout_mode = 2
+text = "This is the center"
+
+[node name="Inspector" type="VBoxContainer" parent="Main"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Selection" type="Label" parent="Main/Inspector"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Selection"
+
+[node name="holdEndTime" type="LineEdit" parent="Main/Inspector"]
+layout_mode = 2
+placeholder_text = "hold end time"
+
+[node name="PoseName" type="OptionButton" parent="Main/Inspector"]
+layout_mode = 2
+selected = 0
+item_count = 7
+popup/item_0/text = "Samurai"
+popup/item_0/id = 0
+popup/item_1/text = "Point up(L)"
+popup/item_1/id = 1
+popup/item_2/text = "Point up(R)"
+popup/item_2/id = 2
+popup/item_3/text = "Stop"
+popup/item_3/id = 3
+popup/item_4/text = "Muscle Man"
+popup/item_4/id = 4
+popup/item_5/text = "What"
+popup/item_5/id = 5
+popup/item_6/text = "Tough Guy"
+popup/item_6/id = 6
+
+[node name="ConvertToHoldorSplit" type="Button" parent="Main/Inspector"]
+layout_mode = 2
+text = "Convert to Hold / Split Hold
+"
+
+[node name="Delete" type="Button" parent="Main/Inspector"]
+layout_mode = 2
+text = "Delete"
+
+[node name="BottomBar" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+offset_left = 960.0
+offset_top = 984.0
+offset_right = 960.0
+offset_bottom = 40.0
+
+[node name="BackToStart" type="Button" parent="BottomBar"]
+layout_mode = 2
+text = "⏮"
+
+[node name="PlayButton" type="Button" parent="BottomBar"]
+layout_mode = 2
+text = "▶/⏸"
+
+[node name="CurrentTime" type="Label" parent="BottomBar"]
+layout_mode = 2
+text = "Current Time"
+
+[node name="BPM" type="Label" parent="BottomBar"]
+layout_mode = 2
+text = "BPM"
+
+[node name="Offset" type="SpinBox" parent="BottomBar"]
+layout_mode = 2
+
+[node name="BpmChangeMarker" type="Button" parent="BottomBar"]
+layout_mode = 2
+text = "BPM Change Marker"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="Audio" type="FileDialog" parent="."]
+title = "Select audio"
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+
+[node name="Chart" type="FileDialog" parent="."]
+title = "Select an existing chart"
+ok_button_text = "Open"
+file_mode = 0
+
+[node name="Zoom" type="HSlider" parent="."]
+layout_mode = 2
+offset_left = 949.0
+offset_top = 962.0
+offset_right = 1449.0
+offset_bottom = 978.0
+
+[node name="Seek" type="HSlider" parent="."]
+layout_mode = 2
+offset_left = 961.0
+offset_top = 936.0
+offset_right = 1461.0
+offset_bottom = 952.0
+
+[connection signal="pressed" from="TopBar/OpenAudio" to="." method="_on_open_audio_pressed"]
+[connection signal="pressed" from="TopBar/OpenChart" to="." method="_on_open_chart_pressed"]
+[connection signal="pressed" from="TopBar/SaveChart" to="." method="_on_save_chart_pressed"]
+[connection signal="pressed" from="BottomBar/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="file_selected" from="Audio" to="." method="_on_audio_file_selected"]
+[connection signal="file_selected" from="Chart" to="." method="_on_chart_file_selected"]
+[connection signal="value_changed" from="Zoom" to="." method="_on_zoom_value_changed"]
+[connection signal="value_changed" from="Seek" to="." method="_on_seek_value_changed"]
