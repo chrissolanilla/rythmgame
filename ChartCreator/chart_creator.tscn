@@ -202,6 +202,7 @@ offset_bottom = 952.0
 [connection signal="pressed" from="TopBar/OpenAudio" to="." method="_on_open_audio_pressed"]
 [connection signal="pressed" from="TopBar/OpenChart" to="." method="_on_open_chart_pressed"]
 [connection signal="pressed" from="TopBar/SaveChart" to="." method="_on_save_chart_pressed"]
+[connection signal="pressed" from="BottomBar/BackToStart" to="." method="_on_back_to_start_pressed"]
 [connection signal="pressed" from="BottomBar/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="file_selected" from="Audio" to="." method="_on_audio_file_selected"]
 [connection signal="file_selected" from="Chart" to="." method="_on_chart_file_selected"]

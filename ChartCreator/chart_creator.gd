@@ -41,6 +41,7 @@ var pending_hold := {}
 var song_offset_ms: int = 0     
 var bpm: float =120.0    
 var is_dragging := false
+var current_seek: float
 
 func _ready():
 	# wire editor state into the timeline
@@ -70,22 +71,29 @@ func _ready():
 
 func _process(delta: float) -> void:
 	if audio.stream:
-		if not is_dragging:
+		if not is_dragging and audio.playing:
+			#make this so that the seek stays in place when paused
 			seek.value = audio.get_playback_position()
-		current_time.text = "%0.3f" % audio.get_playback_position()
+			current_time.text = "%0.3f" % audio.get_playback_position()
 		#request redraw
 		timeline.queue_redraw()
 		
 #signals
 func _on_play_button_pressed() -> void:
 	if not audio.stream: return
-	if audio.playing: audio.stop()
-	else: audio.play()
+	if audio.playing:
+		#make it so that we save our current time of the audio so we can resume
+		current_seek = audio.get_playback_position()
+		audio.stop()
+	else: 
+		audio.play()
+		audio.seek(current_seek)
 
-#func _on_zoom_value_changed(value: float) -> void:
-	#if audio.stream and seek.is_drag_successful():
-		#audio.seek(value)
-
+func _on_back_to_start_pressed() -> void:
+	audio.stop()
+	current_time.text = "0.0"
+	current_seek = 0.0
+	seek.value = 0.0
 
 func _on_open_audio_pressed() -> void:
 	var fd := $Audio
