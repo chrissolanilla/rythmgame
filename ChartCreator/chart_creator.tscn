@@ -1,7 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://dubyp30ucpky4"]
+[gd_scene load_steps=12 format=3 uid="uid://dubyp30ucpky4"]
 
 [ext_resource type="Script" uid="uid://qvw0rp3u5eia" path="res://ChartCreator/chart_creator.gd" id="1_8r2ge"]
-[ext_resource type="Script" uid="uid://daoysi08p58yj" path="res://ChartCreator/timeline.gd" id="2_u4snj"]
+[ext_resource type="Script" uid="uid://dkf4eq0jfb30j" path="res://ChartCreator/playfield.gd" id="2_kakgl"]
+[ext_resource type="PackedScene" uid="uid://4trfkm441e3q" path="res://UpArrow/up_arrow.tscn" id="2_m2jte"]
+[ext_resource type="PackedScene" uid="uid://lhi5y6mg4a2c" path="res://DownArrow/down_arrow.tscn" id="3_kakgl"]
+[ext_resource type="PackedScene" uid="uid://vmniglm0734s" path="res://LeftArrow/left_arrow.tscn" id="4_wwx2v"]
+[ext_resource type="PackedScene" uid="uid://24kddq1nwywr" path="res://RightArrow/right_arrow.tscn" id="5_rk1au"]
+[ext_resource type="PackedScene" uid="uid://byuqe4dvwseil" path="res://UpLeftArrow/UpLeftArrow.tscn" id="6_fgao3"]
+[ext_resource type="PackedScene" uid="uid://dkyb0c0hu67gy" path="res://UpRightArrow/UpRightArrow.tscn" id="7_8pxat"]
+[ext_resource type="PackedScene" uid="uid://c5oq1qinxs4dj" path="res://DownRight/DownRight.tscn" id="8_l8t52"]
+[ext_resource type="PackedScene" uid="uid://dhhg4g05gwjpu" path="res://DownLeft/DownLeft.tscn" id="9_jxjfs"]
+[ext_resource type="PackedScene" uid="uid://dt4htqpir74id" path="res://middleNote/middleNote.tscn" id="10_gjvqi"]
 
 [node name="ChartCreator" type="Control"]
 layout_mode = 3
@@ -84,19 +93,45 @@ text = "Erase"
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Waveform" type="Control" parent="Main/Center"]
-layout_mode = 2
+[node name="Playfield" type="Node2D" parent="Main/Center"]
+position = Vector2(-61, 187)
+script = ExtResource("2_kakgl")
 
-[node name="TimelineScroll" type="ScrollContainer" parent="Main/Center"]
-layout_mode = 2
+[node name="UpArrow" parent="Main/Center" instance=ExtResource("2_m2jte")]
+position = Vector2(27.0001, 26.0001)
+scale = Vector2(0.2, 0.2)
 
-[node name="Timeline" type="Control" parent="Main/Center/TimelineScroll"]
-layout_mode = 2
-script = ExtResource("2_u4snj")
+[node name="DownArrow" parent="Main/Center" instance=ExtResource("3_kakgl")]
+position = Vector2(-151, 26.0001)
+scale = Vector2(0.2, 0.2)
 
-[node name="Label" type="Label" parent="Main/Center"]
-layout_mode = 2
-text = "This is the center"
+[node name="LeftArrow" parent="Main/Center" instance=ExtResource("4_wwx2v")]
+position = Vector2(-312, 26.0001)
+scale = Vector2(0.2, 0.2)
+
+[node name="RightArrow" parent="Main/Center" instance=ExtResource("5_rk1au")]
+position = Vector2(182, 26.0001)
+scale = Vector2(0.2, 0.2)
+
+[node name="UpLeftArrow" parent="Main/Center" instance=ExtResource("6_fgao3")]
+position = Vector2(-230.6, 26.0001)
+scale = Vector2(0.2, 0.2)
+
+[node name="UpRightArrow" parent="Main/Center" instance=ExtResource("7_8pxat")]
+position = Vector2(103, 26.0001)
+scale = Vector2(0.2, 0.2)
+
+[node name="DownRightArrow" parent="Main/Center" instance=ExtResource("8_l8t52")]
+position = Vector2(253, 26)
+scale = Vector2(0.2, 0.2)
+
+[node name="DownLeftArrow" parent="Main/Center" instance=ExtResource("9_jxjfs")]
+position = Vector2(-386, 26.0001)
+scale = Vector2(0.2, 0.2)
+
+[node name="MiddleNote" parent="Main/Center" instance=ExtResource("10_gjvqi")]
+position = Vector2(-62.9999, 37.0001)
+scale = Vector2(0.1, 0.1)
 
 [node name="Inspector" type="VBoxContainer" parent="Main"]
 layout_mode = 2
