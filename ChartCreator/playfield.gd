@@ -4,7 +4,18 @@ class_name PlayField
 @export var pixels_per_second: float = 400.0
 @export var note_scene_path: String = "res://BaseArrow/arrow.tscn"
 @export var beatbar: PackedScene = preload("res://beatbar/beatbar.tscn")
-@export var note_scenes: Dictionary = {}  # optional: direction -> PackedScene
+var note_scenes: Dictionary = {
+	"left": "res://LeftArrow/left_arrow.tscn",
+	"right": "res://RightArrow/right_arrow.tscn",
+	"up": "res://UpArrow/up_arrow.tscn",
+	"down": "res://DownArrow/down_arrow.tscn",
+	"upLeft": "res://UpLeftArrow/UpLeftArrow.tscn",
+	"upRight": "res://UpRightArrow/UpRightArrow.tscn",
+	"downRight": "res://DownRight/DownRight.tscn",
+	"downLeft": "res://DownLeft/DownLeft.tscn",
+	"center": "res://middleNote/middleNote.tscn"
+
+} 
 
 var audio: AudioStreamPlayer
 var bpm: float = 120.0
@@ -113,10 +124,14 @@ func _spawn_bar(t: float) -> void:
 
 func _spawn_note(direction: String, t: float, ev: Dictionary) -> void:
 	var scene: PackedScene = null
-	if note_scenes.has(direction) and note_scenes[direction] is PackedScene:
-		scene = note_scenes[direction]
+	print("direction is ", direction)
+	if note_scenes.has(direction):
+		#scene = note_scenes[direction]
+		scene = load(note_scenes[direction]) as PackedScene
+		print("scene is ", scene, "and direction is ", direction)
 	else:
 		scene = load(note_scene_path) as PackedScene
+		print("scene in else is ", scene)
 	if scene == null:
 		return
 

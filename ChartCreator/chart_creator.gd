@@ -3,23 +3,11 @@ extends Control
 @onready var audio: AudioStreamPlayer = $AudioStreamPlayer
 @onready var play_button: Button = $BottomBar/PlayButton
 @onready var current_time: Label = $BottomBar/CurrentTime
-
-@onready var seek: HSlider = $Seek
-@onready var zoom: HSlider = $Zoom
-@onready var record_mode: Button = $TopBar/RecordMode
-@onready var snap_opt: OptionButton = $TopBar/Option
-@onready var toggle_buttons: GridContainer = $Main/Leftbar/ToggleButtons
-@onready var pose_track: Button = $Main/Leftbar/PoseTrack
-@onready var erase: Button = $Main/Leftbar/Erase
-
-@onready var hold_end_time: LineEdit = $Main/Inspector/holdEndTime
-@onready var pose_name: OptionButton = $Main/Inspector/PoseName
-@onready var convert_to_holdor_split: Button = $Main/Inspector/ConvertToHoldorSplit
-@onready var delete: Button = $Main/Inspector/Delete
-@onready var back_to_start: Button = $BottomBar/BackToStart
 @onready var bpm_label: Label = $BottomBar/BPM
+@onready var seek: HSlider = $Seek
 @onready var offset: SpinBox = $BottomBar/Offset
-@onready var bpm_change_marker: Button = $BottomBar/BpmChangeMarker
+
+@onready var snap_opt: OptionButton = $TopBar/Option
 
 @onready var down_left_arrow: Node2D = $Main/Center/DownLeftArrow
 @onready var left_arrow: Node2D = $Main/Center/LeftArrow
@@ -102,14 +90,12 @@ func _process(delta: float) -> void:
 func _on_play_button_pressed() -> void:
 	if not audio.stream:
 		return
-
 	# First press or resume
 	if not audio.playing:
 		audio.stream_paused = false
 		audio.play()
 		audio.seek(current_seek)
 		return
-
 	# Toggle pause without resetting playback position
 	if audio.stream_paused:
 		audio.stream_paused = false
