@@ -162,10 +162,11 @@ func _on_chart_file_selected(path: String) -> void:
 	playfield.rebuild_notes()
 
 func _on_save_chart_pressed() -> void:
-	var data := JSON.stringify(chart_data, "\t")
+	var data := JSON.stringify(playfield.chart_data, "\t")
 	var f := FileAccess.open("user://my_chart.json", FileAccess.WRITE)
 	f.store_string(data)
 	f.close()
+	print("saving chart with : ", playfield.chart_data)
 
 func _on_zoom_value_changed(value: float) -> void:
 	# no-op for now; vertical zoom would live in PlayField if you add it
@@ -187,3 +188,4 @@ func _on_offset_changed(v: float) -> void:
 	playfield.song_offset_ms = song_offset_ms
 	# rebuild bar Y positions
 	playfield.build_bars_for_song(seek.max_value)
+	

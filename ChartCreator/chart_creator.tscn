@@ -69,6 +69,7 @@ offset_left = 40.0
 offset_top = 82.0
 offset_right = 1880.0
 offset_bottom = 952.0
+mouse_filter = 2
 
 [node name="Leftbar" type="VBoxContainer" parent="Main"]
 layout_mode = 2
@@ -94,7 +95,6 @@ layout_mode = 2
 size_flags_horizontal = 10
 
 [node name="Playfield" type="Node2D" parent="Main/Center"]
-position = Vector2(-61, 187)
 script = ExtResource("2_kakgl")
 
 [node name="UpArrow" parent="Main/Center" instance=ExtResource("2_m2jte")]

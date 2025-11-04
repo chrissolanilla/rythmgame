@@ -15,7 +15,7 @@ var note_scenes: Dictionary = {
 	"downLeft": "res://DownLeft/DownLeft.tscn",
 	"center": "res://middleNote/middleNote.tscn"
 
-} 
+}
 
 var audio: AudioStreamPlayer
 var bpm: float = 120.0
@@ -236,6 +236,7 @@ func _process(_dt: float) -> void:
 # ------------ click to place notes
 func _unhandled_input(e: InputEvent) -> void:
 	if e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
+		print("we clicked")
 		if receptors.is_empty():
 			return
 		var lp: Vector2 = to_local(get_global_mouse_position())
@@ -284,8 +285,9 @@ func _replace_ghost_for_dir(direction: String) -> void:
 		_ghost = null
 
 	var scene: PackedScene = null
-	if note_scenes.has(direction) and note_scenes[direction] is PackedScene:
-		scene = note_scenes[direction]
+	#fix this logic
+	if note_scenes.has(direction):
+		scene = load(note_scenes[direction]) as PackedScene
 	else:
 		scene = load(note_scene_path) as PackedScene
 	if scene == null:
@@ -297,7 +299,7 @@ func _replace_ghost_for_dir(direction: String) -> void:
 		_ghost.is_receptor = false
 		_ghost.modulate.a = 0.45
 		_ghost.z_index = 6
-		_ghost.scale = Vector2(0.2, 0.2)
+		_ghost.scale = Vector2(0.2, 0.2) if direction != "center" else Vector2(0.1,0.1)
 		_ghost.direction = direction
 		if _dir_palette.has(direction):
 			_ghost.baseColor = (_dir_palette[direction] as Color)

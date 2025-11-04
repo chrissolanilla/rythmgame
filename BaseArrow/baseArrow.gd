@@ -28,6 +28,8 @@ func _ready() -> void:
 		inputAction = direction
 		#if is_receptor:
 			#print("Set inputAction = ", inputAction)
+	if baseColor:
+		polygon_2d.color = pressedColor
 
 func _process(delta: float) -> void:
 	if not is_receptor:
