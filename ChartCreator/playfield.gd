@@ -16,6 +16,12 @@ var note_scenes: Dictionary = {
 	"center": "res://middleNote/middleNote.tscn"
 
 }
+@export var pose_prompter_scene:PackedScene = preload("res://Poses/PosePrompter.tscn")
+@export var pose_pre_spawn_sec: float = 5.0
+@export var pose_ui_path: NodePath 
+var _pose_events: Array = []   
+var _pose_cursor: int = 0  
+var _active_prompts: Array[Control] = []
 
 var audio: AudioStreamPlayer
 var bpm: float = 120.0
@@ -32,6 +38,12 @@ var _ghost: BaseArrow = null
 var _ghost_dir: String = "center"
 var _ghost_visible: bool = false
 
+var ghost_enabled : bool = true
+var drag_active: bool = false
+var drag_from: Vector2 = Vector2.ZERO
+var drag_to: Vector2 = Vector2.ZERO
+var selected_notes: Array[Node2D] = []
+
 var _dir_palette: Dictionary = {
 	"upLeft":    Color8(198,113,255,255),
 	"left":      Color8(113,190,255,255),
@@ -44,16 +56,53 @@ var _dir_palette: Dictionary = {
 	"downRight": Color8(190,190,255,255),
 }
 
+@export var sfx_enabled: bool = true
+@export var flash_enabled: bool = true
+@export var hit_window_sec: float = 0.03   # 30 ms
+@export var flash_duration: float = 0.08
+@export var flash_scale: float = 1.15
+					  # optional: Control/CanvasLayer to parent prompts under
+@export var udp_source_path: NodePath                    # optional: node that has a `latest` dict
+				  # optional: node that has a `latest` dict
+@onready var _pose_ui := get_node_or_null(pose_ui_path)
+@onready var _udp_src := get_node_or_null(udp_source_path)
+@onready var _hit_player: AudioStreamPlayer = $"../../../hitSound"
+
+@export var pose_mode: bool = false              # set by your Control
+@export var pose_current_name: String = "Stop Pose"
+
+var _scrub_active : bool = false
+var _scrub_time : float = 0.0
+
+func set_scrub_time(t: float) -> void:
+	_scrub_active = true
+	_scrub_time = t
+
+func clear_scrub_time() -> void:
+	_scrub_active = false
+
 func _ready() -> void:
 	set_process(true)
 	set_process_unhandled_input(true)
 
 # ------------ time mapping
 func _now() -> float:
-	if audio != null:
-		# stream_paused keeps playback_position steady (good for editor view)
-		return audio.get_playback_position() + float(song_offset_ms) / 1000.0
-	return float(song_offset_ms) / 1000.0
+	var base: float
+
+	if _scrub_active:
+		base = _scrub_time
+	elif audio != null:
+		base = audio.get_playback_position()
+	else:
+		base = 0.0
+
+	return base + float(song_offset_ms) / 1000.0
+
+#func _now() -> float:
+	#if audio != null:
+		## stream_paused keeps playback_position steady (good for editor view)
+		#return audio.get_playback_position() + float(song_offset_ms) / 1000.0
+	#return float(song_offset_ms) / 1000.0
 
 func snap_time(t: float) -> float:
 	var beat_len: float = 60.0 / max(1.0, bpm)
@@ -78,6 +127,14 @@ func build_bars_for_song(song_len: float) -> void:
 	while t <= song_len + float(song_offset_ms) / 1000.0:
 		_spawn_bar(t)
 		t += beat_len
+		
+func _collect_pose_events() -> void:
+	_pose_events.clear()
+	for ev in chart_data:
+		if ev.get("type","arrow") == "pose":
+			_pose_events.append(ev)
+	_pose_events.sort_custom(func(a,b): return float(a["time"]) < float(b["time"]))
+	_pose_cursor = 0
 
 func rebuild_notes() -> void:
 	_clear_nodes(notes)
@@ -87,6 +144,12 @@ func rebuild_notes() -> void:
 			continue
 		var dir: String = str(ev.get("direction", "center"))
 		_spawn_note(dir, float(ev["time"]), ev)
+		# collect poses too
+	_collect_pose_events()
+	# clear any old prompts if you want a full rebuild
+	for p in _active_prompts:
+		if is_instance_valid(p): p.queue_free()
+	_active_prompts.clear()
 
 # ------------ spawning
 func _spawn_bar(t: float) -> void:
@@ -208,10 +271,20 @@ func _process(_dt: float) -> void:
 		elif n.has_meta("note_time"):
 			t_note = float(n.get_meta("note_time"))
 		(n as Node2D).position.y = time_to_y(t_note)
+		#play sound when t_note is close enough
+		if(absf(t_note - _now()) <= hit_window_sec):
+			if not n.has_meta("fx_done"):
+				_hit_player.play()
+				_flash_note(n)
+				n.set_meta("fx_done", true)
+		else:
+			n.set_meta("fx_done" , null)
 		(n as Node2D).visible = (n as Node2D).position.y > -200.0 and (n as Node2D).position.y < get_viewport_rect().size.y + 200.0
 
 	# hover ghost preview (direction-specific + recolor + 0.2 scale)
-	_ensure_ghost()
+	if ghost_enabled:
+		_unselect_all_notes()
+		_ensure_ghost()
 	if _ghost != null:
 		var lp: Vector2 = to_local(get_global_mouse_position())
 		if _is_inside_lanes(lp.x):
@@ -228,26 +301,119 @@ func _process(_dt: float) -> void:
 				_ghost.direction = _ghost_dir
 				_ghost.note_time = t_snap
 				_ghost.position = Vector2(rec_local.x, time_to_y(t_snap))
-				_ghost.visible = true
+				_ghost.visible = true if ghost_enabled else false
 		else:
 			_ghost_visible = false
-			_ghost.visible = false
+			
+	# --- Pose prompts: spawn & drive ---
+	var now := _now()
+	# spawn when countdown should begin
+	while _pose_cursor < _pose_events.size():
+		var ev = _pose_events[_pose_cursor]
+		var t  := float(ev["time"])
+		var pre := float(ev.get("countdown_len", pose_pre_spawn_sec))
+		if now >= t - pre:
+			_spawn_pose_prompt(ev)
+			_pose_cursor += 1
+		else:
+			break
+	# pass latest UDP if you centralize it here (optional)
+	var latest_udp := {}
+	if _udp_src and _udp_src.has_variable("latest"):
+		latest_udp = _udp_src.latest
+	var keep: Array[Control] = []
+	for p in _active_prompts:
+		if not is_instance_valid(p): continue
+		p.drive(now, latest_udp)
+		if p.is_inside_tree():
+			keep.append(p)
+	_active_prompts = keep
 
-# ------------ click to place notes
 func _unhandled_input(e: InputEvent) -> void:
-	if e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
-		print("we clicked")
-		if receptors.is_empty():
-			return
-		var lp: Vector2 = to_local(get_global_mouse_position())
-		var lane: String = _nearest_lane_from_x(lp.x)
-		var t_raw: float = _now() + (lp.y - receptor_y()) / pixels_per_second
-		var t: float = snap_time(t_raw)
+	# toggles
+	if e is InputEventKey and e.pressed:
+		if e.keycode == KEY_G:
+			ghost_enabled = !ghost_enabled
+			#hide ghost immediately when turning off
+			if not ghost_enabled and _ghost and is_instance_valid(_ghost):
+				_ghost.visible = false
+			#clear note selection
+			_unselect_all_notes()
+			
 
-		var ev: Dictionary = {"type":"arrow", "direction": lane, "time": t}
-		chart_data.append(ev)
-		chart_data.sort_custom(func(a, b): return a["time"] < b["time"])
-		_spawn_note(lane, t, ev)
+		# delete selection
+		if e.keycode == KEY_DELETE or KEY_BACKSPACE and not ghost_enabled:
+			if selected_notes.size() > 0:
+				print("deleting slected notes: ")
+				_delete_selected()
+			else:
+				print("size is not greater than 0")
+			return
+
+	#place notes
+	#if e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT and ghost_enabled:
+		#if receptors.is_empty(): return
+		#var lp := to_local(get_global_mouse_position())
+		#var lane := _nearest_lane_from_x(lp.x)
+		#var t_raw := _now() + (lp.y - receptor_y()) / pixels_per_second
+		#var t := snap_time(t_raw)
+		#var ev := {"type":"arrow", "direction": lane, "time": t}
+		#chart_data.append(ev)
+		#chart_data.sort_custom(func(a, b): return a["time"] < b["time"])
+		#_spawn_note(lane, t, ev)
+		#return
+	# place notes OR poses
+	if e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT and ghost_enabled:
+		if receptors.is_empty(): return
+		var lp := to_local(get_global_mouse_position())
+		var lane := _nearest_lane_from_x(lp.x)
+		var t_raw := _now() + (lp.y - receptor_y()) / pixels_per_second
+		var t := snap_time(t_raw)
+
+		if pose_mode:
+			var ev := {
+				"type": "pose",
+				"pose": pose_current_name,
+				"time": t,
+				"countdown_len": pose_pre_spawn_sec,  # or expose per-event if you like
+				"window": 0.25,
+				"points": 50
+			}
+			chart_data.append(ev)
+			chart_data.sort_custom(func(a, b): return float(a["time"]) < float(b["time"]))
+			_collect_pose_events()
+			# optional: if you're already inside the pre-spawn window, spawn immediately
+			# (handled below in _process anyway)
+		else:
+			var ev := {"type":"arrow", "direction": lane, "time": t}
+			chart_data.append(ev)
+			chart_data.sort_custom(func(a, b): return a["time"] < b["time"])
+			_spawn_note(lane, t, ev)
+		return
+
+
+	# selection drag begin (ghost OFF)
+	if not ghost_enabled and e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
+		drag_active = true
+		drag_from = to_local(get_global_mouse_position())
+		drag_to = drag_from
+		queue_redraw()
+		return
+
+	# selection drag update
+	if e is InputEventMouseMotion and drag_active and not ghost_enabled:
+		drag_to = to_local(get_global_mouse_position())
+		queue_redraw()
+		return
+
+	# selection drag end
+	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and not e.pressed:
+		if drag_active and not ghost_enabled:
+			drag_active = false
+			var r := _rect_from_drag()
+			_set_selected(_notes_in_rect(r))
+			queue_redraw()
+			return
 
 func _nearest_lane_from_x(local_x: float) -> String:
 	var best: String = "center"
@@ -314,3 +480,165 @@ func _clear_nodes(arr: Array) -> void:
 	for n in arr:
 		if is_instance_valid(n):
 			n.queue_free()
+
+
+func _draw() -> void:
+	if drag_active and not ghost_enabled:
+		var p0: Vector2 = Vector2(min(drag_from.x, drag_to.x), min(drag_from.y, drag_to.y))
+		var p1: Vector2 = Vector2(max(drag_from.x, drag_to.x), max(drag_from.y, drag_to.y))
+		var r := Rect2(p0, p1 - p0)
+		# fill
+		draw_rect(r, Color(1,1,1,0.12), true)
+		# outline
+		draw_rect(r, Color(1,1,1,0.9), false, 2.0)
+
+func _rect_from_drag() -> Rect2:
+	var p0: Vector2 = Vector2(min(drag_from.x, drag_to.x), min(drag_from.y, drag_to.y))
+	var p1: Vector2 = Vector2(max(drag_from.x, drag_to.x), max(drag_from.y, drag_to.y))
+	return Rect2(p0, p1 - p0)
+
+func _notes_in_rect(r: Rect2) -> Array[Node2D]:
+	var res: Array[Node2D] = []
+	for n in notes:
+		if not is_instance_valid(n): continue
+		var p: Vector2 = (n as Node2D).position  # already local
+		if r.has_point(p):
+			res.append(n)
+	return res
+
+func _set_selected(ns: Array[Node2D]) -> void:
+	# simple visual—tint selected; clear old
+	for n in selected_notes:
+		if is_instance_valid(n): (n as Node2D).modulate = Color(1,1,1,1)
+		var poly = n.get_node_or_null("Polygon2D")
+		if poly:
+			poly.color = n.pressedColor
+	selected_notes = ns.duplicate()
+	for n in selected_notes:
+		#(n as Node2D).modulate = Color(164,244,255,0.8)
+		var poly = n.get_node_or_null("Polygon2D")
+		if poly:
+			poly.color = Color(0.3, 0.8, 1.0)
+
+func _delete_selected() -> void:
+	if selected_notes.is_empty(): return
+	# remove nodes
+	for n in selected_notes:
+		if is_instance_valid(n):
+			n.queue_free()
+			notes.erase(n)
+	#remove from chart_data by time+dir match (tolerance for float)
+	var approx := func(a: float, b: float) -> bool: return absf(a - b) < 0.0005
+	for sn in selected_notes:
+		var ba: BaseArrow = sn as BaseArrow
+		var dir := ba.direction if ba != null else (sn.get_meta("direction") as String)
+		var t  := ba.note_time  if ba != null else  float(sn.get_meta("note_time"))
+		for i in range(chart_data.size() - 1, -1, -1):
+			var ev = chart_data[i]
+			if ev.get("type","arrow") == "arrow" and ev.get("direction","center") == dir and approx.call(float(ev["time"]), t):
+				chart_data.remove_at(i)
+	selected_notes.clear()
+	
+func _unselect_all_notes() -> void:
+	if selected_notes.is_empty():
+		return
+	for n in selected_notes:
+		if not is_instance_valid(n):
+			continue
+		var polygon := n.get_node_or_null("Polygon2D")
+		polygon.color = n.pressedColor
+
+	selected_notes.clear()
+	
+func _flash_note(n: Node2D) -> void:
+	if not flash_enabled: return
+	var poly := n.get_node_or_null("Polygon2D") as Polygon2D
+	if poly == null: return
+	var base_color: Color = poly.color
+	var base_scale: Vector2 = n.scale
+	var flash_color: Color = Color(0.3, 0.8, 1.0, base_color.a)
+
+	var d := flash_duration / play_rate  # so it feels the same in “song time”
+
+	var tw := create_tween()
+	tw.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.tween_property(n, "scale", base_scale * flash_scale, d * 0.5)
+	tw.parallel().tween_property(poly, "color", flash_color, d * 0.5)
+	tw.tween_property(n, "scale", base_scale, d * 0.5)
+	tw.parallel().tween_property(poly, "color", base_color, d * 0.5)
+
+#func _flash_note(n: Node2D) -> void:
+	#if not flash_enabled:
+		#return
+	#var poly: Polygon2D = n.get_node_or_null("Polygon2D")
+	#if poly == null:
+		#return
+	#var base_color: Color = poly.color
+	#var base_scale: Vector2 = n.scale
+	#var flash_color: Color = Color(0.3, 0.8, 1.0, base_color.a)
+#
+	#var tw := create_tween()
+	#tw.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+#
+	##scale pop + color flash
+	#tw.tween_property(n, "scale", base_scale * flash_scale, flash_duration * 0.5)
+	#tw.parallel().tween_property(poly, "color", flash_color, flash_duration * 0.5)
+#
+	##return to normal
+	#tw.tween_property(n, "scale", base_scale, flash_duration * 0.5)
+	#tw.parallel().tween_property(poly, "color", base_color, flash_duration * 0.5)
+
+
+func _spawn_pose_prompt(ev: Dictionary) -> void:
+	if pose_prompter_scene == null:
+		return
+	var p := pose_prompter_scene.instantiate() as Control
+	if p == null:
+		return
+
+	# set exported fields on the prompt
+	p.target_pose  = String(ev.get("pose",""))
+	p.target_time  = float(ev.get("time", 0.0))
+	p.countdown_len = float(ev.get("countdown_len", pose_pre_spawn_sec))
+	p.window       = float(ev.get("window", 0.25))
+	p.points       = int(ev.get("points", 10))
+
+	# per-event icon (optional)
+	if ev.has("icon") and ev["icon"] is Texture2D:
+		p.icon = ev["icon"]
+
+	# if you prefer the prompt to read UDP by itself:
+	if _udp_src and _udp_src != null:
+		p.udp_node = udp_source_path
+
+	# parent under UI (if provided), else under PlayField
+	var parent := _pose_ui if _pose_ui != null else self
+	parent.add_child(p)
+
+	# place somewhere sensible (centered above receptors)
+	var y := receptor_y() - 160.0
+	p.global_position = Vector2(global_position.x, to_global(Vector2(0,y)).y)
+
+	# connect scoring signal
+	p.pose_judged.connect(_on_pose_judged)
+
+	_active_prompts.append(p)
+
+func _on_pose_judged(success: bool, at_position: Vector2, points: int) -> void:
+	if success:
+		# simple feedback: sound + screen flash
+		_hit_player.play()
+		# you could also flash a receptor or spawn a checkmark sprite here
+	else:
+		# miss feedback, e.g., different sfx or shake
+		pass
+	# TODO: add to your score/state machine as needed
+	
+@export_range(0.25, 2.0, 0.05) var play_rate := 1.0 : set = set_play_rate
+
+func set_play_rate(r: float) -> void:
+	play_rate = clamp(r, 0.25, 2.0)
+	if audio:
+		audio.pitch_scale = play_rate          # speed + pitch change
+	if _hit_player:
+		_hit_player.pitch_scale = play_rate    # optional: keep SFX feel

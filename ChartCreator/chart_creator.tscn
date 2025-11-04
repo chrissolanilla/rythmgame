@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dubyp30ucpky4"]
+[gd_scene load_steps=13 format=3 uid="uid://dubyp30ucpky4"]
 
 [ext_resource type="Script" uid="uid://qvw0rp3u5eia" path="res://ChartCreator/chart_creator.gd" id="1_8r2ge"]
 [ext_resource type="Script" uid="uid://dkf4eq0jfb30j" path="res://ChartCreator/playfield.gd" id="2_kakgl"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://c5oq1qinxs4dj" path="res://DownRight/DownRight.tscn" id="8_l8t52"]
 [ext_resource type="PackedScene" uid="uid://dhhg4g05gwjpu" path="res://DownLeft/DownLeft.tscn" id="9_jxjfs"]
 [ext_resource type="PackedScene" uid="uid://dt4htqpir74id" path="res://middleNote/middleNote.tscn" id="10_gjvqi"]
+[ext_resource type="AudioStream" uid="uid://dal6rseqanjh8" path="res://mp3files/osu-hit-sound.mp3" id="12_kakgl"]
 
 [node name="ChartCreator" type="Control"]
 layout_mode = 3
@@ -82,13 +83,18 @@ text = "Lanes"
 [node name="ToggleButtons" type="GridContainer" parent="Main/Leftbar"]
 layout_mode = 2
 
-[node name="PoseTrack" type="Button" parent="Main/Leftbar"]
+[node name="AddArrows" type="Button" parent="Main/Leftbar/ToggleButtons"]
 layout_mode = 2
-text = "Pose Track"
+text = "Add Arrows"
 
-[node name="Erase" type="Button" parent="Main/Leftbar"]
+[node name="EraseErrows" type="Button" parent="Main/Leftbar/ToggleButtons"]
 layout_mode = 2
-text = "Erase"
+text = "Select mode"
+
+[node name="PoseMode" type="Button" parent="Main/Leftbar/ToggleButtons"]
+layout_mode = 2
+text = "Pose Mode
+"
 
 [node name="Center" type="VBoxContainer" parent="Main"]
 layout_mode = 2
@@ -209,6 +215,9 @@ text = "BPM Change Marker"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
+[node name="hitSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_kakgl")
+
 [node name="Audio" type="FileDialog" parent="."]
 title = "Open a File"
 ok_button_text = "Open"
@@ -220,13 +229,6 @@ title = "Open a File"
 ok_button_text = "Open"
 file_mode = 0
 
-[node name="Zoom" type="HSlider" parent="."]
-layout_mode = 2
-offset_left = 949.0
-offset_top = 962.0
-offset_right = 1449.0
-offset_bottom = 978.0
-
 [node name="Seek" type="HSlider" parent="."]
 layout_mode = 2
 offset_left = 961.0
@@ -234,12 +236,41 @@ offset_top = 936.0
 offset_right = 1461.0
 offset_bottom = 952.0
 
+[node name="Label" type="Label" parent="Seek"]
+layout_mode = 0
+offset_left = -93.0
+offset_top = -7.0
+offset_right = -24.0
+offset_bottom = 16.0
+text = "playback"
+
+[node name="song_speed" type="HSlider" parent="."]
+layout_mode = 2
+offset_left = 961.0
+offset_top = 898.0
+offset_right = 1461.0
+offset_bottom = 914.0
+min_value = 0.01
+max_value = 2.01
+value = 1.01
+
+[node name="Label" type="Label" parent="song_speed"]
+layout_mode = 0
+offset_left = -95.0
+offset_top = -24.0
+offset_right = -8.0
+offset_bottom = -1.0
+text = "song speed"
+
 [connection signal="pressed" from="TopBar/OpenAudio" to="." method="_on_open_audio_pressed"]
 [connection signal="pressed" from="TopBar/OpenChart" to="." method="_on_open_chart_pressed"]
 [connection signal="pressed" from="TopBar/SaveChart" to="." method="_on_save_chart_pressed"]
+[connection signal="pressed" from="Main/Leftbar/ToggleButtons/AddArrows" to="." method="_on_add_arrows_pressed"]
+[connection signal="pressed" from="Main/Leftbar/ToggleButtons/EraseErrows" to="." method="_on_erase_errows_pressed"]
+[connection signal="pressed" from="Main/Leftbar/ToggleButtons/PoseMode" to="." method="_on_pose_mode_pressed"]
 [connection signal="pressed" from="BottomBar/BackToStart" to="." method="_on_back_to_start_pressed"]
 [connection signal="pressed" from="BottomBar/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="file_selected" from="Audio" to="." method="_on_audio_file_selected"]
 [connection signal="file_selected" from="Chart" to="." method="_on_chart_file_selected"]
-[connection signal="value_changed" from="Zoom" to="." method="_on_zoom_value_changed"]
 [connection signal="value_changed" from="Seek" to="." method="_on_seek_value_changed"]
+[connection signal="value_changed" from="song_speed" to="." method="_on_song_speed_value_changed"]
