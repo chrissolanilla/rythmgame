@@ -31,7 +31,6 @@ var chart_data: Array = []
 var selection: int = -1
 var drag_kind: String = ""
 var active_lane: String = "up"
-var placing_poses: bool = false
 var snap_div: int = 4
 var recording: bool = false
 var pending_hold: Dictionary = {}
@@ -239,6 +238,7 @@ func _on_add_arrows_pressed() -> void:
 
 func _on_erase_errows_pressed() -> void:
 	playfield.ghost_enabled = false
+	playfield.hold_enabled = false
 
 func _unhandled_input(e: InputEvent) -> void:
 	if e is InputEventKey and e.pressed and e.keycode == KEY_P:
@@ -255,3 +255,11 @@ func _on_pose_mode_pressed() -> void:
 func _on_song_speed_value_changed(value: float) -> void:
 	speed_slider_label.text = "Song Speed: %f" % value
 	pass # Replace with function body.
+
+
+func _on_add_holds_pressed() -> void:
+	playfield.hold_enabled = true
+	print("playfield.hold_enabled is " , playfield.hold_enabled)
+
+func _on_spin_box_value_changed(value: float) -> void:
+	playfield.hold_duration = value

@@ -87,6 +87,16 @@ layout_mode = 2
 layout_mode = 2
 text = "Add Arrows"
 
+[node name="AddHolds" type="Button" parent="Main/Leftbar/ToggleButtons"]
+layout_mode = 2
+text = "Add Holds"
+
+[node name="SpinBox" type="SpinBox" parent="Main/Leftbar/ToggleButtons"]
+layout_mode = 2
+min_value = 0.2
+step = 0.2
+value = 1.0
+
 [node name="EraseErrows" type="Button" parent="Main/Leftbar/ToggleButtons"]
 layout_mode = 2
 text = "Select mode"
@@ -266,6 +276,8 @@ text = "song speed"
 [connection signal="pressed" from="TopBar/OpenChart" to="." method="_on_open_chart_pressed"]
 [connection signal="pressed" from="TopBar/SaveChart" to="." method="_on_save_chart_pressed"]
 [connection signal="pressed" from="Main/Leftbar/ToggleButtons/AddArrows" to="." method="_on_add_arrows_pressed"]
+[connection signal="pressed" from="Main/Leftbar/ToggleButtons/AddHolds" to="." method="_on_add_holds_pressed"]
+[connection signal="value_changed" from="Main/Leftbar/ToggleButtons/SpinBox" to="." method="_on_spin_box_value_changed"]
 [connection signal="pressed" from="Main/Leftbar/ToggleButtons/EraseErrows" to="." method="_on_erase_errows_pressed"]
 [connection signal="pressed" from="Main/Leftbar/ToggleButtons/PoseMode" to="." method="_on_pose_mode_pressed"]
 [connection signal="pressed" from="BottomBar/BackToStart" to="." method="_on_back_to_start_pressed"]

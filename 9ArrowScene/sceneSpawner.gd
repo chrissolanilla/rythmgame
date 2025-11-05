@@ -90,7 +90,7 @@ const BREAK_GRACE  := 0.05  # brief grace for micro unholds
 var bar_interval: float
 var next_bar_time: float
 @export var bar_offset :float =0.0
- 
+
 var arrow_scenes = {
 	"up": preload("res://UpArrow/up_arrow.tscn"),
 	"down": preload("res://DownArrow/down_arrow.tscn"),
@@ -127,8 +127,8 @@ func _ready():
 	print("scroll speed: ", scroll_speed)
 	bar_interval = (60.0 / scroll_speed) *4.0
 	next_bar_time = bar_offset+bar_interval
-	
-	
+
+
 
 func _active_hold_notes() -> Array:
 	var arr: Array = []
@@ -158,8 +158,6 @@ func _process(delta):
 				spawn_index += 1
 			else:
 				break
-
-	
 	while song_time + get_lead_time() >= next_bar_time:
 		spawn_bar_at_time(next_bar_time)
 		next_bar_time += (60.0 / scroll_speed) * 4.0
@@ -409,7 +407,7 @@ func _on_timer_timeout() -> void:
 	correct.visible = false
 	wrong.visible = false
 	pass # Replace with function body.
-	
+
 
 
 func spawn_bar_at_time(t: float) -> void:
@@ -419,7 +417,7 @@ func spawn_bar_at_time(t: float) -> void:
 	bar.set_meta("is_bar", true)
 	bar.set_meta("bar_time", t)
 	bar.z_index = 0
-	bar.centered = false 
+	bar.centered = false
 	# compute lane span from receptor Xs
 	var xs: Array = []
 	for k in receptor_positions.keys():
