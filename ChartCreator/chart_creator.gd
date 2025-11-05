@@ -23,6 +23,7 @@ extends Control
 @onready var pose_mode_btn: Button = $Main/Leftbar/ToggleButtons/PoseMode
 @onready var speed_slider: HSlider = $song_speed
 @onready var speed_slider_label: Label = $song_speed/Label
+@onready var save_chart_dialogue: FileDialog = $SaveChart
 
 var seconds_per_pixels: float = 0.02
 var lane_names: Array = ["upLeft","left","downLeft","down","center","up","upRight","right","downRight"]
@@ -206,10 +207,13 @@ func _on_chart_file_selected(path: String) -> void:
 
 func _on_save_chart_pressed() -> void:
 	var data := JSON.stringify(playfield.chart_data, "\t")
-	var f := FileAccess.open("user://my_chart.json", FileAccess.WRITE)
-	f.store_string(data)
-	f.close()
-	print("saving chart with : ", playfield.chart_data)
+	#var f := FileAccess.open("user://my_chart.json", FileAccess.WRITE)
+	#new
+	save_chart_dialogue.popup_centered()
+	##>>>>
+	#f.store_string(data)
+	#f.close()
+	#print("saving chart with : ", playfield.chart_data)
 
 
 func _on_seek_value_changed(value: float) -> void:
@@ -263,3 +267,14 @@ func _on_add_holds_pressed() -> void:
 
 func _on_spin_box_value_changed(value: float) -> void:
 	playfield.hold_duration = value
+
+
+func _on_save_chart_file_selected(path: String) -> void:
+	var data := JSON.stringify(playfield.chart_data, "\t")
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	if f:
+		f.store_string(data)
+		f.close()
+		print("Chart saved to: " , path)
+	else:
+		push_error("Failed to open file for writing: ", path)

@@ -239,6 +239,11 @@ title = "Open a File"
 ok_button_text = "Open"
 file_mode = 0
 
+[node name="SaveChart" type="FileDialog" parent="."]
+auto_translate_mode = 1
+access = 2
+filters = PackedStringArray("*.json ; JSON Files")
+
 [node name="Seek" type="HSlider" parent="."]
 layout_mode = 2
 offset_left = 961.0
@@ -284,5 +289,6 @@ text = "song speed"
 [connection signal="pressed" from="BottomBar/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="file_selected" from="Audio" to="." method="_on_audio_file_selected"]
 [connection signal="file_selected" from="Chart" to="." method="_on_chart_file_selected"]
+[connection signal="file_selected" from="SaveChart" to="." method="_on_save_chart_file_selected"]
 [connection signal="value_changed" from="Seek" to="." method="_on_seek_value_changed"]
 [connection signal="value_changed" from="song_speed" to="." method="_on_song_speed_value_changed"]

@@ -42,6 +42,7 @@ var drag_from: Vector2 = Vector2.ZERO
 var drag_to: Vector2 = Vector2.ZERO
 var selected_notes: Array[Node2D] = []
 var pose_name: String
+var _prev_now: float = -INF
 
 var active_holds := {}
 
@@ -223,9 +224,16 @@ func _spawn_note(direction: String, t: float, ev: Dictionary) -> void:
 		var duration := float(ev["end_Time"]) - float(ev["time"])
 		var total_px := duration* pixels_per_second
 		_set_tail_length_px(a_node, tail, total_px)
+		# save for replay/scrub restoration
+		a_node.set_meta("tail_total_px", total_px)
+		a_node.set_meta("head_time", float(ev["time"]))
+		a_node.set_meta("end_time", float(ev["end_Time"]))
 
 # ------------ frame update
 func _process(_dt: float) -> void:
+	var now := _now()
+	var prev_now := _prev_now
+	_prev_now = now
 	for bar in bars:
 		if not is_instance_valid(bar):
 			continue
@@ -250,15 +258,39 @@ func _process(_dt: float) -> void:
 			t_note = ba.note_time
 		elif n.has_meta("note_time"):
 			t_note = float(n.get_meta("note_time"))
-		(n as Node2D).position.y = time_to_y(t_note)
+		if not n.has_meta("frozen"):
+			(n as Node2D).position.y = time_to_y(t_note)
+		else:
+			(n as Node2D).position.y = n.position.y
+			var remaining_s :float = max(0.0, n.end_Time- _now())
+			var remaining_px := remaining_s * pixels_per_second
+			var tail : Sprite2D= n.get_node_or_null("Tail")
+			_set_tail_length_px(n, tail, remaining_px)
+			if remaining_s <=0.01:
+				n.set_meta("frozen", null)
+			#print("we should be frozen")
 		#play sound when t_note is close enough
 		if(absf(t_note - _now()) <= hit_window_sec):
+			print("its close enough")
 			if not n.has_meta("fx_done"):
-				_hit_player.play()
-				_flash_note(n)
-				n.set_meta("fx_done", true)
+				if n.is_Hold:
+					if not n.has_meta("frozen"):
+						print("freezing the hold")
+						_flash_note(n)
+						_hit_player.play()
+						n.set_meta("frozen", true)
+					else:
+						_flash_note(n)
+					#somehow make it frozen until end_Time is over
+				else:
+					_hit_player.play()
+					_flash_note(n)
+					n.set_meta("fx_done", true)
 		else:
 			n.set_meta("fx_done" , null)
+			
+			#if n.is_Hold:
+				#n.set_meta("frozen", null)
 		(n as Node2D).visible = (n as Node2D).position.y > -200.0 and (n as Node2D).position.y < get_viewport_rect().size.y + 200.0
 
 	# hover ghost preview (direction-specific + recolor + 0.2 scale)
@@ -297,6 +329,8 @@ func _unhandled_input(e: InputEvent) -> void:
 				_ghost.visible = false
 			#clear note selection
 			_unselect_all_notes()
+		if e.keycode == KEY_H:
+			hold_enabled = !hold_enabled
 		# delete selection
 		if e.keycode == KEY_DELETE or KEY_BACKSPACE and not ghost_enabled:
 			if selected_notes.size() > 0:
