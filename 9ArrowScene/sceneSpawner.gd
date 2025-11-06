@@ -33,7 +33,6 @@ var pose_icons := {
 var globalScore: int = 0
 var globalCombo: int = 0
 
-
 func show_judgement(text: String, position: Vector2):
 	var label = judgement_label_scene.instantiate()
 	label.text = text
@@ -376,7 +375,7 @@ func _spawn_pose(nd: Dictionary):
 	p.position = Vector2( (get_viewport_rect().size.x - p.size.x)/2.0, 120 )
 	pose_layer.add_child(p)
 	p.global_position = get_viewport_rect().size / 2.0 -p.size /2.0
-	p.global_position.x+= 1000
+	p.global_position.x+= 0
 	#p.pose_judged.connect(_on_pose_judged)
 	p.pose_judged.connect(Callable(self, "_on_pose_judged"))
 
@@ -407,7 +406,6 @@ func _on_timer_timeout() -> void:
 	correct.visible = false
 	wrong.visible = false
 	pass # Replace with function body.
-
 
 
 func spawn_bar_at_time(t: float) -> void:

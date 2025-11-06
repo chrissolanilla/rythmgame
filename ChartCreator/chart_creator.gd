@@ -98,13 +98,13 @@ func _ready() -> void:
 		song_offset_ms = int(v)
 		playfield.song_offset_ms = song_offset_ms
 	)
-	# set initial pose name on playfield
-	if pose_name.item_count > 0:
-		playfield.pose_current_name = pose_name.get_item_text(pose_name.get_selected_id())
-
-	pose_name.item_selected.connect(func(idx:int):
-		playfield.pose_current_name = pose_name.get_item_text(idx)
-	)
+	## set initial pose name on playfield
+	#if pose_name.item_count > 0:
+		#playfield.pose_current_name = pose_name.get_item_text(pose_name.get_selected_id())
+#
+	#pose_name.item_selected.connect(func(idx:int):
+		#playfield.pose_current_name = pose_name.get_item_text(idx)
+	#)
 
 	pose_mode_btn.toggle_mode = true
 	pose_mode_btn.toggled.connect(func(on: bool):
@@ -278,3 +278,8 @@ func _on_save_chart_file_selected(path: String) -> void:
 		print("Chart saved to: " , path)
 	else:
 		push_error("Failed to open file for writing: ", path)
+
+
+func _on_pose_name_item_selected(index: int) -> void:
+	playfield.pose_index = index
+	print("playfield.pose_index is ", playfield.pose_index)

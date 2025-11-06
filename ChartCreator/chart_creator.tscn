@@ -156,11 +156,7 @@ size_flags_horizontal = 10
 [node name="Selection" type="Label" parent="Main/Inspector"]
 layout_mode = 2
 size_flags_horizontal = 0
-text = "Selection"
-
-[node name="holdEndTime" type="LineEdit" parent="Main/Inspector"]
-layout_mode = 2
-placeholder_text = "hold end time"
+text = "Pose Selection"
 
 [node name="PoseName" type="OptionButton" parent="Main/Inspector"]
 layout_mode = 2
@@ -180,15 +176,6 @@ popup/item_5/text = "What"
 popup/item_5/id = 5
 popup/item_6/text = "Tough Guy"
 popup/item_6/id = 6
-
-[node name="ConvertToHoldorSplit" type="Button" parent="Main/Inspector"]
-layout_mode = 2
-text = "Convert to Hold / Split Hold
-"
-
-[node name="Delete" type="Button" parent="Main/Inspector"]
-layout_mode = 2
-text = "Delete"
 
 [node name="BottomBar" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(200, 0)
@@ -285,6 +272,7 @@ text = "song speed"
 [connection signal="value_changed" from="Main/Leftbar/ToggleButtons/SpinBox" to="." method="_on_spin_box_value_changed"]
 [connection signal="pressed" from="Main/Leftbar/ToggleButtons/EraseErrows" to="." method="_on_erase_errows_pressed"]
 [connection signal="pressed" from="Main/Leftbar/ToggleButtons/PoseMode" to="." method="_on_pose_mode_pressed"]
+[connection signal="item_selected" from="Main/Inspector/PoseName" to="." method="_on_pose_name_item_selected"]
 [connection signal="pressed" from="BottomBar/BackToStart" to="." method="_on_back_to_start_pressed"]
 [connection signal="pressed" from="BottomBar/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="file_selected" from="Audio" to="." method="_on_audio_file_selected"]

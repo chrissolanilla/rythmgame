@@ -5,6 +5,7 @@ class_name PlayField
 @export var pixels_per_second: float = 400.0
 @export var note_scene_path: String = "res://BaseArrow/arrow.tscn"
 @export var beatbar: PackedScene = preload("res://beatbar/beatbar.tscn")
+@export var poseScene: PackedScene = preload("res://ChartCreator/pose.tscn")
 var note_scenes: Dictionary = {
 	"left": "res://LeftArrow/left_arrow.tscn",
 	"right": "res://RightArrow/right_arrow.tscn",
@@ -15,11 +16,33 @@ var note_scenes: Dictionary = {
 	"downRight": "res://DownRight/DownRight.tscn",
 	"downLeft": "res://DownLeft/DownLeft.tscn",
 	"center": "res://middleNote/middleNote.tscn"
-
 }
+var poses := {
+	0: "Samurai",
+	1: "Point up(L)",
+	2: "Point up(R)",
+	3: "Stop",
+	4: "Muscle Man",
+	5: "What",
+	6: "Tough Guy",
+}
+
+var poses_array: Array = []
+
+var pose_sprites := {
+	0: preload("res://art/uniform_samurai.png"),
+	1: preload("res://art/uniform_stop.png"),
+	2: preload("res://art/uniform_what.png"),
+	3: preload("res://art/uniform_muscleman.png"),
+	4: preload("res://art/uniform_toughguy.png"),
+	5: preload("res://art/uniform_pointup.png"),
+	6: preload("res://art/uniform_pointup.png")
+}
+
 
 @export var pose_pre_spawn_sec: float = 5.0
 var _pose_events: Array = []
+var pose_index: int = 0
 
 var audio: AudioStreamPlayer
 var bpm: float = 120.0
@@ -70,11 +93,11 @@ var _dir_palette: Dictionary = {
 @onready var _hit_player: AudioStreamPlayer = $"../../../hitSound"
 
 @export var pose_mode: bool = false              # set by your Control
-@export var pose_current_name: String = "Stop Pose"
 var hold_enabled: bool = false
 @export var hold_duration: float = 1.0
 var _scrub_active : bool = false
 var _scrub_time : float = 0.0
+var select_mode: bool = false
 
 func set_scrub_time(t: float) -> void:
 	_scrub_active = true
@@ -229,18 +252,50 @@ func _spawn_note(direction: String, t: float, ev: Dictionary) -> void:
 		a_node.set_meta("head_time", float(ev["time"]))
 		a_node.set_meta("end_time", float(ev["end_Time"]))
 
+func _spawn_pose(p_index: int, t: float, ev: Dictionary) -> void:
+	var tex: Texture2D = pose_sprites.get(p_index)
+	if tex == null: return
+	var pose = poseScene.instantiate()
+	pose.z_index = 8
+	pose.pose_name_string = poses[p_index]
+	pose.countDown = pose_pre_spawn_sec  
+	pose.time = t 
+	var sprite := pose.get_node_or_null("Sprite2D")
+	if sprite: sprite.texture = tex
+	add_child(pose)
+	pose.position = to_local(get_global_mouse_position())
+	pose.scale = Vector2(0.7, 0.7)
+
+	poses_array.append(pose)
+
 # ------------ frame update
 func _process(_dt: float) -> void:
 	var now := _now()
 	var prev_now := _prev_now
 	_prev_now = now
+	
+	for pose in poses_array:
+		if not is_instance_valid(pose):
+			continue
+		var remaining :float= pose.countDown - _now()   # >0 = countdown before pose.time
+		# Visible only during the pre-spawn countdown window: (time - countDown, time]
+		if remaining <= pose.countDown and remaining > 0.0:
+			var label := pose.get_node_or_null("Countdown") as Label
+			if label:
+				label.text = "%.2f" % max(0.0, remaining)
+			else:
+				pose.countdown_string = "%.2f" % max(0.0, remaining)
+			pose.visible = true
+		else:
+			pose.visible = false
+
 	for bar in bars:
 		if not is_instance_valid(bar):
 			continue
 		var t: float = float(bar.get_meta("bar_time"))
 		bar.position.y = time_to_y(t)
 		bar.visible = bar.position.y > -200.0 and bar.position.y < get_viewport_rect().size.y + 200.0
-
+	
 	for n in notes:
 		if not is_instance_valid(n):
 			continue
@@ -316,21 +371,40 @@ func _process(_dt: float) -> void:
 				_ghost.visible = true if ghost_enabled else false
 		else:
 			_ghost_visible = false
+	if pose_mode:
+		select_mode = false
+		ghost_enabled = false
+	if select_mode:
+		ghost_enabled = false
+		pose_mode = false
 
-	# --- Pose prompts: spawn & drive ---
 
 func _unhandled_input(e: InputEvent) -> void:
 	# toggles
 	if e is InputEventKey and e.pressed:
+		if e.keycode == KEY_S:
+			ghost_enabled = false
+			pose_mode = false
+			select_mode = !select_mode
 		if e.keycode == KEY_G:
 			ghost_enabled = !ghost_enabled
+			if ghost_enabled:
+				pose_mode = false
+				select_mode = false
 			#hide ghost immediately when turning off
 			if not ghost_enabled and _ghost and is_instance_valid(_ghost):
 				_ghost.visible = false
+				select_mode = true
 			#clear note selection
 			_unselect_all_notes()
 		if e.keycode == KEY_H:
 			hold_enabled = !hold_enabled
+		#go into pose mode
+		if e.keycode == KEY_P:
+			pose_mode = !pose_mode
+			if pose_mode:
+				ghost_enabled = false
+				select_mode = false
 		# delete selection
 		if e.keycode == KEY_DELETE or KEY_BACKSPACE and not ghost_enabled:
 			if selected_notes.size() > 0:
@@ -340,6 +414,12 @@ func _unhandled_input(e: InputEvent) -> void:
 				print("size is not greater than 0")
 			return
 	#place notes
+	if e is InputEventMouseButton and e.is_pressed() and e.button_index == MOUSE_BUTTON_LEFT and pose_mode:
+		if pose_mode:
+			var t := _now()
+			var ev = { "type":"pose",  "pose": poses[pose_index],  "time": t, "countdown": pose_pre_spawn_sec, "window": 0.25, "points": 10 }
+			print("[unhadled_input] making pose with time ", t)
+			_spawn_pose(pose_index,t, ev)
 	if e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT and ghost_enabled:
 		if receptors.is_empty(): return
 
@@ -348,6 +428,7 @@ func _unhandled_input(e: InputEvent) -> void:
 		var t_raw := _now() + (lp.y - receptor_y()) / pixels_per_second
 		var t := snap_time(t_raw)
 		var ev:Dictionary
+
 		if hold_enabled:
 			print("unhandled input: making hold note with end time: ", hold_duration)
 			ev = {"type":"arrow", "direction": lane, "time": t, "end_Time": hold_duration+t}
@@ -358,7 +439,7 @@ func _unhandled_input(e: InputEvent) -> void:
 		_spawn_note(lane, t, ev)
 		return
 	# selection drag begin (ghost OFF)
-	if not ghost_enabled and e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
+	if select_mode and e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
 		drag_active = true
 		drag_from = to_local(get_global_mouse_position())
 		drag_to = drag_from
@@ -468,50 +549,71 @@ func _notes_in_rect(r: Rect2) -> Array[Node2D]:
 		var p: Vector2 = (n as Node2D).position  # already local
 		if r.has_point(p):
 			res.append(n)
+	for pnode in poses_array:
+		if not is_instance_valid(pnode): continue
+		var pos: Vector2 = (pnode as Node2D).position
+		if r.has_point(pos):
+			res.append(pnode)
 	return res
+	
+func _apply_selected_visual(n: Node2D, selected: bool) -> void:
+	# arrows: try Polygon2D
+	var poly := n.get_node_or_null("Polygon2D") as Polygon2D
+	if poly:
+		poly.color = (Color(0.3, 0.8, 1.0) if selected else (n.pressedColor if "pressedColor" in n else Color(1,1,1,1)))
+		return
+
+	# poses: try a 'Highlight' node (e.g., ColorRect/NinePatchRect) if present
+	var hi := n.get_node_or_null("Highlight")
+	if hi:
+		hi.visible = selected
+		return
+
+	# fallback for poses: tint Sprite2D
+	var spr := n.get_node_or_null("Sprite2D") as Sprite2D
+	if spr:
+		spr.modulate = (Color(0.3, 0.8, 1.0, 1.0) if selected else Color(1,1,1,1))
 
 func _set_selected(ns: Array[Node2D]) -> void:
-	# simple visual—tint selected; clear old
+	# clear old
 	for n in selected_notes:
-		if is_instance_valid(n): (n as Node2D).modulate = Color(1,1,1,1)
-		var poly = n.get_node_or_null("Polygon2D")
-		if poly:
-			poly.color = n.pressedColor
+		if is_instance_valid(n):
+			_apply_selected_visual(n, false)
+
 	selected_notes = ns.duplicate()
+
+	# apply new
 	for n in selected_notes:
-		#(n as Node2D).modulate = Color(164,244,255,0.8)
-		var poly = n.get_node_or_null("Polygon2D")
-		if poly:
-			poly.color = Color(0.3, 0.8, 1.0)
+		if is_instance_valid(n):
+			_apply_selected_visual(n, true)
+
 
 func _delete_selected() -> void:
 	if selected_notes.is_empty(): return
-	# remove nodes
+
 	for n in selected_notes:
-		if is_instance_valid(n):
+		if not is_instance_valid(n): continue
+
+		# if it's an arrow, remove from notes
+		if notes.has(n):
 			n.queue_free()
 			notes.erase(n)
-	#remove from chart_data by time+dir match (tolerance for float)
-	var approx := func(a: float, b: float) -> bool: return absf(a - b) < 0.0005
-	for sn in selected_notes:
-		var ba: BaseArrow = sn as BaseArrow
-		var dir := ba.direction if ba != null else (sn.get_meta("direction") as String)
-		var t  := ba.note_time  if ba != null else  float(sn.get_meta("note_time"))
-		for i in range(chart_data.size() - 1, -1, -1):
-			var ev = chart_data[i]
-			if ev.get("type","arrow") == "arrow" and ev.get("direction","center") == dir and approx.call(float(ev["time"]), t):
-				chart_data.remove_at(i)
+			continue
+
+		# if it's a pose, remove from poses_array
+		if poses_array.has(n):
+			n.queue_free()
+			poses_array.erase(n)
+			continue
+
 	selected_notes.clear()
 
-func _unselect_all_notes() -> void:
-	if selected_notes.is_empty():
-		return
-	for n in selected_notes:
-		if not is_instance_valid(n):
-			continue
-		var polygon := n.get_node_or_null("Polygon2D")
-		polygon.color = n.pressedColor
 
+func _unselect_all_notes() -> void:
+	if selected_notes.is_empty(): return
+	for n in selected_notes:
+		if is_instance_valid(n):
+			_apply_selected_visual(n, false)
 	selected_notes.clear()
 
 func _flash_note(n: Node2D) -> void:
