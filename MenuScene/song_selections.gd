@@ -2,6 +2,7 @@ extends Control
 
 @onready var Next: Button = $"next"
 func _ready() -> void:
+	GlobalSettings.test_play = false
 	Next.grab_focus()
 	var config = ConfigFile.new()
 	var err = config.load("user://Settings.cfg")
@@ -14,6 +15,9 @@ func _ready() -> void:
 		var loadedImage = chartImageList[chartIndex]
 		var loadedSong = chartSongList[chartIndex]
 		GlobalSettings.startingChartPath = chartPathList[chartIndex]
+		GlobalSettings.current_song = chartSongList[chartIndex]
+		print("chart song is set to ", chartSongList[chartIndex])
+		print("chart is set to : ", chartPathList[chartIndex])
 		$TextureRect.texture = load(loadedImage)
 		$RichTextLabel.text = loadedSong.split(".")[0]
 		
@@ -62,6 +66,8 @@ func get_Prev_Song() -> String:
 			prevChartImage = chartImageList[GlobalSettings.startingIndex]
 	$TextureRect.texture = load(prevChartImage)
 	$RichTextLabel.text = prevSongName.split(".")[0]
+	GlobalSettings.current_song = prevSongName
+	print("song is now : ", prevSongName)
 	return prevSongChart
 	
 func get_Next_Song() -> String:
@@ -91,4 +97,6 @@ func get_Next_Song() -> String:
 			nextChartImage = chartImageList[GlobalSettings.startingIndex]
 	$RichTextLabel.text = nextSongName.split(".")[0]
 	$TextureRect.texture = load(nextChartImage)
+	GlobalSettings.current_song = nextSongChart
+	print("song is now ", nextSongName)
 	return nextSongChart

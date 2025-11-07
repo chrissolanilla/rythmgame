@@ -65,7 +65,6 @@ position = Vector2(1771, 328)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("12_a8lej")
-volume_db = -28.67
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -94,6 +93,15 @@ offset_right = 498.0
 offset_bottom = 533.0
 theme_override_fonts/font = ExtResource("15_rs42x")
 text = "Main Menu"
+
+[node name="BackToEditor" type="Button" parent="CanvasLayer/PauseMenu"]
+layout_mode = 0
+offset_left = 498.0
+offset_top = 219.0
+offset_right = 769.0
+offset_bottom = 378.0
+theme_override_fonts/font = ExtResource("15_rs42x")
+text = "Back To Editor"
 
 [node name="Resume" type="Button" parent="CanvasLayer/PauseMenu"]
 layout_mode = 0
@@ -158,5 +166,6 @@ color = Color(0.192157, 0.196078, 0.266667, 1)
 
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Exit" to="CanvasLayer/PauseMenu" method="_on_exit_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Main Menu" to="CanvasLayer/PauseMenu" method="_on_main_menu_pressed"]
+[connection signal="pressed" from="CanvasLayer/PauseMenu/BackToEditor" to="CanvasLayer/PauseMenu" method="_on_back_to_editor_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Resume" to="CanvasLayer/PauseMenu" method="_on_resume_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Restart" to="CanvasLayer/PauseMenu" method="_on_restart_pressed"]

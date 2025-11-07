@@ -1,5 +1,6 @@
 extends Control
-
+var last_saved_chart_path: String = ""
+var last_saved_song_path : String = ""
 @onready var audio: AudioStreamPlayer = $AudioStreamPlayer
 @onready var play_button: Button = $BottomBar/PlayButton
 @onready var current_time: Label = $BottomBar/CurrentTime
@@ -40,8 +41,25 @@ var bpm: float = 120.0
 var is_dragging: bool = false
 var current_seek: float = 0.0
 
+
 func _ready() -> void:
+	var config = ConfigFile.new()
+	var err = config.load("user://Settings.cfg")
+
+	if err == OK:
+		# Read values from the file (with defaults in case they are missing)
+		var vol := int(config.get_value("game", "volume", 50))  # 0..100
+		vol = clamp(vol, 0, 100)
+		var lin := pow(float(vol) / 100.0, 2.0)  # 0..1
+		var bus := AudioServer.get_bus_index("Master")
+		AudioServer.set_bus_volume_db(bus, linear_to_db(lin))
 	# pass context to playfield
+	save_chart_dialogue.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	save_chart_dialogue.access = FileDialog.ACCESS_FILESYSTEM
+	save_chart_dialogue.filters = PackedStringArray(["*.json ; Chart JSON"])
+	save_chart_dialogue.current_file = "my_chart.json"  # optional default name
+
+	GlobalSettings.test_play = true
 	playfield.audio = audio
 	playfield.bpm = bpm
 	playfield.snap_div = snap_div
@@ -172,6 +190,7 @@ func _on_audio_file_selected(path: String) -> void:
 		push_error("Unsupported or failed to load audio %s" % path)
 
 func _load_audio_any(path: String) -> AudioStream:
+	last_saved_song_path = path
 	var ext := path.get_extension().to_lower()
 
 	if ext == "mp3":
@@ -270,16 +289,45 @@ func _on_spin_box_value_changed(value: float) -> void:
 
 
 func _on_save_chart_file_selected(path: String) -> void:
+	var out_path :=path
+	if not out_path.to_lower().ends_with(".json"):
+		out_path += ".json"
+		
 	var data := JSON.stringify(playfield.chart_data, "\t")
 	var f := FileAccess.open(path, FileAccess.WRITE)
 	if f:
 		f.store_string(data)
 		f.close()
-		print("Chart saved to: " , path)
+		last_saved_chart_path = out_path
+		print("Chart saved to: " , out_path)
 	else:
-		push_error("Failed to open file for writing: ", path)
+		push_error("Failed to open file for writing: ", out_path)
 
 
 func _on_pose_name_item_selected(index: int) -> void:
 	playfield.pose_index = index
 	print("playfield.pose_index is ", playfield.pose_index)
+
+
+func _on_test_chart_pressed() -> void:
+	# If user hasn't saved yet, auto-save to a temp path
+	if last_saved_chart_path == "":
+		var temp := "user://temp_chart.json"
+		var f := FileAccess.open(temp, FileAccess.WRITE)
+		if f:
+			f.store_string(JSON.stringify(playfield.chart_data, "\t"))
+			f.close()
+			last_saved_chart_path = temp
+		else:
+			push_error("Couldn't write temporary chart file.")
+			return
+	GlobalSettings.startingChartPath = last_saved_chart_path
+	GlobalSettings.test_play = true
+	print("setting test play to " , GlobalSettings.test_play)
+	GlobalSettings.current_song = last_saved_song_path
+	get_tree().change_scene_to_file("res://9ArrowScene/Game.tscn")
+
+
+func _on_back_to_main_pressed() -> void:
+	get_tree().change_scene_to_file("res://MenuScene/Menu.tscn")
+	pass # Replace with function body.

@@ -2,7 +2,7 @@ extends Node2D
 
 @export var arrow_scene: PackedScene
 var scroll_speed
-@export var chart_path: String = GlobalSettings.startingChartPath
+@export var chart_path: String
 @onready var notes_layer := $NotesLayer
 @onready var music := $"../AudioStreamPlayer"
 var judgement_label_scene = preload("res://judgementLabel/JudgementLabel.tscn")
@@ -18,7 +18,7 @@ var judgement_label_scene = preload("res://judgementLabel/JudgementLabel.tscn")
 @onready var wrong: Sprite2D = $UI/Judgements/Wrong
 @onready var timer: Timer = $UI/Judgements/Timer
 @export var beatbar: PackedScene = preload("res://beatbar/beatbar.tscn")
-
+var test_play : bool
 
 var pose_icons := {
 	"Samurai Pose": preload("res://art/uniform_samurai.png"),
@@ -103,8 +103,9 @@ var arrow_scenes = {
 }
 
 func _ready():
-
-	print(chart_path)
+	test_play = GlobalSettings.test_play
+	chart_path = GlobalSettings.startingChartPath
+	print("chart path is " , chart_path)
 	# connect signals manually or via editor
 
 	var receptors = get_parent().get_children()
@@ -120,6 +121,8 @@ func _ready():
 		var json_text = file.get_as_text()
 		chart_data = JSON.parse_string(json_text)
 		chart_data.sort_custom(func(a, b): return a["time"] < b["time"])
+		var songPath = load(GlobalSettings.current_song)
+		music.stream = songPath
 		music.play()
 
 	scroll_speed = GlobalSettings.scrollSpeed
@@ -135,20 +138,77 @@ func _active_hold_notes() -> Array:
 		var n = active_holds[d].get("note", null)
 		if n != null: arr.append(n)
 	return arr
+#
+#func _process(delta):
+	#var song_time = music.get_playback_position()
+	#var song_time_int = int(song_time)
+#
+	#while spawn_index < chart_data.size():
+	##while spawn_index < chart_data.size() and chart_data[spawn_index]["time"] <= song_time + get_lead_time():
+		#var nd = chart_data[spawn_index]
+		#var t: float = float(nd["time"])
+		#if nd.get("type", "arrow") == "pose":
+			#var cd := float(nd.get("countdown", 5.0))
+			#if song_time + 0.01 >= t- cd:
+				#_spawn_pose(nd)
+				#spawn_index +=1
+			#else:
+				#break
+		#else:
+			#if song_time + get_lead_time() >= t:
+				#spawn_note(nd)
+				#spawn_index += 1
+			#else:
+				#break
+	#while song_time + get_lead_time() >= next_bar_time:
+		#spawn_bar_at_time(next_bar_time)
+		#next_bar_time += (60.0 / scroll_speed) * 4.0
+	## move + cleanup (bars first, then notes)
+	#for child in notes_layer.get_children():
+		## ----- BAR BRANCH-----
+		#if child.has_meta("is_bar"):
+			#child.position.y -= scroll_speed * delta
+			#if song_time > float(child.get_meta("bar_time", -1.0)) + 0.2:
+				#child.queue_free()
+			#continue
+#
+		## -----NOTE BRANCH-----
+		#var note := child as BaseArrow
+		#if note == null:
+			#continue
+#
+		#if not _is_frozen_hold(note):
+			#note.position.y -= scroll_speed * delta
+		## miss handling (only for real notes)
+		#if note.note_time < song_time - 0.2 and not note in _active_hold_notes():
+			#if note.is_Hold:
+				#if note.end_Time < song_time - 0.2:
+					#show_judgement("Miss", receptor_positions.get(note.direction, note.position))
+					#reset_Combo()
+					#note.queue_free()
+			#else:
+				#show_judgement("Miss", receptor_positions.get(note.direction, note.position))
+				#reset_Combo()
+				#note.queue_free()
+#
+	#var latest_udp: Dictionary = $"../UDP".latest
+	#for p in pose_layer.get_children():
+		#if p.has_method("drive"):
+			#p.drive(song_time, latest_udp)
 
 func _process(delta):
-	var song_time = music.get_playback_position()
-	var song_time_int = int(song_time)
+	var song_time : float = music.get_playback_position()
 
+	# -------- SPAWN (poses + notes) --------
 	while spawn_index < chart_data.size():
-	#while spawn_index < chart_data.size() and chart_data[spawn_index]["time"] <= song_time + get_lead_time():
 		var nd = chart_data[spawn_index]
-		var t: float = float(nd["time"])
+		var t  := float(nd["time"])
+
 		if nd.get("type", "arrow") == "pose":
 			var cd := float(nd.get("countdown", 5.0))
-			if song_time + 0.01 >= t- cd:
+			if song_time + 0.01 >= t - cd:
 				_spawn_pose(nd)
-				spawn_index +=1
+				spawn_index += 1
 			else:
 				break
 		else:
@@ -157,26 +217,31 @@ func _process(delta):
 				spawn_index += 1
 			else:
 				break
+
+	# beat bars
 	while song_time + get_lead_time() >= next_bar_time:
 		spawn_bar_at_time(next_bar_time)
 		next_bar_time += (60.0 / scroll_speed) * 4.0
-	# move + cleanup (bars first, then notes)
+
+	# -------- MOVE / CLEANUP --------
 	for child in notes_layer.get_children():
-		# ----- BAR BRANCH-----
+		# bars
 		if child.has_meta("is_bar"):
 			child.position.y -= scroll_speed * delta
 			if song_time > float(child.get_meta("bar_time", -1.0)) + 0.2:
 				child.queue_free()
 			continue
 
-		# -----NOTE BRANCH-----
+		# notes
 		var note := child as BaseArrow
 		if note == null:
 			continue
 
+		# scroll unless it's a frozen hold head
 		if not _is_frozen_hold(note):
 			note.position.y -= scroll_speed * delta
-		# miss handling (only for real notes)
+
+		# generic miss cleanup (skip active, frozen holds)
 		if note.note_time < song_time - 0.2 and not note in _active_hold_notes():
 			if note.is_Hold:
 				if note.end_Time < song_time - 0.2:
@@ -188,10 +253,53 @@ func _process(delta):
 				reset_Combo()
 				note.queue_free()
 
+	# drive pose UI
 	var latest_udp: Dictionary = $"../UDP".latest
 	for p in pose_layer.get_children():
 		if p.has_method("drive"):
 			p.drive(song_time, latest_udp)
+
+	# -------- ACTIVE HOLDS: shrink tails & finish --------
+	var dirs_to_erase: Array = []
+	for dir in active_holds.keys():
+		var data = active_holds[dir]
+		var n: BaseArrow = data.get("note")
+		if not is_instance_valid(n):
+			dirs_to_erase.append(dir)
+			continue
+
+		var tail := n.get_node_or_null("Tail") as Sprite2D
+		var remaining := float(n.end_Time) - song_time  # seconds left
+
+		# keep frozen while held; small grace for micro unholds
+		if pressed.get(dir, false):
+			data["break_timer"] = 0.0
+			data["frozen"] = true
+		else:
+			data["break_timer"] = data.get("break_timer", 0.0) + delta
+			if data["break_timer"] > BREAK_GRACE:
+				data["frozen"] = false
+
+		# shrink/update tail pixels
+		if tail:
+			var remaining_px : float= max(0.0, remaining) * scroll_speed
+			_set_tail_length_px(n, tail, remaining_px)
+			tail.visible = remaining_px > 0.5
+
+		# completion: tail reached
+		if remaining <= END_WINDOW:
+			# (optional: award if still holding)
+			# if pressed.get(dir, false): show_judgement("Hold OK!", receptor_positions[dir])
+			if is_instance_valid(n):
+				n.queue_free()
+			dirs_to_erase.append(dir)
+		else:
+			# write back updated data
+			active_holds[dir] = data
+
+	# remove finished/invalid holds outside the loop
+	for d in dirs_to_erase:
+		active_holds.erase(d)
 
 func get_lead_time() -> float:
 	return 1.5 # seconds to reach the receptor from spawn point

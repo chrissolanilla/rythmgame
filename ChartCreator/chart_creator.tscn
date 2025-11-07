@@ -30,6 +30,10 @@ offset_right = 960.0
 grow_horizontal = 2
 alignment = 1
 
+[node name="BackToMain" type="Button" parent="TopBar"]
+layout_mode = 2
+text = "Back To Main Menu"
+
 [node name="OpenAudio" type="Button" parent="TopBar"]
 layout_mode = 2
 text = "Open audio"
@@ -42,9 +46,9 @@ text = "Open Chart"
 layout_mode = 2
 text = "Save Chart"
 
-[node name="RecordMode" type="Button" parent="TopBar"]
+[node name="testChart" type="Button" parent="TopBar"]
 layout_mode = 2
-text = "Record Mode"
+text = "Test Chart"
 
 [node name="Snap" type="Label" parent="TopBar"]
 layout_mode = 2
@@ -264,9 +268,11 @@ offset_right = -8.0
 offset_bottom = -1.0
 text = "song speed"
 
+[connection signal="pressed" from="TopBar/BackToMain" to="." method="_on_back_to_main_pressed"]
 [connection signal="pressed" from="TopBar/OpenAudio" to="." method="_on_open_audio_pressed"]
 [connection signal="pressed" from="TopBar/OpenChart" to="." method="_on_open_chart_pressed"]
 [connection signal="pressed" from="TopBar/SaveChart" to="." method="_on_save_chart_pressed"]
+[connection signal="pressed" from="TopBar/testChart" to="." method="_on_test_chart_pressed"]
 [connection signal="pressed" from="Main/Leftbar/ToggleButtons/AddArrows" to="." method="_on_add_arrows_pressed"]
 [connection signal="pressed" from="Main/Leftbar/ToggleButtons/AddHolds" to="." method="_on_add_holds_pressed"]
 [connection signal="value_changed" from="Main/Leftbar/ToggleButtons/SpinBox" to="." method="_on_spin_box_value_changed"]
