@@ -8,6 +8,9 @@ var scrollSpeed: int
 var test_play: bool = false
 var edit_chart
 var current_song: String
+var poses_array: Array
+var notes: Array
+var bars: Array
 
 func _ready() -> void:
 	startingChartPath = "res://MapsJson/recorded_chart.json"

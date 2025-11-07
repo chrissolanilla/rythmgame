@@ -18,16 +18,17 @@ var note_scenes: Dictionary = {
 	"center": "res://middleNote/middleNote.tscn"
 }
 var poses := {
-	0: "Samurai",
-	1: "Point up(L)",
-	2: "Point up(R)",
-	3: "Stop",
-	4: "Muscle Man",
-	5: "What",
-	6: "Tough Guy",
+	0: "Samurai Pose",
+	1: "Point Up Pose (L)",
+	2: "Point Up Pose (R)",
+	3: "Stop Pose",
+	4: "Muscle Man Pose",
+	5: "What? Pose",
+	6: "Tough Guy Pose",
 }
 
-var poses_array: Array = []
+var poses_events: Array
+var pose_nodes: Array
 
 var pose_sprites := {
 	0: preload("res://art/uniform_samurai.png"),
@@ -41,7 +42,7 @@ var pose_sprites := {
 
 
 @export var pose_pre_spawn_sec: float = 5.0
-var _pose_events: Array = []
+var pose_events: Array = []
 var pose_index: int = 0
 
 var audio: AudioStreamPlayer
@@ -49,11 +50,11 @@ var bpm: float = 120.0
 var snap_div: int = 4
 var song_offset_ms: int = 0
 
-var chart_data: Array = []          # {"time": float, "direction": "up", ...}
+var chart_data: Array         # {"time": float, "direction": "up", ...}
 var receptors: Dictionary = {}      # direction -> Node2D
 
-var bars: Array = []                # Sprite2D
-var notes: Array = []               # BaseArrow (or Node2D)
+var bars: Array                # Sprite2D
+var notes: Array               # BaseArrow (or Node2D)
 
 var _ghost: BaseArrow = null
 var _ghost_dir: String = "center"
@@ -266,7 +267,7 @@ func _spawn_pose(p_index: int, t: float, ev: Dictionary) -> void:
 	pose.position = to_local(get_global_mouse_position())
 	pose.scale = Vector2(0.7, 0.7)
 
-	poses_array.append(pose)
+	pose_nodes.append(pose)
 
 # ------------ frame update
 func _process(_dt: float) -> void:
@@ -274,10 +275,12 @@ func _process(_dt: float) -> void:
 	var prev_now := _prev_now
 	_prev_now = now
 	
-	for pose in poses_array:
+	for pose in pose_nodes:
+		#print("pose array is : ", pose_nodes)
 		if not is_instance_valid(pose):
+			print("not valid instance")
 			continue
-		var remaining :float= pose.countDown - _now()   # >0 = countdown before pose.time
+		var remaining :float= pose.time + (pose.countDown) - _now()   # >0 = countdown before pose.time
 		# Visible only during the pre-spawn countdown window: (time - countDown, time]
 		if remaining <= pose.countDown and remaining > 0.0:
 			var label := pose.get_node_or_null("Countdown") as Label
@@ -377,6 +380,7 @@ func _process(_dt: float) -> void:
 	if select_mode:
 		ghost_enabled = false
 		pose_mode = false
+		print("pose mode should be " , pose_mode)
 
 
 func _unhandled_input(e: InputEvent) -> void:
@@ -416,10 +420,12 @@ func _unhandled_input(e: InputEvent) -> void:
 	#place notes
 	if e is InputEventMouseButton and e.is_pressed() and e.button_index == MOUSE_BUTTON_LEFT and pose_mode:
 		if pose_mode:
-			var t := _now()
-			var ev = { "type":"pose",  "pose": poses[pose_index],  "time": t, "countdown": pose_pre_spawn_sec, "window": 0.25, "points": 10 }
+			var t := _prev_now
+			var ev := { "type":"pose",  "pose": poses[pose_index],  "time": t+pose_pre_spawn_sec, "countdown": pose_pre_spawn_sec, "window": 0.25, "points": 10 }
 			print("[unhadled_input] making pose with time ", t)
+			pose_events.append(ev)
 			_spawn_pose(pose_index,t, ev)
+			chart_data.append(ev)
 	if e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT and ghost_enabled:
 		if receptors.is_empty(): return
 
@@ -549,7 +555,7 @@ func _notes_in_rect(r: Rect2) -> Array[Node2D]:
 		var p: Vector2 = (n as Node2D).position  # already local
 		if r.has_point(p):
 			res.append(n)
-	for pnode in poses_array:
+	for pnode in pose_nodes:
 		if not is_instance_valid(pnode): continue
 		var pos: Vector2 = (pnode as Node2D).position
 		if r.has_point(pos):
@@ -601,9 +607,9 @@ func _delete_selected() -> void:
 			continue
 
 		# if it's a pose, remove from poses_array
-		if poses_array.has(n):
+		if pose_nodes.has(n):
 			n.queue_free()
-			poses_array.erase(n)
+			pose_nodes.erase(n)
 			continue
 
 	selected_notes.clear()
@@ -657,3 +663,34 @@ func _set_tail_length_px(arrow: Node2D, tail: Sprite2D, length_px: float) -> voi
 	if parent_sy == 0.0: parent_sy = 1.0
 	# scale.y_local = desired_pixels / (base_h * parent_world_scale_y)
 	tail.scale = Vector2(tail.scale.x, length_px / (base_h * parent_sy))
+
+func _spawn_pose_from_event(ev: Dictionary) -> Node2D:
+	var p_index: int = int(ev.get("pose_index", 0))
+	var t: float = float(ev.get("time", 0.0))
+	var countdown: float = float(ev.get("countdown", pose_pre_spawn_sec))
+
+	var tex: Texture2D = pose_sprites.get(p_index)
+	if tex == null:
+		return null
+
+	var pose = poseScene.instantiate()
+	pose.z_index = 8
+	pose.pose_name_string = poses.get(p_index, "Pose")
+	pose.countDown = countdown
+	pose.time = t
+	var sprite := pose.get_node_or_null("Sprite2D")
+	if sprite:
+		sprite.texture = tex
+
+	add_child(pose)
+	pose.position = to_local(get_global_mouse_position())
+	pose.scale = Vector2(0.7, 0.7)
+
+	pose_nodes.append(pose)
+	return pose
+	
+func rebuild_poses() -> void:
+	_clear_nodes(pose_nodes)
+	pose_nodes.clear()
+	for ev in pose_events:
+		_spawn_pose_from_event(ev)

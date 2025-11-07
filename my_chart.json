@@ -1,0 +1,95 @@
+[
+	{
+		"direction": "up",
+		"time": 0.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "upLeft",
+		"time": 1.0,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 1.375,
+		"type": "arrow"
+	},
+	{
+		"direction": "upLeft",
+		"time": 1.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 2.25,
+		"type": "arrow"
+	},
+	{
+		"countdown": 5.0,
+		"points": 10.0,
+		"pose": "Samurai",
+		"time": 7.22040820121765,
+		"type": "pose",
+		"window": 0.25
+	},
+	{
+		"countdown": 5.0,
+		"points": 10.0,
+		"pose": "Samurai",
+		"time": 7.22040820121765,
+		"type": "pose",
+		"window": 0.25
+	},
+	{
+		"direction": "left",
+		"time": 7.875,
+		"type": "arrow"
+	},
+	{
+		"countdown": 5.0,
+		"points": 10.0,
+		"pose": "Samurai",
+		"time": 9.61496591567993,
+		"type": "pose",
+		"window": 0.25
+	},
+	{
+		"direction": "left",
+		"time": 10.75,
+		"type": "arrow"
+	},
+	{
+		"countdown": 5.0,
+		"points": 10.0,
+		"pose": "Samurai",
+		"time": 11.3825621604919,
+		"type": "pose",
+		"window": 0.25
+	},
+	{
+		"countdown": 5.0,
+		"points": 10.0,
+		"pose": "Samurai",
+		"time": 12.4216780662537,
+		"type": "pose",
+		"window": 0.25
+	},
+	{
+		"direction": "right",
+		"time": 13.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 14.375,
+		"type": "arrow"
+	},
+	{
+		"countdown": 5.0,
+		"points": 10.0,
+		"pose": "Samurai",
+		"time": 19.7600908279419,
+		"type": "pose",
+		"window": 0.25
+	}
+]

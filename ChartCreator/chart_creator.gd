@@ -28,7 +28,7 @@ var last_saved_song_path : String = ""
 
 var seconds_per_pixels: float = 0.02
 var lane_names: Array = ["upLeft","left","downLeft","down","center","up","upRight","right","downRight"]
-var chart_data: Array = []
+var chart_data: Array 
 
 var selection: int = -1
 var drag_kind: String = ""
@@ -45,6 +45,11 @@ var current_seek: float = 0.0
 func _ready() -> void:
 	var config = ConfigFile.new()
 	var err = config.load("user://Settings.cfg")
+	if GlobalSettings.edit_chart:
+		print("loading chart data: ", GlobalSettings.edit_chart)
+		chart_data = GlobalSettings.edit_chart
+	else:
+		print("chart data is null")
 
 	if err == OK:
 		# Read values from the file (with defaults in case they are missing)
@@ -60,6 +65,12 @@ func _ready() -> void:
 	save_chart_dialogue.current_file = "my_chart.json"  # optional default name
 
 	GlobalSettings.test_play = true
+	if GlobalSettings.current_song:
+		audio.stream = load(GlobalSettings.current_song)
+		playfield.audio = audio
+		playfield.build_bars_for_song(audio.stream.get_length())
+		playfield.rebuild_notes()
+		print("we built the sbars")
 	playfield.audio = audio
 	playfield.bpm = bpm
 	playfield.snap_div = snap_div
@@ -137,6 +148,16 @@ func _ready() -> void:
 	speed_slider.value_changed.connect(func(v: float):
 		playfield.set_play_rate(v)
 	)
+	if GlobalSettings.bars:
+		playfield.bars = GlobalSettings.bars
+	if GlobalSettings.notes:
+		playfield.notes = GlobalSettings.notes
+	if GlobalSettings.poses_array:
+		playfield.pose_events = GlobalSettings.poses_array
+		playfield.rebuild_poses()
+	if audio.stream:
+		playfield.build_bars_for_song(audio.stream.get_length())
+	playfield.rebuild_notes()
 
 func _process(delta: float) -> void:
 	if audio.stream:
@@ -229,10 +250,7 @@ func _on_save_chart_pressed() -> void:
 	#var f := FileAccess.open("user://my_chart.json", FileAccess.WRITE)
 	#new
 	save_chart_dialogue.popup_centered()
-	##>>>>
-	#f.store_string(data)
-	#f.close()
-	#print("saving chart with : ", playfield.chart_data)
+
 
 
 func _on_seek_value_changed(value: float) -> void:
@@ -256,12 +274,16 @@ func _on_offset_changed(v: float) -> void:
 
 
 func _on_add_arrows_pressed() -> void:
+	playfield.select_mode = false
+	playfield.pose_mode = false
 	playfield.ghost_enabled = true
 	
 
 func _on_erase_errows_pressed() -> void:
+	playfield.pose_mode = false
 	playfield.ghost_enabled = false
-	playfield.hold_enabled = false
+	playfield.select_mode = true
+	print("we made playfield.select_mode: ", playfield.select_mode)
 
 func _unhandled_input(e: InputEvent) -> void:
 	if e is InputEventKey and e.pressed and e.keycode == KEY_P:
@@ -271,8 +293,10 @@ func _unhandled_input(e: InputEvent) -> void:
 
 
 func _on_pose_mode_pressed() -> void:
-	
-	pass # Replace with function body.
+	playfield.ghost_enabled = false
+	playfield.select_mode = false
+	playfield.pose_mode = true
+
 
 
 func _on_song_speed_value_changed(value: float) -> void:
@@ -311,6 +335,7 @@ func _on_pose_name_item_selected(index: int) -> void:
 
 func _on_test_chart_pressed() -> void:
 	# If user hasn't saved yet, auto-save to a temp path
+	
 	if last_saved_chart_path == "":
 		var temp := "user://temp_chart.json"
 		var f := FileAccess.open(temp, FileAccess.WRITE)
@@ -321,10 +346,18 @@ func _on_test_chart_pressed() -> void:
 		else:
 			push_error("Couldn't write temporary chart file.")
 			return
-	GlobalSettings.startingChartPath = last_saved_chart_path
+	if last_saved_chart_path:
+		GlobalSettings.startingChartPath = last_saved_chart_path
 	GlobalSettings.test_play = true
+	GlobalSettings.edit_chart = chart_data
+	GlobalSettings.bars = playfield.bars
+	GlobalSettings.notes = playfield.notes
+	GlobalSettings.poses_array = playfield.pose_events
 	print("setting test play to " , GlobalSettings.test_play)
-	GlobalSettings.current_song = last_saved_song_path
+	if last_saved_song_path:
+		GlobalSettings.current_song = last_saved_song_path
+	
+	print("loading song with Current song of : ", GlobalSettings.current_song, "chart data of : ", GlobalSettings.edit_chart)
 	get_tree().change_scene_to_file("res://9ArrowScene/Game.tscn")
 
 

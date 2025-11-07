@@ -101,7 +101,7 @@ min_value = 0.2
 step = 0.2
 value = 1.0
 
-[node name="EraseErrows" type="Button" parent="Main/Leftbar/ToggleButtons"]
+[node name="SelectMode" type="Button" parent="Main/Leftbar/ToggleButtons"]
 layout_mode = 2
 text = "Select mode"
 
@@ -276,7 +276,7 @@ text = "song speed"
 [connection signal="pressed" from="Main/Leftbar/ToggleButtons/AddArrows" to="." method="_on_add_arrows_pressed"]
 [connection signal="pressed" from="Main/Leftbar/ToggleButtons/AddHolds" to="." method="_on_add_holds_pressed"]
 [connection signal="value_changed" from="Main/Leftbar/ToggleButtons/SpinBox" to="." method="_on_spin_box_value_changed"]
-[connection signal="pressed" from="Main/Leftbar/ToggleButtons/EraseErrows" to="." method="_on_erase_errows_pressed"]
+[connection signal="pressed" from="Main/Leftbar/ToggleButtons/SelectMode" to="." method="_on_erase_errows_pressed"]
 [connection signal="pressed" from="Main/Leftbar/ToggleButtons/PoseMode" to="." method="_on_pose_mode_pressed"]
 [connection signal="item_selected" from="Main/Inspector/PoseName" to="." method="_on_pose_name_item_selected"]
 [connection signal="pressed" from="BottomBar/BackToStart" to="." method="_on_back_to_start_pressed"]
