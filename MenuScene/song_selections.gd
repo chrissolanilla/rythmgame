@@ -97,6 +97,6 @@ func get_Next_Song() -> String:
 			nextChartImage = chartImageList[GlobalSettings.startingIndex]
 	$RichTextLabel.text = nextSongName.split(".")[0]
 	$TextureRect.texture = load(nextChartImage)
-	GlobalSettings.current_song = nextSongChart
+	GlobalSettings.current_song = nextSongName
 	print("song is now ", nextSongName)
 	return nextSongChart
