@@ -1,0 +1,66 @@
+[
+	{
+		"countdown": 5.0,
+		"points": 10,
+		"pose": "Samurai Pose",
+		"time": 5.0,
+		"type": "pose",
+		"window": 0.25
+	},
+	{
+		"countdown": 5.0,
+		"points": 10,
+		"pose": "Samurai Pose",
+		"time": 12.897686958313,
+		"type": "pose",
+		"window": 0.25
+	},
+	{
+		"countdown": 5.0,
+		"points": 10,
+		"pose": "Point Up Pose (L)",
+		"time": 23.1376876831055,
+		"type": "pose",
+		"window": 0.25
+	},
+	{
+		"countdown": 5.0,
+		"points": 10,
+		"pose": "Point Up Pose (R)",
+		"time": 29.3258056640625,
+		"type": "pose",
+		"window": 0.25
+	},
+	{
+		"countdown": 5.0,
+		"points": 10,
+		"pose": "Stop Pose",
+		"time": 34.8985939025879,
+		"type": "pose",
+		"window": 0.25
+	},
+	{
+		"countdown": 5.0,
+		"points": 10,
+		"pose": "Muscle Man Pose",
+		"time": 40.8661231994629,
+		"type": "pose",
+		"window": 0.25
+	},
+	{
+		"countdown": 5.0,
+		"points": 10,
+		"pose": "What? Pose",
+		"time": 47.2283897399902,
+		"type": "pose",
+		"window": 0.25
+	},
+	{
+		"countdown": 5.0,
+		"points": 10,
+		"pose": "Tough Guy Pose",
+		"time": 53.0449905395508,
+		"type": "pose",
+		"window": 0.25
+	}
+]

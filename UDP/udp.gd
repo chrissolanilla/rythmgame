@@ -26,3 +26,4 @@ func _process(_dt):
 			var tracking := bool(latest.get("tracking", false))
 			if changed:
 				print("→ gesture changed:", g)
+				GlobalSettings.current_pose = g

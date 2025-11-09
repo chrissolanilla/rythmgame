@@ -21,39 +21,39 @@
 script = ExtResource("1_sh2q5")
 
 [node name="UpArrow" parent="." instance=ExtResource("4_vjsbt")]
-position = Vector2(1861, 94)
+position = Vector2(1861, -126)
 scale = Vector2(0.2, 0.2)
 
 [node name="DownArrow" parent="." instance=ExtResource("1_0eyy2")]
-position = Vector2(1683, 94)
+position = Vector2(1683, -126)
 scale = Vector2(0.2, 0.2)
 
 [node name="LeftArrow" parent="." instance=ExtResource("1_gox45")]
-position = Vector2(1522, 94)
+position = Vector2(1522, -126)
 scale = Vector2(0.2, 0.2)
 
 [node name="RightArrow" parent="." instance=ExtResource("3_c4c6w")]
-position = Vector2(2016, 94)
+position = Vector2(2016, -126)
 scale = Vector2(0.2, 0.2)
 
 [node name="UpLeftArrow" parent="." instance=ExtResource("7_sh2q5")]
-position = Vector2(1603.4, 94)
+position = Vector2(1603.4, -126)
 scale = Vector2(0.2, 0.2)
 
 [node name="UpRightArrow" parent="." instance=ExtResource("5_hoyt5")]
-position = Vector2(1937, 94)
+position = Vector2(1937, -126)
 scale = Vector2(0.2, 0.2)
 
 [node name="DownRightArrow" parent="." instance=ExtResource("8_fxsq8")]
-position = Vector2(2087, 94)
+position = Vector2(2087, -126)
 scale = Vector2(0.2, 0.2)
 
 [node name="DownLeftArrow" parent="." instance=ExtResource("9_rs42x")]
-position = Vector2(1448, 94)
+position = Vector2(1448, -126)
 scale = Vector2(0.2, 0.2)
 
 [node name="MiddleNote" parent="." instance=ExtResource("10_2gnyf")]
-position = Vector2(1771, 105)
+position = Vector2(1771, -115)
 scale = Vector2(0.1, 0.1)
 
 [node name="sceneSpawner" parent="." instance=ExtResource("11_qytyx")]
@@ -158,11 +158,17 @@ vertical_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="."]
 z_index = -2
-offset_left = 1186.0
-offset_top = -9.0
-offset_right = 2384.0
-offset_bottom = 665.0
+offset_left = 814.0
+offset_top = -213.0
+offset_right = 2734.0
+offset_bottom = 867.0
 color = Color(0.192157, 0.196078, 0.266667, 1)
+
+[node name="CurrentPoseText" type="Label" parent="."]
+offset_left = 1193.0
+offset_right = 1303.0
+offset_bottom = 23.0
+text = "Current Pose: "
 
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Exit" to="CanvasLayer/PauseMenu" method="_on_exit_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Main Menu" to="CanvasLayer/PauseMenu" method="_on_main_menu_pressed"]

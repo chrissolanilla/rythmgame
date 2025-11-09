@@ -17,33 +17,30 @@ script = ExtResource("1_243wc")
 [node name="ColorRect" type="ColorRect" parent="."]
 z_index = -2
 layout_mode = 0
-offset_left = -579.0
-offset_top = -324.0
-offset_right = 619.0
-offset_bottom = 350.0
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
 color = Color(0.192157, 0.196078, 0.266667, 1)
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = -95.0
+offset_left = -219.0
 offset_top = -237.0
-offset_right = 102.0
-offset_bottom = -106.0
+offset_right = 181.0
+offset_bottom = 63.0
 expand_mode = 3
 
 [node name="PlayMap" type="Button" parent="."]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -366.0
-offset_top = 91.0
-offset_right = 346.0
-offset_bottom = 238.0
+offset_left = -356.0
+offset_top = 336.0
+offset_right = 356.0
+offset_bottom = 483.0
 grow_horizontal = 2
-grow_vertical = 2
 size_flags_horizontal = 4
 focus_neighbor_top = NodePath("../prev")
 theme_override_fonts/font = ExtResource("2_mq6oa")
@@ -52,9 +49,9 @@ text = "Play Game"
 
 [node name="next" type="Button" parent="."]
 layout_mode = 0
-offset_left = 170.0
+offset_left = 384.0
 offset_top = -232.0
-offset_right = 331.0
+offset_right = 545.0
 offset_bottom = -157.0
 focus_neighbor_left = NodePath("../prev")
 focus_neighbor_bottom = NodePath("../PlayMap")
@@ -64,9 +61,9 @@ text = "Next
 
 [node name="prev" type="Button" parent="."]
 layout_mode = 0
-offset_left = -325.0
+offset_left = -609.0
 offset_top = -232.0
-offset_right = -164.0
+offset_right = -448.0
 offset_bottom = -157.0
 focus_neighbor_right = NodePath("../next")
 focus_neighbor_bottom = NodePath("../PlayMap")
@@ -76,11 +73,12 @@ text = "Previous"
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0
 offset_left = -145.0
-offset_top = -68.0
+offset_top = 55.0
 offset_right = 161.0
-offset_bottom = -28.0
+offset_bottom = 95.0
 theme_override_fonts/normal_font = ExtResource("2_mq6oa")
 bbcode_enabled = true
+text = "test"
 horizontal_alignment = 1
 vertical_alignment = 1
 

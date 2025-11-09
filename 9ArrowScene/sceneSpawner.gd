@@ -19,6 +19,7 @@ var judgement_label_scene = preload("res://judgementLabel/JudgementLabel.tscn")
 @onready var timer: Timer = $UI/Judgements/Timer
 @export var beatbar: PackedScene = preload("res://beatbar/beatbar.tscn")
 var test_play : bool
+@onready var current_pose_text: Label = $"../CurrentPoseText"
 
 var pose_icons := {
 	"Samurai Pose": preload("res://art/uniform_samurai.png"),
@@ -139,62 +140,6 @@ func _active_hold_notes() -> Array:
 		if n != null: arr.append(n)
 	return arr
 #
-#func _process(delta):
-	#var song_time = music.get_playback_position()
-	#var song_time_int = int(song_time)
-#
-	#while spawn_index < chart_data.size():
-	##while spawn_index < chart_data.size() and chart_data[spawn_index]["time"] <= song_time + get_lead_time():
-		#var nd = chart_data[spawn_index]
-		#var t: float = float(nd["time"])
-		#if nd.get("type", "arrow") == "pose":
-			#var cd := float(nd.get("countdown", 5.0))
-			#if song_time + 0.01 >= t- cd:
-				#_spawn_pose(nd)
-				#spawn_index +=1
-			#else:
-				#break
-		#else:
-			#if song_time + get_lead_time() >= t:
-				#spawn_note(nd)
-				#spawn_index += 1
-			#else:
-				#break
-	#while song_time + get_lead_time() >= next_bar_time:
-		#spawn_bar_at_time(next_bar_time)
-		#next_bar_time += (60.0 / scroll_speed) * 4.0
-	## move + cleanup (bars first, then notes)
-	#for child in notes_layer.get_children():
-		## ----- BAR BRANCH-----
-		#if child.has_meta("is_bar"):
-			#child.position.y -= scroll_speed * delta
-			#if song_time > float(child.get_meta("bar_time", -1.0)) + 0.2:
-				#child.queue_free()
-			#continue
-#
-		## -----NOTE BRANCH-----
-		#var note := child as BaseArrow
-		#if note == null:
-			#continue
-#
-		#if not _is_frozen_hold(note):
-			#note.position.y -= scroll_speed * delta
-		## miss handling (only for real notes)
-		#if note.note_time < song_time - 0.2 and not note in _active_hold_notes():
-			#if note.is_Hold:
-				#if note.end_Time < song_time - 0.2:
-					#show_judgement("Miss", receptor_positions.get(note.direction, note.position))
-					#reset_Combo()
-					#note.queue_free()
-			#else:
-				#show_judgement("Miss", receptor_positions.get(note.direction, note.position))
-				#reset_Combo()
-				#note.queue_free()
-#
-	#var latest_udp: Dictionary = $"../UDP".latest
-	#for p in pose_layer.get_children():
-		#if p.has_method("drive"):
-			#p.drive(song_time, latest_udp)
 
 func _process(delta):
 	var song_time : float = music.get_playback_position()
@@ -255,6 +200,11 @@ func _process(delta):
 
 	# drive pose UI
 	var latest_udp: Dictionary = $"../UDP".latest
+	var changed: bool = bool(latest_udp.get("changed", false))
+	if changed:
+		current_pose_text.text = "Current Pose: %s, " % GlobalSettings.current_pose
+		#update text of current pose
+		
 	for p in pose_layer.get_children():
 		if p.has_method("drive"):
 			p.drive(song_time, latest_udp)
@@ -302,7 +252,7 @@ func _process(delta):
 		active_holds.erase(d)
 
 func get_lead_time() -> float:
-	return 1.5 # seconds to reach the receptor from spawn point
+	return 2.5 # seconds to reach the receptor from spawn point
 
 func spawn_note(note_data: Dictionary):
 	var dir = note_data["direction"]
@@ -483,7 +433,7 @@ func _spawn_pose(nd: Dictionary):
 	p.position = Vector2( (get_viewport_rect().size.x - p.size.x)/2.0, 120 )
 	pose_layer.add_child(p)
 	p.global_position = get_viewport_rect().size / 2.0 -p.size /2.0
-	p.global_position.x+= 0
+	p.global_position.x+= 150
 	#p.pose_judged.connect(_on_pose_judged)
 	p.pose_judged.connect(Callable(self, "_on_pose_judged"))
 

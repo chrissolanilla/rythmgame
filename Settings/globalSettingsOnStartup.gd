@@ -12,6 +12,7 @@ var current_song: String
 var poses_array: Array
 var notes: Array
 var bars: Array
+var current_pose: String = "None"
 
 const CFG_PATH := "user://Settings.cfg"
 
@@ -23,16 +24,19 @@ const DEFAULTS := {
 		"chartPath": [
 			"res://MapsJson/recorded_chart.json",
 			"res://MapsJson/recorded_chart_2.json",
-			"res://MapsJson/simple_chart.json"
+			"res://MapsJson/simple_chart.json",
+			"res://MapsJson/poses_rickroll.json"
 		],
 		"chartImage": [
 			"res://art/IMG_1269.jpg",
 			"res://art/IMG_4256.png",
-			"res://art/Screenshot 2024-08-20 025111.png"
+			"res://art/Screenshot 2024-08-20 025111.png",
+			"res://art/uniform_samurai.png"
 		],
 		"chartSong": [
 			"res://mp3files/bad_apple.mp3",
 			"res://mp3files/togsk-ba.mp3",
+			"res://mp3files/rickroll.MP3",
 			"res://mp3files/rickroll.MP3"
 		],
 		"chartIndex": 0
