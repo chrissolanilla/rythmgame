@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://c2kbthwlyples"]
+[gd_scene load_steps=6 format=3 uid="uid://c2kbthwlyples"]
 
 [ext_resource type="Script" uid="uid://buy408k8jbr78" path="res://MenuScene/menu.gd" id="1_j1mvo"]
 [ext_resource type="Texture2D" uid="uid://dt6i738ugylis" path="res://art/neon_music_bg_1920x1080.png" id="2_kbsdp"]
 [ext_resource type="FontFile" uid="uid://c5onj8ox0dd42" path="res://Fonts/Johnny Fever.otf" id="2_qtwcp"]
 [ext_resource type="Texture2D" uid="uid://cydcmhb1mh35n" path="res://art/StepsLogo.png" id="3_vfo63"]
+[ext_resource type="StyleBox" uid="uid://v2ee38t63vb7" path="res://Fonts/new_style_box_flat.tres" id="5_0c12v"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -37,24 +38,30 @@ texture = ExtResource("3_vfo63")
 
 [node name="Quit" type="Button" parent="."]
 layout_mode = 0
-offset_left = 410.0
-offset_top = -266.0
-offset_right = 571.0
-offset_bottom = -191.0
+offset_left = 377.0
+offset_top = -262.0
+offset_right = 643.0
+offset_bottom = -176.0
 focus_neighbor_bottom = NodePath("../Settings")
 theme_override_fonts/font = ExtResource("2_qtwcp")
+theme_override_font_sizes/font_size = 55
+theme_override_styles/focus = ExtResource("5_0c12v")
+theme_override_styles/normal = ExtResource("5_0c12v")
 text = "Quit
 "
 
 [node name="Settings" type="Button" parent="."]
 layout_mode = 0
-offset_left = 410.0
-offset_top = -160.0
-offset_right = 571.0
-offset_bottom = -85.0
+offset_left = 370.4
+offset_top = -153.6
+offset_right = 647.4
+offset_bottom = -63.6
 focus_neighbor_top = NodePath("../Quit")
 focus_neighbor_bottom = NodePath("../Play Game Button")
 theme_override_fonts/font = ExtResource("2_qtwcp")
+theme_override_font_sizes/font_size = 55
+theme_override_styles/focus = ExtResource("5_0c12v")
+theme_override_styles/normal = ExtResource("5_0c12v")
 text = "Settings"
 
 [node name="Play Game Button" type="Button" parent="."]
@@ -74,6 +81,8 @@ size_flags_horizontal = 4
 focus_neighbor_top = NodePath("../Settings")
 theme_override_fonts/font = ExtResource("2_qtwcp")
 theme_override_font_sizes/font_size = 55
+theme_override_styles/focus = ExtResource("5_0c12v")
+theme_override_styles/normal = ExtResource("5_0c12v")
 text = "Play Game"
 
 [node name="ChartCreatorButton" type="Button" parent="."]
@@ -93,6 +102,8 @@ size_flags_horizontal = 4
 focus_neighbor_top = NodePath("../Settings")
 theme_override_fonts/font = ExtResource("2_qtwcp")
 theme_override_font_sizes/font_size = 55
+theme_override_styles/focus = ExtResource("5_0c12v")
+theme_override_styles/normal = ExtResource("5_0c12v")
 text = "Chart Creator"
 
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]

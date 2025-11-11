@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://0vvhlblbt4wc"]
+[gd_scene load_steps=5 format=3 uid="uid://0vvhlblbt4wc"]
 
 [ext_resource type="Script" uid="uid://dhl6170xt1dvf" path="res://MenuScene/song_selections.gd" id="1_243wc"]
 [ext_resource type="FontFile" uid="uid://c5onj8ox0dd42" path="res://Fonts/Johnny Fever.otf" id="2_mq6oa"]
 [ext_resource type="Texture2D" uid="uid://dt6i738ugylis" path="res://art/neon_music_bg_1920x1080.png" id="2_uxnl6"]
+[ext_resource type="StyleBox" uid="uid://v2ee38t63vb7" path="res://Fonts/new_style_box_flat.tres" id="4_cblf6"]
 
 [node name="SongSelection" type="Control"]
 layout_mode = 3
@@ -42,6 +43,7 @@ size_flags_horizontal = 4
 focus_neighbor_top = NodePath("../prev")
 theme_override_fonts/font = ExtResource("2_mq6oa")
 theme_override_font_sizes/font_size = 55
+theme_override_styles/normal = ExtResource("4_cblf6")
 text = "Play Game"
 
 [node name="next" type="Button" parent="."]
@@ -54,6 +56,7 @@ scale = Vector2(1.6, 1.6)
 focus_neighbor_left = NodePath("../prev")
 focus_neighbor_bottom = NodePath("../PlayMap")
 theme_override_fonts/font = ExtResource("2_mq6oa")
+theme_override_styles/normal = ExtResource("4_cblf6")
 text = "Next
 "
 
@@ -67,6 +70,7 @@ scale = Vector2(1.6, 1.6)
 focus_neighbor_right = NodePath("../next")
 focus_neighbor_bottom = NodePath("../PlayMap")
 theme_override_fonts/font = ExtResource("2_mq6oa")
+theme_override_styles/normal = ExtResource("4_cblf6")
 text = "Previous"
 
 [node name="Quit" type="Button" parent="."]
@@ -79,6 +83,7 @@ scale = Vector2(1.6, 1.6)
 focus_neighbor_right = NodePath("../next")
 focus_neighbor_bottom = NodePath("../PlayMap")
 theme_override_fonts/font = ExtResource("2_mq6oa")
+theme_override_styles/normal = ExtResource("4_cblf6")
 text = "Main Menu"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]

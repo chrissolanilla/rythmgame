@@ -21,6 +21,8 @@ var judgement_label_scene = preload("res://judgementLabel/JudgementLabel.tscn")
 var test_play : bool
 @onready var current_pose_text: Label = $"../CurrentPoseText"
 var chartFinished: bool = false
+@onready var progress_bar: ProgressBar = $"../ProgressBar"
+
 
 var perfects: int
 var goods: int
@@ -158,6 +160,9 @@ func _active_hold_notes() -> Array:
 
 func _process(delta):
 	var song_time : float = music.get_playback_position()
+	progress_bar.value = (song_time / music.stream.get_length()) * 100
+	#if song_time > 3:
+		
 	if chartFinished == true :
 		var counter = 0
 		var notesList = notes_layer.get_children()
