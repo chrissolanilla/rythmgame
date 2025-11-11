@@ -14,6 +14,11 @@ var notes: Array
 var bars: Array
 var current_pose: String = "None"
 
+var perfectCounter: int
+var goodCounter: int
+var badCounter: int
+var missCounter: int
+
 const CFG_PATH := "user://Settings.cfg"
 
 # your desired default structure

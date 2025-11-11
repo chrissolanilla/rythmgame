@@ -21,6 +21,14 @@ var judgement_label_scene = preload("res://judgementLabel/JudgementLabel.tscn")
 var test_play : bool
 @onready var current_pose_text: Label = $"../CurrentPoseText"
 
+var perfects = 0
+var goods = 0
+var bads = 0
+var misses = 0
+
+
+
+
 var pose_icons := {
 	"Samurai Pose": preload("res://art/uniform_samurai.png"),
 	"Stop Pose": preload("res://art/uniform_stop.png"),
@@ -328,8 +336,7 @@ func check_hits(direction: String):
 	# HEAD judgement window
 	if closest_diff <= 0.050:
 		show_judgement("Perfect!", closest_note.position)
-		update_Shown_Acc(10); update_Score(10); update_Combo()
-
+		update_Shown_Acc(10); update_Score(10); update_Combo(); GlobalSettings.perfectCounter += 1; 
 		if closest_note.is_Hold:
 			active_holds[direction] = {"note": closest_note, "break_timer": 0.0, "frozen": true}
 			var head_poly := closest_note.get_node_or_null("Polygon2D") as Polygon2D
@@ -341,7 +348,7 @@ func check_hits(direction: String):
 
 	elif closest_diff <= 0.1:
 		show_judgement("Good!", closest_note.position)
-		update_Shown_Acc(5); update_Score(5); update_Combo()
+		update_Shown_Acc(5); update_Score(5); update_Combo(); GlobalSettings.goodCounter += 1; 
 
 		if closest_note.is_Hold:
 			active_holds[direction] = {"note": closest_note, "break_timer": 0.0, "frozen": true}
@@ -354,10 +361,11 @@ func check_hits(direction: String):
 
 	elif closest_diff <= 0.2:
 		show_judgement("Bad!", closest_note.position)
-		update_Shown_Acc(1); update_Score(1); reset_Combo()
+		update_Shown_Acc(1); update_Score(1); reset_Combo(); GlobalSettings.badCounter += 1; 
+		
 		closest_note.queue_free()
 	else:
-		reset_Combo()
+		reset_Combo(); GlobalSettings.missCounter += 1;
 		show_judgement("Miss", receptor_positions[direction])
 
 
@@ -498,3 +506,9 @@ func spawn_bar_at_time(t: float) -> void:
 	# bar.scale.y = 1.5
 
 	notes_layer.add_child(bar)
+
+
+func _on_audio_stream_player_finished() -> void:
+	
+	get_tree().change_scene_to_file("res://MenuScene/GameStart.tscn")
+	pass # Replace with function body.

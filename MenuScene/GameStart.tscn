@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dwmsagl0eqmnk"]
 
-[ext_resource type="Script" uid="uid://befbuee00lggn" path="res://MenuScene/Lost.gd" id="1_yhw6k"]
+[ext_resource type="Script" uid="uid://befbuee00lggn" path="res://MenuScene/endScreen.gd" id="1_yhw6k"]
 [ext_resource type="FontFile" uid="uid://c5onj8ox0dd42" path="res://Fonts/Johnny Fever.otf" id="2_vp0mw"]
 
 [node name="GameOver" type="Control"]
@@ -12,25 +12,46 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_yhw6k")
 
-[node name="Button" type="Button" parent="."]
+[node name="Play Again" type="Button" parent="."]
 layout_mode = 0
-offset_left = 373.0
-offset_top = 491.0
-offset_right = 657.0
-offset_bottom = 595.0
+offset_left = 597.0
+offset_top = 658.0
+offset_right = 1309.0
+offset_bottom = 805.0
 theme_override_fonts/font = ExtResource("2_vp0mw")
+theme_override_font_sizes/font_size = 55
 text = "Play again"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
+[node name="Song Selection" type="Button" parent="."]
 layout_mode = 0
-offset_left = 217.0
-offset_top = 217.0
-offset_right = 898.0
-offset_bottom = 386.0
-theme_override_fonts/normal_font = ExtResource("2_vp0mw")
-theme_override_font_sizes/normal_font_size = 136
-text = "GAME OVER"
-horizontal_alignment = 1
-vertical_alignment = 1
+offset_left = 604.0
+offset_top = 870.0
+offset_right = 1316.0
+offset_bottom = 1017.0
+theme_override_fonts/font = ExtResource("2_vp0mw")
+theme_override_font_sizes/font_size = 55
+text = "Song Selection"
 
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[node name="Quit" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1444.0
+offset_top = 129.0
+offset_right = 1745.0
+offset_bottom = 233.0
+theme_override_fonts/font = ExtResource("2_vp0mw")
+theme_override_font_sizes/font_size = 55
+text = "Quit"
+
+[node name="Stats" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 578.0
+offset_top = 135.0
+offset_right = 1365.0
+offset_bottom = 670.0
+theme_override_fonts/normal_font = ExtResource("2_vp0mw")
+theme_override_font_sizes/normal_font_size = 86
+text = "Perfect: 3232
+good:       32323
+bad:         43
+Miss:        34"
+vertical_alignment = 1

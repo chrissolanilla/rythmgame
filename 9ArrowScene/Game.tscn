@@ -170,6 +170,7 @@ offset_right = 1303.0
 offset_bottom = 23.0
 text = "Current Pose: "
 
+[connection signal="finished" from="AudioStreamPlayer" to="sceneSpawner" method="_on_audio_stream_player_finished"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Exit" to="CanvasLayer/PauseMenu" method="_on_exit_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Main Menu" to="CanvasLayer/PauseMenu" method="_on_main_menu_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/BackToEditor" to="CanvasLayer/PauseMenu" method="_on_back_to_editor_pressed"]
