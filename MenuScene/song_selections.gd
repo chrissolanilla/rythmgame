@@ -13,13 +13,13 @@ func _ready() -> void:
 		var chartSongList = config.get_value("game", "chartSong", [])
 		var chartIndex = GlobalSettings.startingIndex
 		var loadedImage = chartImageList[chartIndex]
-		var loadedSong = chartSongList[chartIndex]
-		GlobalSettings.startingChartPath = chartPathList[chartIndex]
+		var loadedSong = parse_filename(chartSongList[chartIndex])
+		GlobalSettings.startingChartPath =  chartPathList[chartIndex]
 		GlobalSettings.current_song = chartSongList[chartIndex]
 		print("chart song is set to ", chartSongList[chartIndex])
 		print("chart is set to : ", chartPathList[chartIndex])
 		$TextureRect.texture = load(loadedImage)
-		$RichTextLabel.text = loadedSong.split(".")[0]
+		$RichTextLabel.text = loadedSong
 		
 	
 
@@ -65,7 +65,7 @@ func get_Prev_Song() -> String:
 			prevSongName = songNameList[GlobalSettings.startingIndex]
 			prevChartImage = chartImageList[GlobalSettings.startingIndex]
 	$TextureRect.texture = load(prevChartImage)
-	$RichTextLabel.text = prevSongName.split(".")[0]
+	$RichTextLabel.text = parse_filename(prevSongName)
 	GlobalSettings.current_song = prevSongName
 	print("song is now : ", prevSongName)
 	return prevSongChart
@@ -95,8 +95,22 @@ func get_Next_Song() -> String:
 			nextSongChart = chartList[GlobalSettings.startingIndex]
 			nextSongName = songNameList[GlobalSettings.startingIndex]
 			nextChartImage = chartImageList[GlobalSettings.startingIndex]
-	$RichTextLabel.text = nextSongName.split(".")[0]
+	$RichTextLabel.text = parse_filename(nextSongName)
 	$TextureRect.texture = load(nextChartImage)
 	GlobalSettings.current_song = nextSongName
 	print("song is now ", nextSongName)
 	return nextSongChart
+
+func parse_filename(path: String) -> String:
+	var prefix = "res://mp3files/"
+	var suffix = ".mp3"
+	
+	# Remove the prefix if present
+	if path.begins_with(prefix):
+		path = path.substr(prefix.length())
+	
+	# Handle case-insensitive .mp3 suffix
+	var lower_path = path.to_lower()
+	if lower_path.ends_with(suffix):
+		path = path.substr(0, path.length() - suffix.length())
+	return path

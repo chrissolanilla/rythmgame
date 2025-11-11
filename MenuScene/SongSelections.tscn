@@ -25,10 +25,10 @@ color = Color(0.192157, 0.196078, 0.266667, 1)
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = -219.0
-offset_top = -237.0
-offset_right = 181.0
-offset_bottom = 63.0
+offset_left = -300.0
+offset_top = -331.0
+offset_right = 274.0
+offset_bottom = 158.0
 expand_mode = 3
 
 [node name="PlayMap" type="Button" parent="."]
@@ -53,6 +53,7 @@ offset_left = 384.0
 offset_top = -232.0
 offset_right = 545.0
 offset_bottom = -157.0
+scale = Vector2(1.6, 1.6)
 focus_neighbor_left = NodePath("../prev")
 focus_neighbor_bottom = NodePath("../PlayMap")
 theme_override_fonts/font = ExtResource("2_mq6oa")
@@ -65,6 +66,7 @@ offset_left = -609.0
 offset_top = -232.0
 offset_right = -448.0
 offset_bottom = -157.0
+scale = Vector2(1.6, 1.6)
 focus_neighbor_right = NodePath("../next")
 focus_neighbor_bottom = NodePath("../PlayMap")
 theme_override_fonts/font = ExtResource("2_mq6oa")
@@ -72,11 +74,12 @@ text = "Previous"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = -145.0
-offset_top = 55.0
-offset_right = 161.0
-offset_bottom = 95.0
+offset_left = -209.0
+offset_top = 163.0
+offset_right = 228.0
+offset_bottom = 287.0
 theme_override_fonts/normal_font = ExtResource("2_mq6oa")
+theme_override_font_sizes/normal_font_size = 72
 bbcode_enabled = true
 text = "test"
 horizontal_alignment = 1
