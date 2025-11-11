@@ -2,13 +2,14 @@ extends Control
 
 # Default values if no saved settings exist
 var default_volume := 0.0
-var scroll_speed = 300.0
+var default_scroll_speed = 300.0
 var default_text := "[b][color=green]Game Volume[/color][/b]"
 var arrow_scale: float = 0.2
 var globalMapArray = []
 var globalMapPath: String = ""
 var startingIndex = 0
 var volume: int = 0
+var scroll_speed: int = 0
 @onready var Confirm: Button = $"Confirm"
 
 
@@ -26,8 +27,10 @@ func _load_settings() -> void:
 		# Read values from the file (with defaults in case they are missing)
 		globalMapArray = config.get_value("game", "chartPath", [])
 		globalMapPath = globalMapArray[config.get_value("game","chartIndex", 0)]
-		volume = config.get_value("game", "volume", 0)	
-		scroll_speed = config.get_value("game","scrollSpeed", 1)
+		default_volume = config.get_value("game", "volume", 0)
+		volume = default_volume
+		default_scroll_speed = config.get_value("game","scrollSpeed", 1)
+		scroll_speed = default_scroll_speed
 		$ScrollSpeedSlider.value = scroll_speed
 		$HSlider.value = volume
 		#Add the changing of volume of the master control
@@ -35,8 +38,9 @@ func _load_settings() -> void:
 # Load default values into UI
 func _load_defaults() -> void:
 	GlobalSettings.startingVolume = default_volume
-	GlobalSettings.scrollSpeed = scroll_speed
+	GlobalSettings.scrollSpeed = default_scroll_speed
 	$HSlider.value = GlobalSettings.startingVolume
+	$ScrollSpeedSlider.value = GlobalSettings.scrollSpeed
 
 # Save settings to file
 func _save_settings() -> void:

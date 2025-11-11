@@ -14,10 +14,12 @@ var notes: Array
 var bars: Array
 var current_pose: String = "None"
 
-var perfectCounter: int
-var goodCounter: int
-var badCounter: int
-var missCounter: int
+var perfectCounter = 0
+var goodCounter = 0
+var badCounter = 0
+var missCounter = 0
+
+var songTime: float = 0.0
 
 const CFG_PATH := "user://Settings.cfg"
 

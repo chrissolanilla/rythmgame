@@ -20,6 +20,7 @@ var judgement_label_scene = preload("res://judgementLabel/JudgementLabel.tscn")
 @export var beatbar: PackedScene = preload("res://beatbar/beatbar.tscn")
 var test_play : bool
 @onready var current_pose_text: Label = $"../CurrentPoseText"
+var chartFinished: bool = false
 
 var perfects = 0
 var goods = 0
@@ -151,7 +152,18 @@ func _active_hold_notes() -> Array:
 
 func _process(delta):
 	var song_time : float = music.get_playback_position()
-
+	if chartFinished == true :
+		var counter = 0
+		var notesList = notes_layer.get_children()
+		for note in notesList:
+			if not note.has_meta("is_bar"):
+				counter += 1
+		if counter == 0:
+			GlobalSettings.songTime = song_time
+			get_tree().change_scene_to_file("res://MenuScene/SongEnd.tscn")
+	if spawn_index == chart_data.size():
+		chartFinished = true
+	#get_tree().change_scene_to_file("res://MenuScene/SongEnd.tscn")
 	# -------- SPAWN (poses + notes) --------
 	while spawn_index < chart_data.size():
 		var nd = chart_data[spawn_index]
@@ -508,7 +520,6 @@ func spawn_bar_at_time(t: float) -> void:
 	notes_layer.add_child(bar)
 
 
-func _on_audio_stream_player_finished() -> void:
-	
-	get_tree().change_scene_to_file("res://MenuScene/GameStart.tscn")
+func _on_audio_stream_player_finished() -> void:	
+	get_tree().change_scene_to_file("res://MenuScene/SongEnd.tscn")
 	pass # Replace with function body.

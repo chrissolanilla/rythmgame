@@ -114,3 +114,8 @@ func parse_filename(path: String) -> String:
 	if lower_path.ends_with(suffix):
 		path = path.substr(0, path.length() - suffix.length())
 	return path
+
+
+func _on_menu_pressed() -> void:
+	get_tree().change_scene_to_file("res://MenuScene/Menu.tscn")
+	pass # Replace with function body.
