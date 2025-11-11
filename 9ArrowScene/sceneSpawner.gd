@@ -22,11 +22,12 @@ var test_play : bool
 @onready var current_pose_text: Label = $"../CurrentPoseText"
 var chartFinished: bool = false
 
-var perfects = 0
-var goods = 0
-var bads = 0
-var misses = 0
+var perfects: int
+var goods: int
+var bads: int
+var misses: int
 
+var highestCombo: int = 0
 
 
 
@@ -113,6 +114,11 @@ var arrow_scenes = {
 }
 
 func _ready():
+	perfects = 0
+	bads = 0
+	goods = 0
+	misses = 0
+	
 	test_play = GlobalSettings.test_play
 	chart_path = GlobalSettings.startingChartPath
 	print("chart path is " , chart_path)
@@ -160,6 +166,12 @@ func _process(delta):
 				counter += 1
 		if counter == 0:
 			GlobalSettings.songTime = song_time
+			GlobalSettings.perfectCounter = perfects
+			GlobalSettings.goodCounter = goods
+			GlobalSettings.badCounter = bads
+			GlobalSettings.missCounter = misses
+			GlobalSettings.highestComboAchieved = highestCombo
+			
 			get_tree().change_scene_to_file("res://MenuScene/SongEnd.tscn")
 	if spawn_index == chart_data.size():
 		chartFinished = true
@@ -348,7 +360,7 @@ func check_hits(direction: String):
 	# HEAD judgement window
 	if closest_diff <= 0.050:
 		show_judgement("Perfect!", closest_note.position)
-		update_Shown_Acc(10); update_Score(10); update_Combo(); GlobalSettings.perfectCounter += 1; 
+		update_Shown_Acc(10); update_Score(10); update_Combo(); perfects += 1; 
 		if closest_note.is_Hold:
 			active_holds[direction] = {"note": closest_note, "break_timer": 0.0, "frozen": true}
 			var head_poly := closest_note.get_node_or_null("Polygon2D") as Polygon2D
@@ -360,7 +372,7 @@ func check_hits(direction: String):
 
 	elif closest_diff <= 0.1:
 		show_judgement("Good!", closest_note.position)
-		update_Shown_Acc(5); update_Score(5); update_Combo(); GlobalSettings.goodCounter += 1; 
+		update_Shown_Acc(5); update_Score(5); update_Combo(); goods += 1; 
 
 		if closest_note.is_Hold:
 			active_holds[direction] = {"note": closest_note, "break_timer": 0.0, "frozen": true}
@@ -373,11 +385,11 @@ func check_hits(direction: String):
 
 	elif closest_diff <= 0.2:
 		show_judgement("Bad!", closest_note.position)
-		update_Shown_Acc(1); update_Score(1); reset_Combo(); GlobalSettings.badCounter += 1; 
+		update_Shown_Acc(1); update_Score(1); reset_Combo(); bads += 1; 
 		
 		closest_note.queue_free()
 	else:
-		reset_Combo(); GlobalSettings.missCounter += 1;
+		reset_Combo(); misses += 1;
 		show_judgement("Miss", receptor_positions[direction])
 
 
@@ -400,9 +412,11 @@ func update_Score(x):
 
 func update_Combo():
 	globalCombo += 1
+	highestCombo = max(highestCombo, globalCombo)
 	comboTracker.text = "[b][color=green] %s [/color][/b]" % globalCombo
 
 func reset_Combo():
+	highestCombo = max(highestCombo, globalCombo)
 	globalCombo = 0
 	comboTracker.text = "[b][color=green] %s [/color][/b]" % globalCombo
 

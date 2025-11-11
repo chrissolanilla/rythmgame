@@ -40,26 +40,79 @@ text = "Song Selection"
 
 [node name="Quit" type="Button" parent="."]
 layout_mode = 0
-offset_left = 1444.0
-offset_top = 129.0
-offset_right = 1745.0
-offset_bottom = 233.0
+offset_left = 1556.0
+offset_top = 51.0
+offset_right = 1857.0
+offset_bottom = 155.0
 theme_override_fonts/font = ExtResource("2_3q6t4")
 theme_override_font_sizes/font_size = 55
 text = "Quit"
 
-[node name="Stats" type="RichTextLabel" parent="."]
+[node name="Perfect" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 578.0
-offset_top = 135.0
-offset_right = 1365.0
-offset_bottom = 670.0
+offset_left = 207.0
+offset_top = 109.0
+offset_right = 894.0
+offset_bottom = 230.0
 theme_override_fonts/normal_font = ExtResource("2_3q6t4")
 theme_override_font_sizes/normal_font_size = 86
 bbcode_enabled = true
+text = "Perfect: 47
+"
+vertical_alignment = 1
+
+[node name="Good" type="RichTextLabel" parent="."]
+offset_left = 196.0
+offset_top = 234.0
+offset_right = 888.0
+offset_bottom = 344.0
+theme_override_fonts/normal_font = ExtResource("2_3q6t4")
+theme_override_font_sizes/normal_font_size = 86
+bbcode_enabled = true
+text = "Good: 473"
+vertical_alignment = 1
+
+[node name="Bad" type="RichTextLabel" parent="."]
+offset_left = 203.0
+offset_top = 384.0
+offset_right = 890.0
+offset_bottom = 490.0
+theme_override_fonts/normal_font = ExtResource("2_3q6t4")
+theme_override_font_sizes/normal_font_size = 86
+bbcode_enabled = true
+text = "Bad: 498"
+vertical_alignment = 1
+
+[node name="Miss" type="RichTextLabel" parent="."]
+offset_left = 207.0
+offset_top = 506.0
+offset_right = 898.0
+offset_bottom = 642.0
+theme_override_fonts/normal_font = ExtResource("2_3q6t4")
+theme_override_font_sizes/normal_font_size = 86
+bbcode_enabled = true
+text = "Miss: 478"
+vertical_alignment = 1
+
+[node name="Combo" type="RichTextLabel" parent="."]
+offset_left = 1276.0
+offset_top = 174.0
+offset_right = 1771.0
+offset_bottom = 674.0
+theme_override_fonts/normal_font = ExtResource("2_3q6t4")
+theme_override_font_sizes/normal_font_size = 86
+bbcode_enabled = true
+text = "Highest Combo: x794"
 vertical_alignment = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = 661.0
+offset_top = 147.0
+offset_right = 1235.0
+offset_bottom = 636.0
+expand_mode = 3
 
 [connection signal="pressed" from="Play Again" to="." method="_on_play_again_pressed"]
 [connection signal="pressed" from="Song Selection" to="." method="_on_song_selection_pressed"]

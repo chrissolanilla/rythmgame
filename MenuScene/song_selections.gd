@@ -16,6 +16,7 @@ func _ready() -> void:
 		var loadedSong = parse_filename(chartSongList[chartIndex])
 		GlobalSettings.startingChartPath =  chartPathList[chartIndex]
 		GlobalSettings.current_song = chartSongList[chartIndex]
+		GlobalSettings.startingChartImage = chartImageList[chartIndex]
 		print("chart song is set to ", chartSongList[chartIndex])
 		print("chart is set to : ", chartPathList[chartIndex])
 		$TextureRect.texture = load(loadedImage)
@@ -58,12 +59,14 @@ func get_Prev_Song() -> String:
 			prevSongChart = chartList[GlobalSettings.startingIndex]
 			prevSongName = songNameList[GlobalSettings.startingIndex]
 			prevChartImage = chartImageList[GlobalSettings.startingIndex]
+			GlobalSettings.startingChartImage = prevChartImage
 		else:
 			newIndex = GlobalSettings.startingIndex-1
 			GlobalSettings.startingIndex = newIndex
 			prevSongChart = chartList[GlobalSettings.startingIndex]
 			prevSongName = songNameList[GlobalSettings.startingIndex]
 			prevChartImage = chartImageList[GlobalSettings.startingIndex]
+			GlobalSettings.startingChartImage = prevChartImage
 	$TextureRect.texture = load(prevChartImage)
 	$RichTextLabel.text = parse_filename(prevSongName)
 	GlobalSettings.current_song = prevSongName
@@ -89,12 +92,14 @@ func get_Next_Song() -> String:
 			nextSongChart = chartList[GlobalSettings.startingIndex]
 			nextSongName = songNameList[GlobalSettings.startingIndex]
 			nextChartImage = chartImageList[GlobalSettings.startingIndex]
+			GlobalSettings.startingChartImage = nextChartImage
 		else:
 			newIndex = GlobalSettings.startingIndex+1
 			GlobalSettings.startingIndex = newIndex
 			nextSongChart = chartList[GlobalSettings.startingIndex]
 			nextSongName = songNameList[GlobalSettings.startingIndex]
 			nextChartImage = chartImageList[GlobalSettings.startingIndex]
+			GlobalSettings.startingChartImage = nextChartImage
 	$RichTextLabel.text = parse_filename(nextSongName)
 	$TextureRect.texture = load(nextChartImage)
 	GlobalSettings.current_song = nextSongName
