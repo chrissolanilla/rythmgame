@@ -35,7 +35,8 @@ const DEFAULTS := {
 		"volume": 50.0,
 		"scrollSpeed": 450,
 		"chartPath": [
-			"res://MapsJson/recorded_chart.json",
+			#"res://MapsJson/recorded_chart.json",
+			"res://MapsJson/77bada.json",
 			"res://MapsJson/recorded_chart_2.json",
 			"res://MapsJson/simple_chart.json",
 			"res://MapsJson/poses_rickroll.json"

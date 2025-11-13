@@ -337,6 +337,8 @@ func spawn_note(note_data: Dictionary):
 	arrow.baseColor = get_color_for_direction(dir)
 	# print("arrow base color is ", arrow.baseColor)
 	arrow.note_time = note_data["time"]  # assign for hit detection
+	arrow.modulate = Color.WHITE
+	arrow.modulate.a = 4.5
 	notes_layer.add_child(arrow)
 
 	#print("Final spawn position:", arrow.position)
@@ -547,6 +549,8 @@ func spawn_bar_at_time(t: float) -> void:
 	if bar.texture:
 		tex_w = max(1.0, float(bar.texture.get_size().x))
 	bar.scale.x = width_px / tex_w
+	bar.modulate = Color.AQUA
+	bar.modulate.a = 5
 	# tweak thickness if needed:
 	# bar.scale.y = 1.5
 

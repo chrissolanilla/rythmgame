@@ -54,9 +54,9 @@ text = "Quit"
 
 [node name="Perfect" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 207.0
+offset_left = 20.0
 offset_top = 109.0
-offset_right = 894.0
+offset_right = 707.0
 offset_bottom = 230.0
 theme_override_fonts/normal_font = ExtResource("2_3q6t4")
 theme_override_font_sizes/normal_font_size = 86
@@ -67,9 +67,9 @@ vertical_alignment = 1
 
 [node name="Good" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 196.0
+offset_left = 20.0
 offset_top = 234.0
-offset_right = 888.0
+offset_right = 712.0
 offset_bottom = 344.0
 theme_override_fonts/normal_font = ExtResource("2_3q6t4")
 theme_override_font_sizes/normal_font_size = 86
@@ -79,9 +79,9 @@ vertical_alignment = 1
 
 [node name="Bad" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 203.0
+offset_left = 20.0
 offset_top = 384.0
-offset_right = 890.0
+offset_right = 707.0
 offset_bottom = 490.0
 theme_override_fonts/normal_font = ExtResource("2_3q6t4")
 theme_override_font_sizes/normal_font_size = 86
@@ -91,9 +91,9 @@ vertical_alignment = 1
 
 [node name="Miss" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 207.0
+offset_left = 20.0
 offset_top = 506.0
-offset_right = 898.0
+offset_right = 711.0
 offset_bottom = 642.0
 theme_override_fonts/normal_font = ExtResource("2_3q6t4")
 theme_override_font_sizes/normal_font_size = 86

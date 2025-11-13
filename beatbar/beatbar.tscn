@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://dtyjkj0676i85"]
+[gd_scene load_steps=3 format=3 uid="uid://dtyjkj0676i85"]
 
-[ext_resource type="Texture2D" uid="uid://d1a7b6w6ltrw" path="res://art/beatbar.png" id="1_gto44"]
+[ext_resource type="Texture2D" uid="uid://ddw6rvvft1tpt" path="res://art/beatbar.png" id="1_gto44"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_gto44"]
 
 [node name="Beatbar" type="Sprite2D"]
+material = SubResource("CanvasItemMaterial_gto44")
 texture = ExtResource("1_gto44")

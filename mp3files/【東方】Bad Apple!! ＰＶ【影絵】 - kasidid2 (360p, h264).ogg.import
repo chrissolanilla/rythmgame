@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dde2cqnfr8pcv"
+path="res://.godot/imported/【東方】Bad Apple!! ＰＶ【影絵】 - kasidid2 (360p, h264).ogg-50de850f6127f5e5b2f2d1a829bb5922.oggvorbisstr"
+
+[deps]
+
+source_file="res://mp3files/【東方】Bad Apple!! ＰＶ【影絵】 - kasidid2 (360p, h264).ogg"
+dest_files=["res://.godot/imported/【東方】Bad Apple!! ＰＶ【影絵】 - kasidid2 (360p, h264).ogg-50de850f6127f5e5b2f2d1a829bb5922.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

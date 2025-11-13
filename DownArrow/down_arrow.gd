@@ -2,7 +2,7 @@ extends BaseArrow
 
 func _ready() -> void:
 	direction = "down"
-	baseColor = Color("e66600", 0.35)
+	baseColor = Color("e66600", 0.85)
 	pressedColor = Color("e66600", 1.0)
 	is_receptor = true
 
