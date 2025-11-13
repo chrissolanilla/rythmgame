@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bk374ib8x1sq4"]
+[gd_scene load_steps=20 format=3 uid="uid://bk374ib8x1sq4"]
 
 [ext_resource type="PackedScene" uid="uid://lhi5y6mg4a2c" path="res://DownArrow/down_arrow.tscn" id="1_0eyy2"]
 [ext_resource type="PackedScene" uid="uid://vmniglm0734s" path="res://LeftArrow/left_arrow.tscn" id="1_gox45"]
@@ -16,57 +16,105 @@
 [ext_resource type="Script" uid="uid://ce4tupnoxkkum" path="res://9ArrowScene/pause_menu.gd" id="14_fxsq8"]
 [ext_resource type="PackedScene" uid="uid://djhnqlbcx681n" path="res://UDP/udp.tscn" id="15_fxsq8"]
 [ext_resource type="FontFile" uid="uid://c5onj8ox0dd42" path="res://Fonts/Johnny Fever.otf" id="15_rs42x"]
+[ext_resource type="StyleBox" uid="uid://v2ee38t63vb7" path="res://Fonts/new_style_box_flat.tres" id="16_6u72i"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rs42x"]
+bg_color = Color(0.598724, 0.300147, 0.910758, 1)
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6u72i"]
+bg_color = Color(1, 0.478431, 0.776471, 1)
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_sh2q5")
 
 [node name="UpArrow" parent="." instance=ExtResource("4_vjsbt")]
-position = Vector2(1861, -126)
+position = Vector2(3440, 96)
 scale = Vector2(0.2, 0.2)
 
 [node name="DownArrow" parent="." instance=ExtResource("1_0eyy2")]
-position = Vector2(1683, -126)
+position = Vector2(3262, 96)
 scale = Vector2(0.2, 0.2)
 
 [node name="LeftArrow" parent="." instance=ExtResource("1_gox45")]
-position = Vector2(1522, -126)
+position = Vector2(3101, 96)
 scale = Vector2(0.2, 0.2)
 
 [node name="RightArrow" parent="." instance=ExtResource("3_c4c6w")]
-position = Vector2(2016, -126)
+position = Vector2(3595, 96)
+rotation = 1.57079
 scale = Vector2(0.2, 0.2)
 
 [node name="UpLeftArrow" parent="." instance=ExtResource("7_sh2q5")]
-position = Vector2(1603.4, -126)
+position = Vector2(3182.4, 96)
+rotation = -0.785397
 scale = Vector2(0.2, 0.2)
 
 [node name="UpRightArrow" parent="." instance=ExtResource("5_hoyt5")]
-position = Vector2(1937, -126)
+position = Vector2(3516, 96)
 scale = Vector2(0.2, 0.2)
 
 [node name="DownRightArrow" parent="." instance=ExtResource("8_fxsq8")]
-position = Vector2(2087, -126)
+position = Vector2(3666, 96)
+rotation = 2.35619
 scale = Vector2(0.2, 0.2)
 
 [node name="DownLeftArrow" parent="." instance=ExtResource("9_rs42x")]
-position = Vector2(1448, -126)
+position = Vector2(3027, 96)
+rotation = -2.09439
 scale = Vector2(0.2, 0.2)
 
 [node name="MiddleNote" parent="." instance=ExtResource("10_2gnyf")]
-position = Vector2(1771, -115)
+position = Vector2(3350, 107)
 scale = Vector2(0.1, 0.1)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(3350, 550)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_a8lej")
 
 [node name="sceneSpawner" parent="." instance=ExtResource("11_qytyx")]
 position = Vector2(553, 1123)
 arrow_scene = ExtResource("11_5h82b")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(1771, 328)
+[node name="NoteScore" type="RichTextLabel" parent="."]
+offset_left = 3209.0
+offset_top = 205.0
+offset_right = 3491.0
+offset_bottom = 296.0
+bbcode_enabled = true
+text = "[b][color=white] 0 [/color][/b]
+"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("12_a8lej")
+[node name="ComboScoring" type="RichTextLabel" parent="."]
+offset_left = 3478.0
+offset_top = 498.0
+offset_right = 3760.0
+offset_bottom = 589.0
+bbcode_enabled = true
+text = "[b][color=white] 0 [/color][/b]
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GlobalScoring" type="RichTextLabel" parent="."]
+offset_left = 3214.0
+offset_top = 638.0
+offset_right = 3496.0
+offset_bottom = 729.0
+bbcode_enabled = true
+text = "[b][color=green] 0 [/color][/b]
+"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+scale = Vector2(1.6, 1.6)
+transform = Transform2D(1.6, 0, 0, 1.6, 0, 0)
 
 [node name="PauseMenu" type="Control" parent="CanvasLayer"]
 process_mode = 2
@@ -83,6 +131,7 @@ offset_top = 57.0
 offset_right = 507.0
 offset_bottom = 216.0
 theme_override_fonts/font = ExtResource("15_rs42x")
+theme_override_styles/normal = ExtResource("16_6u72i")
 text = "Exit"
 
 [node name="Main Menu" type="Button" parent="CanvasLayer/PauseMenu"]
@@ -92,6 +141,7 @@ offset_top = 374.0
 offset_right = 498.0
 offset_bottom = 533.0
 theme_override_fonts/font = ExtResource("15_rs42x")
+theme_override_styles/normal = ExtResource("16_6u72i")
 text = "Main Menu"
 
 [node name="BackToEditor" type="Button" parent="CanvasLayer/PauseMenu"]
@@ -101,6 +151,7 @@ offset_top = 219.0
 offset_right = 769.0
 offset_bottom = 378.0
 theme_override_fonts/font = ExtResource("15_rs42x")
+theme_override_styles/normal = ExtResource("16_6u72i")
 text = "Back To Editor"
 
 [node name="Resume" type="Button" parent="CanvasLayer/PauseMenu"]
@@ -110,6 +161,7 @@ offset_top = 389.0
 offset_right = 1037.0
 offset_bottom = 548.0
 theme_override_fonts/font = ExtResource("15_rs42x")
+theme_override_styles/normal = ExtResource("16_6u72i")
 text = "Resume"
 
 [node name="Restart" type="Button" parent="CanvasLayer/PauseMenu"]
@@ -119,57 +171,33 @@ offset_top = 51.0
 offset_right = 1030.0
 offset_bottom = 210.0
 theme_override_fonts/font = ExtResource("15_rs42x")
+theme_override_styles/normal = ExtResource("16_6u72i")
 text = "Restart"
-
-[node name="NoteScore" type="RichTextLabel" parent="."]
-offset_left = 1630.0
-offset_top = -17.0
-offset_right = 1912.0
-offset_bottom = 74.0
-bbcode_enabled = true
-text = "[b][color=white] 0 [/color][/b]
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ComboScoring" type="RichTextLabel" parent="."]
-offset_left = 1899.0
-offset_top = 276.0
-offset_right = 2181.0
-offset_bottom = 367.0
-bbcode_enabled = true
-text = "[b][color=white] 0 [/color][/b]
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="GlobalScoring" type="RichTextLabel" parent="."]
-offset_left = 1635.0
-offset_top = 416.0
-offset_right = 1917.0
-offset_bottom = 507.0
-bbcode_enabled = true
-text = "[b][color=green] 0 [/color][/b]
-"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="UDP" parent="." instance=ExtResource("15_fxsq8")]
 
-[node name="ColorRect" type="ColorRect" parent="."]
-z_index = -2
-offset_left = 814.0
-offset_top = -213.0
-offset_right = 2734.0
-offset_bottom = 867.0
-color = Color(0.192157, 0.196078, 0.266667, 1)
-
 [node name="CurrentPoseText" type="Label" parent="."]
-offset_left = 1193.0
-offset_right = 1303.0
-offset_bottom = 23.0
+offset_left = 2772.0
+offset_top = 222.0
+offset_right = 2882.0
+offset_bottom = 245.0
 text = "Current Pose: "
 
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_left = 2528.0
+offset_top = 1032.0
+offset_right = 3515.0
+offset_bottom = 1139.0
+rotation = -1.5708
+theme_override_styles/background = SubResource("StyleBoxFlat_rs42x")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6u72i")
+value = 50.0
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[connection signal="finished" from="AudioStreamPlayer" to="sceneSpawner" method="_on_audio_stream_player_finished"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Exit" to="CanvasLayer/PauseMenu" method="_on_exit_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Main Menu" to="CanvasLayer/PauseMenu" method="_on_main_menu_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/BackToEditor" to="CanvasLayer/PauseMenu" method="_on_back_to_editor_pressed"]

@@ -5,6 +5,7 @@ var startingVolume: float
 var startingIndex: int
 var startingChartArray: Array
 var scrollSpeed: int
+var startingChartImage: String
 
 var test_play: bool = false
 var edit_chart
@@ -13,6 +14,15 @@ var poses_array: Array
 var notes: Array
 var bars: Array
 var current_pose: String = "None"
+
+var perfectCounter = 0
+var goodCounter = 0
+var badCounter = 0
+var missCounter = 0
+
+var songTime: float = 0.0
+
+var highestComboAchieved: int
 
 const CFG_PATH := "user://Settings.cfg"
 

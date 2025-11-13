@@ -1,94 +1,105 @@
-[gd_scene load_steps=3 format=3 uid="uid://bi87g2mr7ol7r"]
+[gd_scene load_steps=5 format=3 uid="uid://bi87g2mr7ol7r"]
 
 [ext_resource type="FontFile" uid="uid://c5onj8ox0dd42" path="res://Fonts/Johnny Fever.otf" id="2_ds7ha"]
 [ext_resource type="Script" uid="uid://dblc43ykvrw81" path="res://Settings/changeSettings.gd" id="2_ljqr7"]
+[ext_resource type="Texture2D" uid="uid://dt6i738ugylis" path="res://art/neon_music_bg_1920x1080.png" id="2_tvu6k"]
+[ext_resource type="StyleBox" uid="uid://v2ee38t63vb7" path="res://Fonts/new_style_box_flat.tres" id="4_tvu6k"]
 
 [node name="GlobalSettings" type="Control"]
 layout_mode = 3
 anchors_preset = 0
+scale = Vector2(1.745, 1.745)
 script = ExtResource("2_ljqr7")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-z_index = -2
-layout_mode = 0
-offset_left = -1.0
-offset_top = -1.0
-offset_right = 1172.0
-offset_bottom = 673.0
-color = Color(0.192157, 0.196078, 0.266667, 1)
+[node name="NeonMusicBg1920x1080" type="Sprite2D" parent="."]
+position = Vector2(549.571, 311.842)
+scale = Vector2(0.81305, 0.792439)
+texture = ExtResource("2_tvu6k")
 
 [node name="HSlider" type="HSlider" parent="."]
 layout_mode = 0
-offset_left = 461.0
-offset_top = 283.0
-offset_right = 695.0
-offset_bottom = 299.0
+offset_left = 441.834
+offset_top = 361.605
+offset_right = 675.834
+offset_bottom = 377.605
+scale = Vector2(1.2, 1.2)
 
 [node name="ScrollSpeedSlider" type="HSlider" parent="."]
 layout_mode = 0
-offset_left = 461.0
-offset_top = 216.0
-offset_right = 695.0
-offset_bottom = 232.0
+offset_left = 436.676
+offset_top = 261.891
+offset_right = 670.676
+offset_bottom = 277.891
+scale = Vector2(1.2, 1.2)
 min_value = 1.0
 max_value = 1000.0
 value = 300.0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 447.0
-offset_top = 236.0
-offset_right = 709.0
-offset_bottom = 276.0
+offset_left = 480.229
+offset_top = 296.848
+offset_right = 742.229
+offset_bottom = 336.848
+scale = Vector2(1.2, 1.2)
 pivot_offset = Vector2(311, 14)
+theme_override_fonts/normal_font = ExtResource("2_ds7ha")
 bbcode_enabled = true
-text = "[b][color=green]Game Volume[/color][/b]
+text = "[b][font=res://Fonts/Johnny Fever.otf][color=green]Game Volume[/color][/font][/b]
 "
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 447.0
-offset_top = 173.0
-offset_right = 709.0
-offset_bottom = 213.0
+offset_left = 475.645
+offset_top = 196.562
+offset_right = 737.645
+offset_bottom = 236.562
+scale = Vector2(1.2, 1.2)
 pivot_offset = Vector2(311, 14)
+theme_override_fonts/normal_font = ExtResource("2_ds7ha")
 bbcode_enabled = true
-text = "[b][color=green]Scroll Speed[/color][/b]
+text = "[b][font=res://Fonts/Johnny Fever.otf][color=green]Scroll Speed[/color][/font][/b]
 "
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Cancel" type="Button" parent="."]
 layout_mode = 0
-offset_left = 280.0
-offset_top = 150.0
-offset_right = 424.0
-offset_bottom = 214.0
+offset_left = 691.0
+offset_top = 477.0
+offset_right = 907.0
+offset_bottom = 549.0
 focus_neighbor_top = NodePath("../Exit")
 focus_neighbor_bottom = NodePath("../Confirm")
 theme_override_fonts/font = ExtResource("2_ds7ha")
+theme_override_font_sizes/font_size = 42
+theme_override_styles/normal = ExtResource("4_tvu6k")
 text = "Cancel"
 
 [node name="Confirm" type="Button" parent="."]
 layout_mode = 0
-offset_left = 40.0
-offset_top = 193.0
-offset_right = 224.0
-offset_bottom = 245.0
+offset_left = 272.0
+offset_top = 475.0
+offset_right = 488.0
+offset_bottom = 547.0
 focus_neighbor_top = NodePath("../Cancel")
 theme_override_fonts/font = ExtResource("2_ds7ha")
+theme_override_font_sizes/font_size = 42
+theme_override_styles/normal = ExtResource("4_tvu6k")
 text = "Confirm"
 
 [node name="Exit" type="Button" parent="."]
 layout_mode = 0
-offset_left = 45.0
-offset_top = 56.0
-offset_right = 222.0
-offset_bottom = 97.0
+offset_left = 841.834
+offset_top = 89.3983
+offset_right = 1031.83
+offset_bottom = 152.398
 focus_neighbor_bottom = NodePath("../Cancel")
 theme_override_fonts/font = ExtResource("2_ds7ha")
+theme_override_font_sizes/font_size = 42
+theme_override_styles/normal = ExtResource("4_tvu6k")
 text = "Exit"
 
 [connection signal="value_changed" from="HSlider" to="." method="_on_value_changed"]

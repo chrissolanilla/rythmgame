@@ -20,6 +20,18 @@ var judgement_label_scene = preload("res://judgementLabel/JudgementLabel.tscn")
 @export var beatbar: PackedScene = preload("res://beatbar/beatbar.tscn")
 var test_play : bool
 @onready var current_pose_text: Label = $"../CurrentPoseText"
+var chartFinished: bool = false
+@onready var progress_bar: ProgressBar = $"../ProgressBar"
+
+
+var perfects: int
+var goods: int
+var bads: int
+var misses: int
+
+var highestCombo: int = 0
+
+
 
 var pose_icons := {
 	"Samurai Pose": preload("res://art/uniform_samurai.png"),
@@ -104,6 +116,11 @@ var arrow_scenes = {
 }
 
 func _ready():
+	perfects = 0
+	bads = 0
+	goods = 0
+	misses = 0
+	
 	test_play = GlobalSettings.test_play
 	chart_path = GlobalSettings.startingChartPath
 	print("chart path is " , chart_path)
@@ -143,7 +160,27 @@ func _active_hold_notes() -> Array:
 
 func _process(delta):
 	var song_time : float = music.get_playback_position()
-
+	progress_bar.value = (song_time / music.stream.get_length()) * 100
+	#if song_time > 3:
+		
+	if chartFinished == true :
+		var counter = 0
+		var notesList = notes_layer.get_children()
+		for note in notesList:
+			if not note.has_meta("is_bar"):
+				counter += 1
+		if counter == 0:
+			GlobalSettings.songTime = song_time
+			GlobalSettings.perfectCounter = perfects
+			GlobalSettings.goodCounter = goods
+			GlobalSettings.badCounter = bads
+			GlobalSettings.missCounter = misses
+			GlobalSettings.highestComboAchieved = highestCombo
+			
+			get_tree().change_scene_to_file("res://MenuScene/SongEnd.tscn")
+	if spawn_index == chart_data.size():
+		chartFinished = true
+	#get_tree().change_scene_to_file("res://MenuScene/SongEnd.tscn")
 	# -------- SPAWN (poses + notes) --------
 	while spawn_index < chart_data.size():
 		var nd = chart_data[spawn_index]
@@ -328,8 +365,7 @@ func check_hits(direction: String):
 	# HEAD judgement window
 	if closest_diff <= 0.050:
 		show_judgement("Perfect!", closest_note.position)
-		update_Shown_Acc(10); update_Score(10); update_Combo()
-
+		update_Shown_Acc(10); update_Score(10); update_Combo(); perfects += 1; 
 		if closest_note.is_Hold:
 			active_holds[direction] = {"note": closest_note, "break_timer": 0.0, "frozen": true}
 			var head_poly := closest_note.get_node_or_null("Polygon2D") as Polygon2D
@@ -341,7 +377,7 @@ func check_hits(direction: String):
 
 	elif closest_diff <= 0.1:
 		show_judgement("Good!", closest_note.position)
-		update_Shown_Acc(5); update_Score(5); update_Combo()
+		update_Shown_Acc(5); update_Score(5); update_Combo(); goods += 1; 
 
 		if closest_note.is_Hold:
 			active_holds[direction] = {"note": closest_note, "break_timer": 0.0, "frozen": true}
@@ -354,10 +390,11 @@ func check_hits(direction: String):
 
 	elif closest_diff <= 0.2:
 		show_judgement("Bad!", closest_note.position)
-		update_Shown_Acc(1); update_Score(1); reset_Combo()
+		update_Shown_Acc(1); update_Score(1); reset_Combo(); bads += 1; 
+		
 		closest_note.queue_free()
 	else:
-		reset_Combo()
+		reset_Combo(); misses += 1;
 		show_judgement("Miss", receptor_positions[direction])
 
 
@@ -380,9 +417,11 @@ func update_Score(x):
 
 func update_Combo():
 	globalCombo += 1
+	highestCombo = max(highestCombo, globalCombo)
 	comboTracker.text = "[b][color=green] %s [/color][/b]" % globalCombo
 
 func reset_Combo():
+	highestCombo = max(highestCombo, globalCombo)
 	globalCombo = 0
 	comboTracker.text = "[b][color=green] %s [/color][/b]" % globalCombo
 
@@ -498,3 +537,8 @@ func spawn_bar_at_time(t: float) -> void:
 	# bar.scale.y = 1.5
 
 	notes_layer.add_child(bar)
+
+
+func _on_audio_stream_player_finished() -> void:	
+	get_tree().change_scene_to_file("res://MenuScene/SongEnd.tscn")
+	pass # Replace with function body.
