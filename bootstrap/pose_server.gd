@@ -9,215 +9,139 @@ var _pid: int = -1
 func _ready() -> void:
 	ensure_server_running()
 
+	var root := get_tree().root
+	if root and not root.is_connected("close_requested", Callable(self, "_on_close_requested")):
+		root.connect("close_requested", Callable(self, "_on_close_requested"))
+
+	if not get_tree().is_connected("tree_exiting", Callable(self, "_on_tree_exiting")):
+		get_tree().connect("tree_exiting", Callable(self, "_on_tree_exiting"))
+
+func _on_close_requested() -> void:
+	stop_server_if_started()
+
+func _on_tree_exiting() -> void:
+	stop_server_if_started()
+
 func _exit_tree() -> void:
 	stop_server_if_started()
 
+
 # ----------------- Public -----------------
 func ensure_server_running() -> void:
-	# If port already bound (likely by your UDP node), don't fight it.
+	# If someone is already sending UDP packets, don’t spawn another.
 	if await _have_udp_packets_recently():
 		return
 
-	_copy_payload_to_user()
-	var user_dir := OS.get_user_data_dir()
+	# Kill any stale process from previous runs.
+	var old := _read_pid()
+	if old > 0:
+		await _kill_pid_hard(old)
+		_clear_pid()
 
-	if !_create_venv_if_needed(user_dir):
-		push_error("PoseServer: Python 3.10–3.12 is required.")
-		return
+	# Linux / FreeBSD → launch via /bin/sh so we can cd into the right folder.
+	if OS.get_name() in ["Linux", "FreeBSD"]:
+		var cmd := _linux_launch_command()
+		if cmd == "":
+			push_error("PoseServer: could not build Linux launch command.")
+			return
 
-	if !_install_deps(user_dir):
-		push_error("PoseServer: dependency install failed.")
-		return
+		_pid = OS.create_process("/bin/sh", PackedStringArray(["-c", cmd]))
+	else:
+		# Fallback for Windows (you can adapt this later)
+		var exe := _pose_sender_exe()
+		if exe == "":
+			push_error("PoseServer: no pose_udp_sender binary found.")
+			return
 
-	var cmd := _build_server_cmd(user_dir)
-	_pid = OS.create_process(cmd[0], PackedStringArray([cmd[1]]))
+		var graph_path := _pose_graph_path()
+		if graph_path == "":
+			push_error("PoseServer: pose_tracking_cpu.pbtxt not found.")
+			return
+
+		var args := PackedStringArray([
+			"--calculator_graph_config_file=" + graph_path,
+			"--verbose=false"
+		])
+		_pid = OS.create_process(exe, args)
+
 	if _pid <= 0:
-		push_error("PoseServer: failed to start process")
+		push_error("PoseServer: failed to start pose_udp_sender")
+		return
 
-	await get_tree().create_timer(1.0).timeout
+	_write_pid(_pid)
+
+	# Give it a moment to open the camera and start sending.
+	await get_tree().create_timer(2.0).timeout
+
 	if !(await _have_udp_packets_recently()):
-		push_warning("PoseServer started but no packets yet (camera/permissions?).")
+		push_warning("pose_udp_sender started but no UDP packets yet (camera / permissions?).")
+
 
 func stop_server_if_started() -> void:
-	if _pid > 0:
-		OS.kill(_pid)
-		_pid = -1
+	var pid := _pid
+	if pid <= 0:
+		pid = _read_pid()
+	if pid > 0:
+		OS.kill(pid) # SIGTERM
+		await get_tree().create_timer(0.25).timeout
+		if OS.get_name() == "Linux":
+			OS.execute("kill", PackedStringArray(["-9", str(pid)]), [], true)
+	_clear_pid()
+	_pid = -1
+
 
 # ----------------- Internals -----------------
-func _platform_key() -> String:
-	var osn := OS.get_name()
-	if osn == "Windows": return "windows-x86_64"
-	if osn == "Linux" or osn == "FreeBSD": return "linux-x86_64"
-	if osn == "macOS": return "" # you decided to skip macOS for now
-	return ""
 
-func _get_system_python_candidates() -> PackedStringArray:
-	match OS.get_name():
-		"Windows":
-			# Try launcher first for exact 3.11; then generic
-			return ["py","py -3.11","python","python3"]
-		_:
-			return ["python3","python"]
+# For Linux: build a shell command that cd's into the cpp_server/linux folder
+# and runs pose_udp_sender with a *relative* graph path.
+func _linux_launch_command() -> String:
+	# Absolute path to the binary inside the project/export.
+	var exe := ProjectSettings.globalize_path("res://cpp_server/linux/pose_udp_sender")
+	if !FileAccess.file_exists(exe):
+		return ""
 
-func _ensure_system_python() -> Dictionary:
-	# returns {"exe": "py", "args": PackedStringArray(["-3.11"])} or {"exe":"python3","args":[]}
-	for cand in _get_system_python_candidates():
-		var parts := cand.split(" ")
-		var exe := parts[0]
-		var args := PackedStringArray()
-		if parts.size() > 1:
-			args.append(parts[1])
-		var code := OS.execute(exe, args + PackedStringArray(["--version"]), [], true)
-		if code == 0:
-			return {"exe": exe, "args": args}
-	return {}
+	var exe_dir := exe.get_base_dir()
+	# This must match what works from your manual test:
+	#   cd cpp_server/linux
+	#   ./pose_udp_sender --calculator_graph_config_file=mediapipe/graphs/pose_tracking/pose_tracking_cpu.pbtxt
+	var rel_graph := "mediapipe/graphs/pose_tracking/pose_tracking_cpu.pbtxt"
+
+	# Build: cd '<exe_dir>' && ./pose_udp_sender --calculator_graph_config_file=...
+	var cmd := "cd '%s' && ./pose_udp_sender --calculator_graph_config_file=%s --verbose=false" % [
+		exe_dir,
+		rel_graph
+	]
+	return cmd
 
 
-func _venv_python(user_dir: String) -> String:
+# Windows path helpers (not used on Linux right now, but kept for later)
+func _pose_sender_exe() -> String:
+	var path := ""
+
 	if OS.get_name() == "Windows":
-		return user_dir.path_join("python_server/venv/Scripts/python.exe")
-	return user_dir.path_join("python_server/venv/bin/python")
+		path = ProjectSettings.globalize_path("res://cpp_server/windows/pose_udp_sender.exe")
 
-func _copy_file(src: String, dst_dir: String) -> void:
-	# Make sure the destination directory exists
-	DirAccess.make_dir_recursive_absolute(dst_dir)
-
-	var dst_path := dst_dir.path_join(src.get_file())
-	var bytes := FileAccess.get_file_as_bytes(src)
-	var f := FileAccess.open(dst_path, FileAccess.WRITE)
-	if f == null:
-		push_error("Failed to open %s for write".format([dst_path]))
-		return
-	f.store_buffer(bytes)
-	f.close()
-#func _copy_file(src: String, dst_dir: String) -> void:
-	#var dst_path := dst_dir.path_join(src.get_file())
-	#var bytes := FileAccess.get_file_as_bytes(src)
-	#var f := FileAccess.open(dst_path, FileAccess.WRITE)
-	#if f == null:
-		#push_error("Failed to open %s for write".format([dst_path]))
-		#return
-	#f.store_buffer(bytes)
-	#f.close()
-
-func _copy_payload_to_user() -> void:
-	var dst := "user://python_server"
-	DirAccess.make_dir_recursive_absolute(dst)
-	for p in [
-		"res://python_server/main.py",
-		"res://python_server/poses.py",
-		"res://python_server/requirements.txt"
-	]:
-		#Static function "copy()" not found in base "GDScriptNativeClass".
-		#FileAccess.copy(p, dst.path_join(p.get_file()))
-		_copy_file(p, dst)
-	_copy_dir_recursive("res://python_server/wheels", "user://python_server/wheels")
-
-func _copy_dir_recursive(src: String, dst: String) -> void:
-	if !DirAccess.dir_exists_absolute(src): return
-	DirAccess.make_dir_recursive_absolute(dst)
-
-	var da := DirAccess.open(src)
-	if da:
-		da.list_dir_begin()
-		while true:
-			var name := da.get_next()
-			if name == "": break
-			if name == "." or name == "..": continue
-
-			var s := src.path_join(name)
-			var d := dst.path_join(name)
-
-			if da.current_is_dir():
-				# For directories, recurse into the new dst directory
-				_copy_dir_recursive(s, d)
-			else:
-				# For files, copy into the *parent* directory (dst), not d
-				_copy_file(s, dst)
-		da.list_dir_end()
-
-#func _copy_dir_recursive(src: String, dst: String) -> void:
-	#if !DirAccess.dir_exists_absolute(src): return
-	#DirAccess.make_dir_recursive_absolute(dst)
-	#var da := DirAccess.open(src)
-	#if da:
-		#da.list_dir_begin()
-		#while true:
-			#var name := da.get_next()
-			#if name == "": break
-			#if name == "." or name == "..": continue
-			#var s := src.path_join(name)
-			#var d := dst.path_join(name)
-			#if da.current_is_dir(): _copy_dir_recursive(s, d)
-			##Static fuciton "copy" not found in base syayayay
-			##else: FileAccess.copy(s, d)
-			#_copy_file(s,d)
-		#da.list_dir_end()
+	if path == "" or !FileAccess.file_exists(path):
+		return ""
+	return path
 
 
-func _create_venv_if_needed(user_dir: String) -> bool:
-	var vpy := _venv_python(user_dir)
-	if FileAccess.file_exists(vpy): return true
+func _pose_graph_path() -> String:
+	var rel := "mediapipe/graphs/pose_tracking/pose_tracking_cpu.pbtxt"
+	var path := ""
 
-	#var sys_py := _ensure_system_python()
-	var found := _ensure_system_python()
-	#if sys_py == "":
-		#push_error("Python not found. Please install Python 3.11.")
-		#return false
+	if OS.get_name() == "Windows":
+		path = ProjectSettings.globalize_path("res://cpp_server/windows/" + rel)
 
-	if found.is_empty():
-		push_error("Python not found Please Install Python 3.11(64 bit)")
-		OS.shell_open("https://www.python.org/downloads/release/python-3110/")
-		return false
-		
-	var venv_dir := user_dir.path_join("python_server/venv")
-	DirAccess.make_dir_recursive_absolute(venv_dir.get_base_dir())
+	if path == "" or !FileAccess.file_exists(path):
+		return ""
+	return path
 
-	# Handle "py -3.11 -m venv" on Windows
-	#var parts := sys_py.split(" ")
-	#var exe := parts[0]
-	var exe := String(found["exe"])
-	#var args := parts.size() > 1 ? [parts[1],"-m","venv", venv_dir] : ["-m","venv", venv_dir]
-	#var args := [parts[1], "-m", "venv", venv_dir] if parts.size() > 1 else ["-m", "venv", venv_dir]
-	var base_args := PackedStringArray(found["args"])
-	#var code := OS.execute(exe, args, [], true)
-	#var code := OS.execute(exe,base_args, [], true)
-	var code := OS.execute(
-							exe,
-							base_args + PackedStringArray(["-m", "venv", venv_dir]),
-							[],
-							true
-						)
-
-	return code == 0
-
-func _install_deps(user_dir: String) -> bool:
-	var vpy := _venv_python(user_dir)
-	var code := OS.execute(vpy, ["-m","pip","install","-U","pip","wheel"], [], true)
-	if code != 0: return false
-
-	var req := user_dir.path_join("python_server/requirements.txt")
-	var plat := _platform_key()
-	if plat != "":
-		var wheels_dir := user_dir.path_join("python_server/wheels").path_join(plat)
-		if DirAccess.dir_exists_absolute(wheels_dir):
-			code = OS.execute(vpy, [
-				"-m","pip","install",
-				"--no-index","--find-links", wheels_dir,
-				"-r", req
-			], [], true)
-			if code == 0: return true
-			push_warning("Offline install failed; trying online.")
-
-	code = OS.execute(vpy, ["-m","pip","install","-r", req], [], true)
-	return code == 0
-
-func _build_server_cmd(user_dir: String) -> Array:
-	return [_venv_python(user_dir), user_dir.path_join("python_server/main.py")]
 
 func _have_udp_packets_recently() -> bool:
 	var udp := PacketPeerUDP.new()
-	var err := udp.bind(PORT, ADDR)  # Godot 4 API uses bind()
+	var err := udp.bind(PORT, ADDR)
+
 	if err == OK:
 		var t0 := Time.get_ticks_msec()
 		while Time.get_ticks_msec() - t0 < 200:
@@ -228,24 +152,40 @@ func _have_udp_packets_recently() -> bool:
 		udp.close()
 		return false
 	elif err == ERR_ALREADY_IN_USE:
-		# Your real UDP node already bound the port — assume packets will flow
-		return true
+		# Port already bound (likely your game's UDP listener).
+		return false
 	else:
-		# Some other error (e.g., permission)
 		return false
 
-#func _have_udp_packets_recently() -> bool:
-	#var udp := PacketPeerUDP.new()
-	## we cant infer the type with :=, what is this type?
-	#var err = udp.listen(PORT, ADDR)
-	#if err != OK:
-		## Port already bound by your UDP receiver → assume server running/coming
-		#return true
-	#var t0 := Time.get_ticks_msec()
-	#while Time.get_ticks_msec() - t0 < 200:
-		#if udp.get_available_packet_count() > 0:
-			#udp.close()
-			#return true
-		#await get_tree().process_frame
-	#udp.close()
-	#return false
+
+func _pid_file() -> String:
+	return "user://pose_server/pose_server.pid"
+
+func _read_pid() -> int:
+	var p := _pid_file()
+	if FileAccess.file_exists(p):
+		var f := FileAccess.open(p, FileAccess.READ)
+		if f:
+			var txt := f.get_as_text().strip_edges()
+			f.close()
+			return int(txt)
+	return -1
+
+func _write_pid(pid: int) -> void:
+	var p := _pid_file()
+	DirAccess.make_dir_recursive_absolute("user://pose_server")
+	var f := FileAccess.open(p, FileAccess.WRITE)
+	if f:
+		f.store_string(str(pid))
+		f.close()
+
+func _clear_pid() -> void:
+	var p := _pid_file()
+	if FileAccess.file_exists(p):
+		DirAccess.remove_absolute(p)
+
+func _kill_pid_hard(pid: int) -> void:
+	OS.kill(pid)
+	await get_tree().process_frame
+	if OS.get_name() == "Linux":
+		OS.execute("kill", PackedStringArray(["-9", str(pid)]), [], true)
