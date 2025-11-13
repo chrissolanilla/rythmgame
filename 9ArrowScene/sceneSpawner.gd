@@ -472,7 +472,9 @@ func _spawn_pose(nd: Dictionary):
 	p.position = Vector2( (get_viewport_rect().size.x - p.size.x)/2.0, 120 )
 	pose_layer.add_child(p)
 	p.global_position = get_viewport_rect().size / 2.0 -p.size /2.0
-	p.global_position.x+= 150
+	p.global_position.x= $"../ComboScoring".global_position.x + 600
+	p.z_index = 10
+	print("p.global_postion.x is : ", p.global_position.x)
 	#p.pose_judged.connect(_on_pose_judged)
 	p.pose_judged.connect(Callable(self, "_on_pose_judged"))
 
@@ -483,7 +485,7 @@ func _on_pose_judged(success: bool, at_position: Vector2, points: int):
 		show_judgement("Perfect!", at_position)
 		sfx_success.play()
 		#correct.global_position =get_viewport_rect().size / 2.0 -correct.size /2.0
-		correct.global_position = center +Vector2(500, -120)
+		correct.global_position = center +Vector2(600, -120)
 		correct.visible = true
 		timer.start()
 		update_Shown_Acc(points)
@@ -492,7 +494,7 @@ func _on_pose_judged(success: bool, at_position: Vector2, points: int):
 	else:
 		sfx_fail.play()
 		#wrong.global_position = get_viewport_rect().size / 2.0 - wrong.size /2.0
-		wrong.global_position = center+ Vector2(500,-120)
+		wrong.global_position = center+ Vector2(600,-120)
 		wrong.visible = true
 		timer.start()
 		show_judgement("Miss", at_position)
