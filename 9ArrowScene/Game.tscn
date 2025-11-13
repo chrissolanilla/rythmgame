@@ -85,30 +85,41 @@ offset_top = 205.0
 offset_right = 3491.0
 offset_bottom = 296.0
 bbcode_enabled = true
-text = "[b][color=white] 0 [/color][/b]
-"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ComboScoring" type="RichTextLabel" parent="."]
-offset_left = 3478.0
-offset_top = 498.0
-offset_right = 3760.0
-offset_bottom = 589.0
+offset_left = 2553.0
+offset_top = 980.0
+offset_right = 2896.0
+offset_bottom = 1100.0
+theme_override_fonts/normal_font = ExtResource("15_rs42x")
+theme_override_fonts/bold_font = ExtResource("15_rs42x")
+theme_override_font_sizes/bold_italics_font_size = 301
+theme_override_font_sizes/italics_font_size = 151
+theme_override_font_sizes/mono_font_size = 181
+theme_override_font_sizes/normal_font_size = 76
+theme_override_font_sizes/bold_font_size = 91
 bbcode_enabled = true
-text = "[b][color=white] 0 [/color][/b]
+text = "[b][color=white] x0 [/color][/b]
 "
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="GlobalScoring" type="RichTextLabel" parent="."]
-offset_left = 3214.0
-offset_top = 638.0
-offset_right = 3496.0
-offset_bottom = 729.0
+offset_left = 2631.0
+offset_top = 60.0
+offset_right = 2913.0
+offset_bottom = 151.0
+theme_override_fonts/normal_font = ExtResource("15_rs42x")
+theme_override_fonts/bold_font = ExtResource("15_rs42x")
+theme_override_font_sizes/bold_italics_font_size = 51
+theme_override_font_sizes/italics_font_size = 346
+theme_override_font_sizes/mono_font_size = 541
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 1
 bbcode_enabled = true
-text = "[b][color=green] 0 [/color][/b]
-"
+text = "123545821259010115"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -181,6 +192,7 @@ offset_left = 2772.0
 offset_top = 222.0
 offset_right = 2882.0
 offset_bottom = 245.0
+theme_override_fonts/font = ExtResource("15_rs42x")
 text = "Current Pose: "
 
 [node name="ProgressBar" type="ProgressBar" parent="."]

@@ -28,11 +28,7 @@ var perfects: int
 var goods: int
 var bads: int
 var misses: int
-
 var highestCombo: int = 0
-
-
-
 var pose_icons := {
 	"Samurai Pose": preload("res://art/uniform_samurai.png"),
 	"Stop Pose": preload("res://art/uniform_stop.png"),
@@ -46,32 +42,43 @@ var pose_icons := {
 var globalScore: int = 0
 var globalCombo: int = 0
 
-func show_judgement(text: String, position: Vector2):
-	var label = judgement_label_scene.instantiate()
-	label.text = text
-	label.position = position + Vector2(0, -40)
-
-	# set custom color
-	match text:
-		"Perfect!":
-			label.modulate = Color("34cfeb") # bright blue
-		"Good!":
-			label.modulate = Color("00c92c") # greenish
-		"Bad!":
-			label.modulate = Color("03005c") # dark blue
-		"Miss":
-			label.modulate = Color("ff1900") # red
-
-	judgement_layer.add_child(label)
-
-	if label.has_node("AnimationPlayer"):
-		label.get_node("AnimationPlayer").play("fade_out")
-
-	await get_tree().create_timer(1.0).timeout
-	if label.is_inside_tree():
-		label.queue_free()
-
-
+func show_judgement(text: String, position: Vector2) -> void:
+	# We'll reuse the single on-screen label instead of spawning new ones.
+	var label: RichTextLabel = ScoreLabel
+	if label:
+			
+		# Make sure it's visible and reset basic state
+		label.visible = true
+		label.scale = Vector2.ONE
+		label.modulate = Color.WHITE
+		label.modulate.a = 1.0  # fully opaque
+		# If you want the judgement at a fixed spot (osu!mania style),
+		# just position the label in the editor and DON'T touch its position here.
+		# (So we ignore the 'position' argument.)
+		# Set the text
+		label.text = text
+		# Set color by judgement
+		match text:
+			"Perfect!":
+				label.modulate = Color("34cfeb") # bright blue
+			"Good!":
+				label.modulate = Color("00c92c") # greenish
+			"Bad!":
+				label.modulate = Color("03005c") # dark blue
+			"Miss":
+				label.modulate = Color("ff1900") # red
+		# --- Cool animation (pop + fade out) ---
+		# Cancel previous tweens by just making a new one; the old one will finish but
+		# this will override scale/alpha visually anyway.
+		var tween := get_tree().create_tween()
+		# Pop scale a bit
+		tween.tween_property(label, "scale", Vector2(1.3, 1.3), 0.08) \
+				.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(label, "scale", Vector2.ONE, 0.10) \
+				.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN_OUT)
+		# Fade out after a short delay
+		tween.parallel().tween_property(label, "modulate:a", 0.0, 0.4) \
+			.set_delay(0.25)
 
 var chart_data = []
 var spawn_index = 0
@@ -228,10 +235,12 @@ func _process(delta):
 			if note.is_Hold:
 				if note.end_Time < song_time - 0.2:
 					show_judgement("Miss", receptor_positions.get(note.direction, note.position))
+					misses+=1
 					reset_Combo()
 					note.queue_free()
 			else:
 				show_judgement("Miss", receptor_positions.get(note.direction, note.position))
+				misses+=1
 				reset_Combo()
 				note.queue_free()
 
@@ -396,6 +405,7 @@ func check_hits(direction: String):
 	else:
 		reset_Combo(); misses += 1;
 		show_judgement("Miss", receptor_positions[direction])
+		misses+=1
 
 
 func _on_arrow_released(direction: String) -> void:
@@ -403,14 +413,15 @@ func _on_arrow_released(direction: String) -> void:
 
 
 func update_Shown_Acc(x):
-	if x is int:
-		ScoreLabel.text = "[b][color=green] %s [/color][/b]" % x
-	else:
-		ScoreLabel.text = "[b][color=green] 0 [/color][/b]"
+	pass
+	#if x is int:
+		#ScoreLabel.text = "[b][color=green] %s [/color][/b]" % x
+	#else:
+		#ScoreLabel.text = "[b][color=green] 0 [/color][/b]"
 
 func update_Score(x):
 	globalScore += x
-	globalScoring.text = "[b][color=green] %s [/color][/b]" % globalScore
+	globalScoring.text = "%s" % globalScore
 
 	#Could add to updating the score of based on the 2 parameters scoring and combo, total score could be the following formula
 	#globalscore = (shown acc score * globalCombo) + globalScore
@@ -418,12 +429,12 @@ func update_Score(x):
 func update_Combo():
 	globalCombo += 1
 	highestCombo = max(highestCombo, globalCombo)
-	comboTracker.text = "[b][color=green] %s [/color][/b]" % globalCombo
+	comboTracker.text = "x%s" % globalCombo
 
 func reset_Combo():
 	highestCombo = max(highestCombo, globalCombo)
 	globalCombo = 0
-	comboTracker.text = "[b][color=green] %s [/color][/b]" % globalCombo
+	comboTracker.text = "x%s" % globalCombo
 
 func _sprite_base_height(s: Sprite2D) -> float:
 	if s == null or s.texture == null: return 1.0
@@ -472,7 +483,7 @@ func _spawn_pose(nd: Dictionary):
 	p.position = Vector2( (get_viewport_rect().size.x - p.size.x)/2.0, 120 )
 	pose_layer.add_child(p)
 	p.global_position = get_viewport_rect().size / 2.0 -p.size /2.0
-	p.global_position.x= $"../ComboScoring".global_position.x + 600
+	p.global_position.x= $"../ComboScoring".global_position.x + 1500
 	p.z_index = 10
 	print("p.global_postion.x is : ", p.global_position.x)
 	#p.pose_judged.connect(_on_pose_judged)
@@ -480,12 +491,12 @@ func _spawn_pose(nd: Dictionary):
 
 func _on_pose_judged(success: bool, at_position: Vector2, points: int):
 	print("[POSE] judged: ", success, " pts=", points)
-	var center = globalScoring.global_position
+	var center = comboTracker.global_position
 	if success:
 		show_judgement("Perfect!", at_position)
 		sfx_success.play()
 		#correct.global_position =get_viewport_rect().size / 2.0 -correct.size /2.0
-		correct.global_position = center +Vector2(600, -120)
+		correct.global_position = center +Vector2(1200, -400)
 		correct.visible = true
 		timer.start()
 		update_Shown_Acc(points)
@@ -494,10 +505,11 @@ func _on_pose_judged(success: bool, at_position: Vector2, points: int):
 	else:
 		sfx_fail.play()
 		#wrong.global_position = get_viewport_rect().size / 2.0 - wrong.size /2.0
-		wrong.global_position = center+ Vector2(600,-120)
+		wrong.global_position = center+ Vector2(1200,-400)
 		wrong.visible = true
 		timer.start()
 		show_judgement("Miss", at_position)
+		misses+=1
 		reset_Combo()
 
 

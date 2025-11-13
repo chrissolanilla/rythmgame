@@ -1,9 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://0vvhlblbt4wc"]
+[gd_scene load_steps=6 format=3 uid="uid://0vvhlblbt4wc"]
 
 [ext_resource type="Script" uid="uid://dhl6170xt1dvf" path="res://MenuScene/song_selections.gd" id="1_243wc"]
 [ext_resource type="FontFile" uid="uid://c5onj8ox0dd42" path="res://Fonts/Johnny Fever.otf" id="2_mq6oa"]
 [ext_resource type="Texture2D" uid="uid://dt6i738ugylis" path="res://art/neon_music_bg_1920x1080.png" id="2_uxnl6"]
 [ext_resource type="StyleBox" uid="uid://v2ee38t63vb7" path="res://Fonts/new_style_box_flat.tres" id="4_cblf6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cblf6"]
+bg_color = Color(0, 0.700429, 0.400595, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
 
 [node name="SongSelection" type="Control"]
 layout_mode = 3
@@ -24,9 +31,9 @@ texture = ExtResource("2_uxnl6")
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 0
 offset_left = -281.0
-offset_top = -369.0
+offset_top = -524.0
 offset_right = 293.0
-offset_bottom = 120.0
+offset_bottom = -35.0
 expand_mode = 3
 
 [node name="PlayMap" type="Button" parent="."]
@@ -89,9 +96,9 @@ text = "Main Menu"
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0
 offset_left = -218.0
-offset_top = 123.0
+offset_top = -49.0
 offset_right = 219.0
-offset_bottom = 247.0
+offset_bottom = 75.0
 theme_override_fonts/normal_font = ExtResource("2_mq6oa")
 theme_override_font_sizes/normal_font_size = 72
 bbcode_enabled = true
@@ -99,7 +106,19 @@ text = "test"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = -110.0
+offset_top = 108.0
+offset_right = 105.0
+offset_bottom = 248.0
+theme_override_fonts/font = ExtResource("2_mq6oa")
+theme_override_font_sizes/font_size = 96
+theme_override_styles/normal = SubResource("StyleBoxFlat_cblf6")
+text = "Easy"
+
 [connection signal="pressed" from="PlayMap" to="." method="_on_play_map_pressed"]
 [connection signal="pressed" from="next" to="." method="_on_next_pressed"]
 [connection signal="pressed" from="prev" to="." method="_on_prev_pressed"]
 [connection signal="pressed" from="Quit" to="." method="_on_menu_pressed"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
