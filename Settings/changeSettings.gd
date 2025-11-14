@@ -76,3 +76,8 @@ func _on_value_changed(value: float) -> void:
 func _on_scroll_speed_slider_value_changed(value: float) -> void:
 	$RichTextLabel2.text = "[b][color=green]Scroll Speed[/color][/b]: %d" % $ScrollSpeedSlider.value
 	pass # Replace with function body.
+
+
+func offset_pressed() -> void:
+	get_tree().change_scene_to_file("res://offset/offset.tscn")
+	pass # Replace with function body.

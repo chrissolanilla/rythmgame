@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://dvckj5jjv0cjt"]
+
+[ext_resource type="PackedScene" uid="uid://dt4htqpir74id" path="res://middleNote/middleNote.tscn" id="1_p8ocj"]
+
+[node name="Offset" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="MiddleNote" parent="." instance=ExtResource("1_p8ocj")]
+position = Vector2(953, 543)
+scale = Vector2(0.2, 0.2)

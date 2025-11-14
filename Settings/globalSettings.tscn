@@ -78,6 +78,20 @@ theme_override_font_sizes/font_size = 42
 theme_override_styles/normal = ExtResource("4_tvu6k")
 text = "Cancel"
 
+[node name="Cancel2" type="Button" parent="."]
+layout_mode = 0
+offset_left = 92.8367
+offset_top = 201.719
+offset_right = 308.837
+offset_bottom = 305.719
+focus_neighbor_top = NodePath("../Exit")
+focus_neighbor_bottom = NodePath("../Confirm")
+theme_override_fonts/font = ExtResource("2_ds7ha")
+theme_override_font_sizes/font_size = 42
+theme_override_styles/normal = ExtResource("4_tvu6k")
+text = "Callibrate 
+Offset"
+
 [node name="Confirm" type="Button" parent="."]
 layout_mode = 0
 offset_left = 272.0
@@ -105,5 +119,6 @@ text = "Exit"
 [connection signal="value_changed" from="HSlider" to="." method="_on_value_changed"]
 [connection signal="value_changed" from="ScrollSpeedSlider" to="." method="_on_scroll_speed_slider_value_changed"]
 [connection signal="pressed" from="Cancel" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="Cancel2" to="." method="offset_pressed"]
 [connection signal="pressed" from="Confirm" to="." method="_on_confirm_pressed"]
 [connection signal="pressed" from="Exit" to="." method="_on_exit_pressed"]
