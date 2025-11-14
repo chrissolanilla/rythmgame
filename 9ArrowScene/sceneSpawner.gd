@@ -57,7 +57,6 @@ func show_judgement(text: String, position: Vector2) -> void:
 		# (So we ignore the 'position' argument.)
 		# Set the text
 		label.text = text
-		#label.normal_font_size = 
 		# Set color by judgement
 		match text:
 			"Perfect!":
@@ -73,13 +72,13 @@ func show_judgement(text: String, position: Vector2) -> void:
 		# this will override scale/alpha visually anyway.
 		var tween := get_tree().create_tween()
 		# Pop scale a bit
-		tween.tween_property(label, "scale", Vector2(1.3, 1.3), 0.15) \
+		tween.tween_property(label, "scale", Vector2(1.3, 1.3), 0.08) \
 				.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tween.tween_property(label, "scale", Vector2.ONE, 0.1) \
+		tween.tween_property(label, "scale", Vector2.ONE, 0.10) \
 				.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN_OUT)
 		# Fade out after a short delay
-		tween.parallel().tween_property(label, "modulate:a", 0.0, 0.17775) \
-			.set_delay(0.05)
+		tween.parallel().tween_property(label, "modulate:a", 0.0, 0.4) \
+			.set_delay(0.25)
 
 var chart_data = []
 var spawn_index = 0
@@ -370,13 +369,12 @@ func check_hits(direction: String):
 		if diff < closest_diff:
 			closest_note = note
 			closest_diff = diff
-		print(diff)
-		print(note.direction)
+
 	if closest_note == null:
 		return
 
 	# HEAD judgement window
-	if closest_diff <= 0.15:
+	if closest_diff <= 0.050:
 		show_judgement("Perfect!", closest_note.position)
 		update_Shown_Acc(10); update_Score(10); update_Combo(); perfects += 1; 
 		if closest_note.is_Hold:
@@ -388,7 +386,7 @@ func check_hits(direction: String):
 		else:
 			closest_note.queue_free()
 
-	elif closest_diff <= 0.35:
+	elif closest_diff <= 0.1:
 		show_judgement("Good!", closest_note.position)
 		update_Shown_Acc(5); update_Score(5); update_Combo(); goods += 1; 
 
@@ -401,7 +399,7 @@ func check_hits(direction: String):
 		else:
 			closest_note.queue_free()
 
-	elif closest_diff <= 1.5:
+	elif closest_diff <= 0.2:
 		show_judgement("Bad!", closest_note.position)
 		update_Shown_Acc(1); update_Score(1); reset_Combo(); bads += 1; 
 		
@@ -552,7 +550,7 @@ func spawn_bar_at_time(t: float) -> void:
 		tex_w = max(1.0, float(bar.texture.get_size().x))
 	bar.scale.x = width_px / tex_w
 	bar.modulate = Color.AQUA
-	bar.modulate.a = 50
+	bar.modulate.a = 5
 	# tweak thickness if needed:
 	# bar.scale.y = 1.5
 
