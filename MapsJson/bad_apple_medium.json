@@ -1,0 +1,162 @@
+[
+	{
+		"direction": "left",
+		"time": 3.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "upLeft",
+		"time": 4.0,
+		"type": "arrow"
+	},
+	{
+		"direction": "down",
+		"time": 4.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 5.0,
+		"type": "arrow"
+	},
+	{
+		"direction": "upRight",
+		"time": 5.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "upRight",
+		"time": 5.625,
+		"type": "arrow"
+	},
+	{
+		"direction": "upRight",
+		"time": 5.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"time": 6.375,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"time": 6.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "down",
+		"time": 7.375,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
+		"time": 7.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 8.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "upLeft",
+		"time": 8.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 9.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 9.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 9.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 10.0,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
+		"time": 10.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "down",
+		"time": 11.0,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 11.375,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 11.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 12.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "down",
+		"time": 12.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "upLeft",
+		"time": 13.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 13.375,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 13.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "upLeft",
+		"time": 14.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
+		"time": 14.625,
+		"type": "arrow"
+	},
+	{
+		"direction": "down",
+		"time": 15.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 15.375,
+		"type": "arrow"
+	},
+	{
+		"direction": "downRight",
+		"time": 15.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "downLeft",
+		"time": 16.5,
+		"type": "arrow"
+	}
+]
