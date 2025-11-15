@@ -29,7 +29,7 @@ theme_override_font_sizes/font_size = 31
 text = "Offset Result"
 horizontal_alignment = 1
 
-[node name="Button" type="Button" parent="."]
+[node name="Button" type="Button" parent="." groups=["themed_Buttons"]]
 layout_mode = 0
 offset_left = 630.0
 offset_top = 755.0

@@ -3,6 +3,9 @@ extends Control
 @onready var Play: Button = $"Play Game Button"
 
 func _ready() -> void:
+	for button in get_tree().get_nodes_in_group("themed_Buttons"):
+		if button is Button:
+			button.add_theme_color_override("font_focus_color", Color.RED)
 	# Set up neighbors manually (you can also do this in the Inspector)
 	Play.grab_focus()
 	
