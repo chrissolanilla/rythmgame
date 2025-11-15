@@ -206,6 +206,8 @@ func _spawn_note(direction: String, t: float, ev: Dictionary) -> void:
 	if a_node == null:
 		return
 	# apply data fields before placement
+	#we store a ref
+	a_node.set_meta("event_ref", ev)
 	var a_pre: BaseArrow = a_node as BaseArrow
 	if a_pre != null:
 		a_pre.is_receptor = false
@@ -261,8 +263,11 @@ func _spawn_pose(p_index: int, t: float, ev: Dictionary) -> void:
 	pose.pose_name_string = poses[p_index]
 	pose.countDown = pose_pre_spawn_sec
 	pose.time = t
+	#store a ref
+	pose.set_meta("event_ref", ev)
 	var sprite := pose.get_node_or_null("Sprite2D")
 	if sprite: sprite.texture = tex
+
 	add_child(pose)
 	pose.position = to_local(get_global_mouse_position())
 	pose.scale = Vector2(0.7, 0.7)
@@ -410,7 +415,8 @@ func _unhandled_input(e: InputEvent) -> void:
 				ghost_enabled = false
 				select_mode = false
 		# delete selection
-		if e.keycode == KEY_DELETE or KEY_BACKSPACE and not ghost_enabled:
+		if (e.keycode == KEY_DELETE or e.keycode == KEY_BACKSPACE) and not ghost_enabled:
+		#if e.keycode == KEY_DELETE or KEY_BACKSPACE and not ghost_enabled:
 			if selected_notes.size() > 0:
 				print("deleting slected notes: ")
 				_delete_selected()
@@ -595,25 +601,53 @@ func _set_selected(ns: Array[Node2D]) -> void:
 
 
 func _delete_selected() -> void:
-	if selected_notes.is_empty(): return
+	if selected_notes.is_empty():
+		return
 
 	for n in selected_notes:
-		if not is_instance_valid(n): continue
+		if not is_instance_valid(n):
+			continue
 
-		# if it's an arrow, remove from notes
+		# 🔹 get the underlying chart_data event
+		var ev = null
+		if n.has_meta("event_ref"):
+			ev = n.get_meta("event_ref")
+
+		# remove node from visual collections
 		if notes.has(n):
-			n.queue_free()
 			notes.erase(n)
-			continue
-
-		# if it's a pose, remove from poses_array
-		if pose_nodes.has(n):
-			n.queue_free()
+		elif pose_nodes.has(n):
 			pose_nodes.erase(n)
-			continue
+
+		n.queue_free()
+
+		# 🔹 remove from chart_data (source of truth for saving)
+		if ev != null:
+			chart_data.erase(ev)
+
+			# optional, if you're also using pose_events for rebuild_poses:
+			if ev.get("type", "arrow") == "pose":
+				pose_events.erase(ev)
 
 	selected_notes.clear()
 
+#func _delete_selected() -> void:
+	#if selected_notes.is_empty(): return
+#
+	#for n in selected_notes:
+		#if not is_instance_valid(n): continue
+		## if it's an arrow, remove from notes
+		#if notes.has(n):
+			#n.queue_free()
+			#notes.erase(n)
+			#continue
+		## if it's a pose, remove from poses_array
+		#if pose_nodes.has(n):
+			#n.queue_free()
+			#pose_nodes.erase(n)
+			#continue
+	#selected_notes.clear()
+#
 
 func _unselect_all_notes() -> void:
 	if selected_notes.is_empty(): return
@@ -678,6 +712,8 @@ func _spawn_pose_from_event(ev: Dictionary) -> Node2D:
 	pose.pose_name_string = poses.get(p_index, "Pose")
 	pose.countDown = countdown
 	pose.time = t
+	#add a ref
+	pose.set_meta("event_ref", ev)
 	var sprite := pose.get_node_or_null("Sprite2D")
 	if sprite:
 		sprite.texture = tex
