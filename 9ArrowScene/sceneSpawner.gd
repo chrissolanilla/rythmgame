@@ -146,14 +146,53 @@ func _ready():
 			# use global_position
 			receptor_positions[node.direction] = node.global_position
 
+	#var file = FileAccess.open(chart_path, FileAccess.READ)
+	#if file:
+		#var json_text = file.get_as_text()
+		#chart_data = JSON.parse_string(json_text)
+		#chart_data.sort_custom(func(a, b): return a["time"] < b["time"])
+		#var songPath = load(GlobalSettings.current_song)
+		#print("current song path is ", GlobalSettings.current_song)
+		#music.stream = songPath
+		#music.play()
 	var file = FileAccess.open(chart_path, FileAccess.READ)
 	if file:
 		var json_text = file.get_as_text()
 		chart_data = JSON.parse_string(json_text)
 		chart_data.sort_custom(func(a, b): return a["time"] < b["time"])
-		var songPath = load(GlobalSettings.current_song)
-		music.stream = songPath
-		music.play()
+
+		# --- load audio for both built-in and external paths ---
+		var path := GlobalSettings.current_song
+		print("current song path is ", path)
+
+		var stream: AudioStream = null
+
+		if path.begins_with("res://"):
+			# normal in-project resource
+			stream = load(path) as AudioStream
+		else:
+			# external file: do what chart editor does
+			var ext := path.get_extension().to_lower()
+			if ext == "mp3":
+				var s_mp3 := AudioStreamMP3.new()
+				s_mp3.data = FileAccess.get_file_as_bytes(path)
+				stream = s_mp3
+			elif ext == "wav":
+				var s_wav := AudioStreamWAV.new()
+				s_wav.data = FileAccess.get_file_as_bytes(path)
+				stream = s_wav
+			elif ext == "ogg" or ext == "oga":
+				var s_ogg := AudioStreamOggVorbis.new()
+				if s_ogg.has_method("load_from_file"):
+					s_ogg.load_from_file(path)
+					stream = s_ogg
+
+		if stream:
+			music.stream = stream
+			music.play()
+		else:
+			push_error("Failed to load song for test play: %s" % path)
+
 
 	scroll_speed = GlobalSettings.scrollSpeed
 	print("scroll speed: ", scroll_speed)

@@ -229,6 +229,7 @@ access = 2
 title = "Open a File"
 ok_button_text = "Open"
 file_mode = 0
+access = 2
 
 [node name="SaveChart" type="FileDialog" parent="."]
 auto_translate_mode = 1

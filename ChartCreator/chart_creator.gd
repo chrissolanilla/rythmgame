@@ -66,7 +66,29 @@ func _ready() -> void:
 
 	GlobalSettings.test_play = true
 	if GlobalSettings.current_song:
-		audio.stream = load(GlobalSettings.current_song)
+		var path = GlobalSettings.current_song
+		var stream
+		if path.begins_with("res://"):
+			# normal in-project resource
+			stream = load(path) as AudioStream
+		else:
+			# external file: do what chart editor does
+			var ext := path.get_extension().to_lower()
+			if ext == "mp3":
+				var s_mp3 := AudioStreamMP3.new()
+				s_mp3.data = FileAccess.get_file_as_bytes(path)
+				stream = s_mp3
+			elif ext == "wav":
+				var s_wav := AudioStreamWAV.new()
+				s_wav.data = FileAccess.get_file_as_bytes(path)
+				stream = s_wav
+			elif ext == "ogg" or ext == "oga":
+				var s_ogg := AudioStreamOggVorbis.new()
+				if s_ogg.has_method("load_from_file"):
+					s_ogg.load_from_file(path)
+					stream = s_ogg
+
+		audio.stream = stream
 		playfield.audio = audio
 		playfield.build_bars_for_song(audio.stream.get_length())
 		playfield.rebuild_notes()
@@ -206,6 +228,7 @@ func _on_audio_file_selected(path: String) -> void:
 	var stream := _load_audio_any(path)
 	if stream:
 		audio.stream = stream
+		GlobalSettings.current_song = path
 		seek.max_value = stream.get_length()
 		seek.value = 0.0
 		# build bars + clear notes view
