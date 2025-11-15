@@ -6,6 +6,7 @@ var startingIndex: int
 var startingChartArray: Array
 var scrollSpeed: int
 var startingChartImage: String
+var timing_offset =0.0
 
 var test_play: bool = false
 var edit_chart

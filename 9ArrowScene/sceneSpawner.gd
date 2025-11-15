@@ -123,6 +123,7 @@ var arrow_scenes = {
 }
 
 func _ready():
+	print("gloabl offset is : ", GlobalSettings.timing_offset)
 	perfects = 0
 	bads = 0
 	goods = 0
@@ -166,8 +167,9 @@ func _active_hold_notes() -> Array:
 #
 
 func _process(delta):
-	var song_time : float = music.get_playback_position()
-	progress_bar.value = (song_time / music.stream.get_length()) * 100
+	var song_time_raw : float = music.get_playback_position()
+	var song_time_adj :float = song_time_raw - GlobalSettings.timing_offset
+	progress_bar.value = (song_time_raw / music.stream.get_length()) * 100
 	#if song_time > 3:
 		
 	if chartFinished == true :
@@ -177,7 +179,7 @@ func _process(delta):
 			if not note.has_meta("is_bar"):
 				counter += 1
 		if counter == 0:
-			GlobalSettings.songTime = song_time
+			GlobalSettings.songTime = song_time_raw
 			GlobalSettings.perfectCounter = perfects
 			GlobalSettings.goodCounter = goods
 			GlobalSettings.badCounter = bads
@@ -195,20 +197,20 @@ func _process(delta):
 
 		if nd.get("type", "arrow") == "pose":
 			var cd := float(nd.get("countdown", 5.0))
-			if song_time + 0.01 >= t - cd:
+			if song_time_raw + 0.01 >= t - cd:
 				_spawn_pose(nd)
 				spawn_index += 1
 			else:
 				break
 		else:
-			if song_time + get_lead_time() >= t:
+			if song_time_raw + get_lead_time() >= t:
 				spawn_note(nd)
 				spawn_index += 1
 			else:
 				break
 
 	# beat bars
-	while song_time + get_lead_time() >= next_bar_time:
+	while song_time_raw + get_lead_time() >= next_bar_time:
 		spawn_bar_at_time(next_bar_time)
 		next_bar_time += (60.0 / scroll_speed) * 4.0
 
@@ -217,7 +219,7 @@ func _process(delta):
 		# bars
 		if child.has_meta("is_bar"):
 			child.position.y -= scroll_speed * delta
-			if song_time > float(child.get_meta("bar_time", -1.0)) + 0.2:
+			if song_time_raw > float(child.get_meta("bar_time", -1.0)) + 0.2:
 				child.queue_free()
 			continue
 
@@ -231,9 +233,9 @@ func _process(delta):
 			note.position.y -= scroll_speed * delta
 
 		# generic miss cleanup (skip active, frozen holds)
-		if note.note_time < song_time - 0.2 and not note in _active_hold_notes():
+		if note.note_time < song_time_adj - 0.2 and not note in _active_hold_notes():
 			if note.is_Hold:
-				if note.end_Time < song_time - 0.2:
+				if note.end_Time < song_time_adj - 0.2:
 					show_judgement("Miss", receptor_positions.get(note.direction, note.position))
 					misses+=1
 					reset_Combo()
@@ -253,7 +255,8 @@ func _process(delta):
 		
 	for p in pose_layer.get_children():
 		if p.has_method("drive"):
-			p.drive(song_time, latest_udp)
+			#i think we use raw for poses?
+			p.drive(song_time_raw, latest_udp)
 
 	# -------- ACTIVE HOLDS: shrink tails & finish --------
 	var dirs_to_erase: Array = []
@@ -265,7 +268,7 @@ func _process(delta):
 			continue
 
 		var tail := n.get_node_or_null("Tail") as Sprite2D
-		var remaining := float(n.end_Time) - song_time  # seconds left
+		var remaining = float(n.end_Time) - song_time_adj  # seconds left
 
 		# keep frozen while held; small grace for micro unholds
 		if pressed.get(dir, false):
@@ -357,7 +360,9 @@ func get_color_for_direction(dir: String) -> Color:
 			return Color(1, 1, 1)
 
 func check_hits(direction: String):
-	var song_time = music.get_playback_position()
+	var song_time_raw :float= music.get_playback_position()
+	var song_time_adj :float= song_time_raw - GlobalSettings.timing_offset
+	#var song_time = music.get_playback_position()
 	var closest_note: BaseArrow = null
 	var closest_diff := INF
 	pressed[direction] = true
@@ -365,7 +370,7 @@ func check_hits(direction: String):
 	for note in notes_layer.get_children():
 		if not note is BaseArrow: continue
 		if note.direction != direction: continue
-		var diff = abs(note.note_time - song_time)
+		var diff = abs(note.note_time - song_time_adj)
 		if diff < closest_diff:
 			closest_note = note
 			closest_diff = diff

@@ -1,13 +1,42 @@
-[gd_scene load_steps=2 format=3 uid="uid://dvckj5jjv0cjt"]
+[gd_scene load_steps=5 format=3 uid="uid://dvckj5jjv0cjt"]
 
 [ext_resource type="PackedScene" uid="uid://dt4htqpir74id" path="res://middleNote/middleNote.tscn" id="1_p8ocj"]
+[ext_resource type="Script" uid="uid://cyexbh7ntqhyt" path="res://offset/offset.gd" id="1_u4lqq"]
+[ext_resource type="AudioStream" uid="uid://cuqvvno60xcbb" path="res://mp3files/ping.wav" id="2_t7rmp"]
+[ext_resource type="StyleBox" uid="uid://v2ee38t63vb7" path="res://Fonts/new_style_box_flat.tres" id="4_pbrhl"]
 
 [node name="Offset" type="Control"]
 layout_mode = 3
 anchors_preset = 0
+script = ExtResource("1_u4lqq")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_t7rmp")
 
 [node name="MiddleNote" parent="." instance=ExtResource("1_p8ocj")]
-position = Vector2(953, 543)
+position = Vector2(953, 200)
 scale = Vector2(0.2, 0.2)
+
+[node name="NotesLayer" type="Node2D" parent="."]
+
+[node name="ResultLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 593.0
+offset_top = 575.0
+offset_right = 1286.0
+offset_bottom = 727.0
+theme_override_font_sizes/font_size = 31
+text = "Offset Result"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 630.0
+offset_top = 755.0
+offset_right = 1250.0
+offset_bottom = 854.0
+theme_override_font_sizes/font_size = 66
+theme_override_styles/normal = ExtResource("4_pbrhl")
+text = "Back to Main Menu"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
