@@ -71,7 +71,7 @@ func _get_default_songs() -> Array:
 		{
 			"name": "RickRoll",
 			"image": "res://art/uniform_samurai.png",
-			"audio": "res://mp3files/rickroll.mp3",
+			"audio": "res://mp3files/rickroll.MP3",
 			"charts": {"Medium":"res://MapsJson/poses_rickroll.json","Hard": "res://MapsJson/poses_rickroll.json"}
 		}
 	]
