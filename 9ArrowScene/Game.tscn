@@ -17,7 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://djhnqlbcx681n" path="res://UDP/udp.tscn" id="15_fxsq8"]
 [ext_resource type="FontFile" uid="uid://c5onj8ox0dd42" path="res://Fonts/Johnny Fever.otf" id="15_rs42x"]
 [ext_resource type="StyleBox" uid="uid://v2ee38t63vb7" path="res://Fonts/new_style_box_flat.tres" id="16_6u72i"]
-[ext_resource type="VideoStream" uid="uid://6ype52egn3cg" path="res://mp3files/【東方】Bad Apple!! ＰＶ【影絵】 - kasidid2 (360p, h264).ogv" id="18_6y0qc"]
+[ext_resource type="VideoStream" uid="uid://doiluuujx2oue" path="res://mp3files/blazingHeart.ogv" id="18_6y0qc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6y0qc"]
 bg_color = Color(0, 0, 0, 0.32549)
@@ -108,13 +108,12 @@ arrow_scene = ExtResource("11_5h82b")
 [node name="NoteScore" type="RichTextLabel" parent="."]
 offset_left = 3169.0
 offset_top = 226.0
-offset_right = 3533.0
+offset_right = 3612.0
 offset_bottom = 384.0
 theme_override_fonts/bold_font = ExtResource("15_rs42x")
 theme_override_font_sizes/bold_italics_font_size = 626
 theme_override_font_sizes/bold_font_size = 106
 bbcode_enabled = true
-text = "[b]test"
 horizontal_alignment = 1
 vertical_alignment = 1
 

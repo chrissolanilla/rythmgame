@@ -14,6 +14,7 @@ var timing_offset =0.0
 var test_play: bool = false
 var edit_chart
 var current_song: String = ""
+var current_video : String = ""
 var poses_array: Array = []
 var notes: Array = []
 var bars: Array = []
@@ -59,18 +60,21 @@ func _get_default_songs() -> Array:
 		{
 			"name": "Bad Apple",
 			"image": "res://art/IMG_1269.jpg",
+			"video": "res://mp3files/【東方】Bad Apple!! ＰＶ【影絵】 - kasidid2 (360p, h264).ogv",
 			"audio": "res://mp3files/bad_apple.mp3",
 			"charts": {"Easy":"res://MapsJson/bad_apple_easy.json","Medium": "res://MapsJson/77bada.json","Hard": "res://MapsJson/bad_apple_hard.json"}
 		},
 		{
 			"name": "Song B",
 			"image": "res://art/IMG_4256.png",
+			"video": "res://mp3files/blazingHeart.ogv",
 			"audio": "res://mp3files/togsk-ba.mp3",
 			"charts": {"Easy":"res://MapsJson/77bada.json","Hard": "res://MapsJson/77bada.json"}
 		},
 		{
 			"name": "RickRoll",
 			"image": "res://art/uniform_samurai.png",
+			"video": "res://mp3files/rickroll.ogv",
 			"audio": "res://mp3files/rickroll.MP3",
 			"charts": {"Medium":"res://MapsJson/poses_rickroll.json","Hard": "res://MapsJson/poses_rickroll.json"}
 		}
@@ -156,6 +160,7 @@ func _update_state_from_loaded() -> void:
 	startingChartPath = startingChartArray[startingIndex] if startingChartArray.size() > 0 else ""
 	startingChartImage = current_song_dict.get("image","")
 	current_song = current_song_dict.get("audio","")
+	current_video = current_song_dict.get("video","")
 
 # -----------------------
 # Save config

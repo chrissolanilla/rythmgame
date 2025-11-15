@@ -110,6 +110,8 @@ func get_Next_Song() -> String:
 	GlobalSettings.difficulty = diffs[0] if diffs.size() > 0 else "None"
 	GlobalSettings.startingChartPath = charts.get(GlobalSettings.difficulty,"")
 	GlobalSettings.startingChartImage = GlobalSettings.current_song_dict.get("image","")
+	GlobalSettings.current_video = GlobalSettings.current_song_dict.get("video","")
+	print("Current video is : ", GlobalSettings.current_video)
 	GlobalSettings.current_song = GlobalSettings.current_song_dict.get("audio","")
 	GlobalSettings.startingIndex = GlobalSettings.song_index
 
@@ -132,6 +134,8 @@ func get_Prev_Song() -> String:
 	GlobalSettings.difficulty = diffs[0] if diffs.size() > 0 else "None"
 	GlobalSettings.startingChartPath = charts.get(GlobalSettings.difficulty,"")
 	GlobalSettings.startingChartImage = GlobalSettings.current_song_dict.get("image","")
+	GlobalSettings.current_video = GlobalSettings.current_song_dict.get("video","")
+	print("Current video is : ", GlobalSettings.current_video)
 	GlobalSettings.current_song = GlobalSettings.current_song_dict.get("audio","")
 	GlobalSettings.startingIndex = GlobalSettings.song_index
 

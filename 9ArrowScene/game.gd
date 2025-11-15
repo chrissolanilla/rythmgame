@@ -1,4 +1,5 @@
 extends Node2D
+@onready var video_stream_player: VideoStreamPlayer = $VideoStreamPlayer
 
 # Reference to the pause menu node
 @onready var pause_menu = $CanvasLayer/PauseMenu
@@ -8,6 +9,11 @@ var test_play: bool = GlobalSettings.test_play
 
 func _ready() -> void:
 	print("Globalsettings.testplay is : ", GlobalSettings.test_play)
+	print("in ready: Globalsettings.current_video is ", GlobalSettings.current_video)
+	if GlobalSettings.current_video:
+		video_stream_player.stream = load(GlobalSettings.current_video)
+		video_stream_player.play()
+		print("stream is ", video_stream_player.stream)
 	pose.connect("pose_updated", Callable(self, "_on_pose"))
 	pause_menu.visible = false  # ensure it starts hidden
 	var config = ConfigFile.new()
