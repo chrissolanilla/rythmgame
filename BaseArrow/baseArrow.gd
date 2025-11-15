@@ -22,14 +22,16 @@ signal arrow_pressed(direction: String)
 signal arrow_released(direction: String)
 
 func _ready() -> void:
-	if $Tail and not is_Hold:
-		$Tail.visible = false
-	if inputAction == "":
-		inputAction = direction
-		#if is_receptor:
-			#print("Set inputAction = ", inputAction)
-	if baseColor:
-		polygon_2d.color = pressedColor
+	if tail and not is_Hold:
+		tail.visible = false
+	#ensure only receptors ever listen to input
+	if is_receptor:
+		if inputAction == "":
+			inputAction = direction
+	else:
+		inputAction = ""  # hard-disable input for non-receptors
+	#start at base color, not pressed
+	polygon_2d.color = baseColor
 
 func _process(delta: float) -> void:
 	if not is_receptor:

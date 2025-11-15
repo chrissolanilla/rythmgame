@@ -1,4 +1,5 @@
 extends Node2D
+var judgement_tween: Tween
 
 @export var arrow_scene: PackedScene
 var scroll_speed
@@ -22,6 +23,7 @@ var test_play : bool
 @onready var current_pose_text: Label = $"../CurrentPoseText"
 var chartFinished: bool = false
 @onready var progress_bar: ProgressBar = $"../ProgressBar"
+@onready var middle_note: Node2D = $"../MiddleNote"
 
 
 var perfects: int
@@ -42,43 +44,44 @@ var pose_icons := {
 var globalScore: int = 0
 var globalCombo: int = 0
 
+	
 func show_judgement(text: String, position: Vector2) -> void:
-	# We'll reuse the single on-screen label instead of spawning new ones.
 	var label: RichTextLabel = ScoreLabel
-	if label:
-			
-		# Make sure it's visible and reset basic state
-		label.visible = true
-		label.scale = Vector2.ONE
-		label.modulate = Color.WHITE
-		label.modulate.a = 1.0  # fully opaque
-		# If you want the judgement at a fixed spot (osu!mania style),
-		# just position the label in the editor and DON'T touch its position here.
-		# (So we ignore the 'position' argument.)
-		# Set the text
-		label.text = text
-		# Set color by judgement
-		match text:
-			"Perfect!":
-				label.modulate = Color("34cfeb") # bright blue
-			"Good!":
-				label.modulate = Color("00c92c") # greenish
-			"Bad!":
-				label.modulate = Color("03005c") # dark blue
-			"Miss":
-				label.modulate = Color("ff1900") # red
-		# --- Cool animation (pop + fade out) ---
-		# Cancel previous tweens by just making a new one; the old one will finish but
-		# this will override scale/alpha visually anyway.
-		var tween := get_tree().create_tween()
-		# Pop scale a bit
-		tween.tween_property(label, "scale", Vector2(1.3, 1.3), 0.08) \
-				.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tween.tween_property(label, "scale", Vector2.ONE, 0.10) \
-				.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN_OUT)
-		# Fade out after a short delay
-		tween.parallel().tween_property(label, "modulate:a", 0.0, 0.4) \
-			.set_delay(0.25)
+	if label == null:
+		return
+
+	# Kill previous tween if it exists
+	if judgement_tween and judgement_tween.is_valid():
+		judgement_tween.kill()  # or judgement_tween.stop()
+
+	# Reset state so it's definitely visible
+	label.visible = true
+	label.scale = Vector2.ONE
+	label.modulate = Color.WHITE
+	label.modulate.a = 1.0
+
+	label.text = "[b]%s" % text
+	match text:
+		"Perfect!":
+			label.modulate = Color("34cfeb")
+		"Good!":
+			label.modulate = Color("00c92c")
+		"Bad!":
+			label.modulate = Color("03005c")
+		"Miss":
+			label.modulate = Color("ff1900")
+
+	# Create a new tween and keep a handle to it
+	judgement_tween = get_tree().create_tween()
+
+	judgement_tween.tween_property(label, "scale", Vector2(1.3, 1.3), 0.08) \
+			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	judgement_tween.tween_property(label, "scale", Vector2.ONE, 0.10) \
+			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN_OUT)
+
+	# Slightly shorter fade helps on dense patterns
+	judgement_tween.parallel().tween_property(label, "modulate:a", 0.0, 0.25) \
+		.set_delay(0.10)
 
 var chart_data = []
 var spawn_index = 0
@@ -123,6 +126,7 @@ var arrow_scenes = {
 }
 
 func _ready():
+	middle_note.is_receptor = true
 	print("gloabl offset is : ", GlobalSettings.timing_offset)
 	perfects = 0
 	bads = 0
@@ -243,6 +247,7 @@ func _process(delta):
 			else:
 				show_judgement("Miss", receptor_positions.get(note.direction, note.position))
 				misses+=1
+				print("clean up miss here")
 				reset_Combo()
 				note.queue_free()
 
@@ -343,6 +348,7 @@ func spawn_note(note_data: Dictionary):
 	arrow.modulate = Color.WHITE
 	arrow.modulate.a = 4.5
 	notes_layer.add_child(arrow)
+	arrow.is_receptor = false
 
 	#print("Final spawn position:", arrow.position)
 
@@ -404,15 +410,20 @@ func check_hits(direction: String):
 		else:
 			closest_note.queue_free()
 
+	#instead of making it bad if within 0.2 and miss after that, make it else bad and dont do miss for early or late press
 	elif closest_diff <= 0.2:
 		show_judgement("Bad!", closest_note.position)
 		update_Shown_Acc(1); update_Score(1); reset_Combo(); bads += 1; 
 		
 		closest_note.queue_free()
-	else:
-		reset_Combo(); misses += 1;
-		show_judgement("Miss", receptor_positions[direction])
-		misses+=1
+	#actually dont give them misses for hitting it too early or late at this time
+	#there always gonna be standing on the pad on at leats one arrow so yeah. 
+	#you need to be able to press on it and shit 
+	#else:
+		#reset_Combo(); misses += 1;
+		#show_judgement("Miss", receptor_positions[direction])
+		#print("we doing miss here")
+		#misses+=1
 
 
 func _on_arrow_released(direction: String) -> void:

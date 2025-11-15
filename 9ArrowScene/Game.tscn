@@ -19,6 +19,9 @@
 [ext_resource type="StyleBox" uid="uid://v2ee38t63vb7" path="res://Fonts/new_style_box_flat.tres" id="16_6u72i"]
 [ext_resource type="VideoStream" uid="uid://6ype52egn3cg" path="res://mp3files/【東方】Bad Apple!! ＰＶ【影絵】 - kasidid2 (360p, h264).ogv" id="18_6y0qc"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6y0qc"]
+bg_color = Color(0, 0, 0, 0.32549)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rs42x"]
 bg_color = Color(0.598724, 0.300147, 0.910758, 1)
 corner_radius_top_right = 25
@@ -27,11 +30,30 @@ corner_radius_bottom_right = 25
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6u72i"]
 bg_color = Color(1, 0.478431, 0.776471, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6y0qc"]
-bg_color = Color(0, 0, 0, 0.32549)
-
 [node name="Game" type="Node2D"]
 script = ExtResource("1_sh2q5")
+
+[node name="Panel" type="Panel" parent="."]
+z_index = -35
+offset_left = 2145.0
+offset_top = -398.0
+offset_right = 4645.79
+offset_bottom = 1602.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_6y0qc")
+
+[node name="Panel2" type="Panel" parent="."]
+z_index = -35
+offset_left = 2645.0
+offset_top = 840.0
+offset_right = 2845.0
+offset_bottom = 1040.0
+
+[node name="Panel3" type="Panel" parent="."]
+z_index = -35
+offset_left = 2640.0
+offset_top = 74.0
+offset_right = 2989.13
+offset_bottom = 274.0
 
 [node name="UpArrow" parent="." instance=ExtResource("4_vjsbt")]
 position = Vector2(3440, 96)
@@ -84,11 +106,15 @@ position = Vector2(553, 1123)
 arrow_scene = ExtResource("11_5h82b")
 
 [node name="NoteScore" type="RichTextLabel" parent="."]
-offset_left = 3209.0
-offset_top = 205.0
-offset_right = 3491.0
-offset_bottom = 296.0
+offset_left = 3169.0
+offset_top = 226.0
+offset_right = 3533.0
+offset_bottom = 384.0
+theme_override_fonts/bold_font = ExtResource("15_rs42x")
+theme_override_font_sizes/bold_italics_font_size = 626
+theme_override_font_sizes/bold_font_size = 106
 bbcode_enabled = true
+text = "[b]test"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -226,28 +252,6 @@ stream = ExtResource("18_6y0qc")
 volume_db = -80.0
 autoplay = true
 expand = true
-
-[node name="Panel" type="Panel" parent="."]
-z_index = -35
-offset_left = 2388.0
-offset_top = -37.0
-offset_right = 4308.0
-offset_bottom = 1043.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_6y0qc")
-
-[node name="Panel2" type="Panel" parent="."]
-z_index = -35
-offset_left = 2645.0
-offset_top = 840.0
-offset_right = 2845.0
-offset_bottom = 1040.0
-
-[node name="Panel3" type="Panel" parent="."]
-z_index = -35
-offset_left = 2640.0
-offset_top = 74.0
-offset_right = 2989.13
-offset_bottom = 274.0
 
 [connection signal="finished" from="AudioStreamPlayer" to="sceneSpawner" method="_on_audio_stream_player_finished"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/Exit" to="CanvasLayer/PauseMenu" method="_on_exit_pressed"]
