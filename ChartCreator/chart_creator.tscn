@@ -268,6 +268,23 @@ offset_right = -8.0
 offset_bottom = -1.0
 text = "song speed"
 
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 808.0
+offset_right = 613.0
+offset_bottom = 1065.0
+text = "KEYBOARD SHORTCUTS:
+G -> Enter Place Arrows Mode
+H -> Enable Hold Mode while in Place Arrows Mode
+P -> Enter Place Poses Mode
+S -> Enter Select Mode
+
+To delete arrows, go into select mode and click and drag to get a selction. 
+Then you can press spacebar or delete or enter to delete the selected arrows.
+
+When adding hold notes, you can adjust how long that hold is "
+
 [connection signal="pressed" from="TopBar/BackToMain" to="." method="_on_back_to_main_pressed"]
 [connection signal="pressed" from="TopBar/OpenAudio" to="." method="_on_open_audio_pressed"]
 [connection signal="pressed" from="TopBar/OpenChart" to="." method="_on_open_chart_pressed"]

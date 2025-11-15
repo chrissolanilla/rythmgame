@@ -16,7 +16,7 @@ position = Vector2(549.571, 311.842)
 scale = Vector2(0.81305, 0.792439)
 texture = ExtResource("2_tvu6k")
 
-[node name="HSlider" type="HSlider" parent="."]
+[node name="GameVolumeSlider" type="HSlider" parent="."]
 layout_mode = 0
 offset_left = 441.834
 offset_top = 361.605
@@ -92,6 +92,19 @@ theme_override_styles/normal = ExtResource("4_tvu6k")
 text = "Callibrate 
 Offset"
 
+[node name="Cancel3" type="Button" parent="."]
+layout_mode = 0
+offset_left = 318.0
+offset_top = 40.0
+offset_right = 779.0
+offset_bottom = 156.0
+focus_neighbor_top = NodePath("../Exit")
+focus_neighbor_bottom = NodePath("../Confirm")
+theme_override_fonts/font = ExtResource("2_ds7ha")
+theme_override_font_sizes/font_size = 42
+theme_override_styles/normal = ExtResource("4_tvu6k")
+text = "Recreate Settings file"
+
 [node name="Confirm" type="Button" parent="."]
 layout_mode = 0
 offset_left = 272.0
@@ -116,9 +129,10 @@ theme_override_font_sizes/font_size = 42
 theme_override_styles/normal = ExtResource("4_tvu6k")
 text = "Exit"
 
-[connection signal="value_changed" from="HSlider" to="." method="_on_value_changed"]
+[connection signal="value_changed" from="GameVolumeSlider" to="." method="_on_value_changed"]
 [connection signal="value_changed" from="ScrollSpeedSlider" to="." method="_on_scroll_speed_slider_value_changed"]
 [connection signal="pressed" from="Cancel" to="." method="_on_cancel_pressed"]
 [connection signal="pressed" from="Cancel2" to="." method="offset_pressed"]
+[connection signal="pressed" from="Cancel3" to="." method="recreate_pressed"]
 [connection signal="pressed" from="Confirm" to="." method="_on_confirm_pressed"]
 [connection signal="pressed" from="Exit" to="." method="_on_exit_pressed"]

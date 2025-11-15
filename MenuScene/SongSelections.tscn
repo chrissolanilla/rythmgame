@@ -108,9 +108,9 @@ vertical_alignment = 1
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0
-offset_left = -110.0
+offset_left = -245.0
 offset_top = 108.0
-offset_right = 105.0
+offset_right = 237.0
 offset_bottom = 248.0
 theme_override_fonts/font = ExtResource("2_mq6oa")
 theme_override_font_sizes/font_size = 96

@@ -160,6 +160,10 @@ func _ready() -> void:
 	playfield.rebuild_notes()
 
 func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("scrollDown"):
+		_jump_time(+1.0)
+	if Input.is_action_just_pressed("scrollUp"):
+		_jump_time(-1.0)
 	if audio.stream:
 		if not is_dragging and (audio.playing and not audio.stream_paused):
 			var t: float = audio.get_playback_position()
@@ -272,13 +276,11 @@ func _on_offset_changed(v: float) -> void:
 	playfield.build_bars_for_song(seek.max_value)
 	
 
-
 func _on_add_arrows_pressed() -> void:
 	playfield.select_mode = false
 	playfield.pose_mode = false
 	playfield.ghost_enabled = true
 	
-
 func _on_erase_errows_pressed() -> void:
 	playfield.pose_mode = false
 	playfield.ghost_enabled = false
@@ -364,3 +366,39 @@ func _on_test_chart_pressed() -> void:
 func _on_back_to_main_pressed() -> void:
 	get_tree().change_scene_to_file("res://MenuScene/Menu.tscn")
 	pass # Replace with function body.
+
+func _jump_time(delta: float) -> void:
+	if not audio.stream:
+		return
+
+	var song_len := audio.stream.get_length()
+
+	var base_t: float
+	# If we're actively playing (not paused), trust the live playback position
+	if audio.playing and not audio.stream_paused:
+		base_t = audio.get_playback_position()
+	else:
+		# When stopped or paused, use our own stored time
+		base_t = current_seek
+
+	var new_t: float = clamp(base_t + delta, 0.0, song_len)
+
+	# remember this for resume
+	current_seek = new_t
+
+	# move audio head (for next play or live)
+	audio.seek(new_t)
+
+	# update slider
+	seek.value = new_t
+
+	# update label
+	current_time.text = "Current Time: %0.3f" % new_t
+
+	# drive visuals correctly
+	if (not audio.playing) or audio.stream_paused:
+		# we're paused → use scrub mode so notes/bars jump too
+		playfield.set_scrub_time(new_t)
+	else:
+		# we're playing → clear scrub override and let playback drive visuals
+		playfield.clear_scrub_time()

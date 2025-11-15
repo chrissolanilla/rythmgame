@@ -244,7 +244,7 @@ func _spawn_note(direction: String, t: float, ev: Dictionary) -> void:
 		tail.self_modulate = a_node.pressedColor
 		tail.centered = false
 		tail.position = Vector2.ZERO
-		
+
 		var duration := float(ev["end_Time"]) - float(ev["time"])
 		var total_px := duration* pixels_per_second
 		_set_tail_length_px(a_node, tail, total_px)
@@ -259,8 +259,8 @@ func _spawn_pose(p_index: int, t: float, ev: Dictionary) -> void:
 	var pose = poseScene.instantiate()
 	pose.z_index = 8
 	pose.pose_name_string = poses[p_index]
-	pose.countDown = pose_pre_spawn_sec  
-	pose.time = t 
+	pose.countDown = pose_pre_spawn_sec
+	pose.time = t
 	var sprite := pose.get_node_or_null("Sprite2D")
 	if sprite: sprite.texture = tex
 	add_child(pose)
@@ -274,7 +274,7 @@ func _process(_dt: float) -> void:
 	var now := _now()
 	var prev_now := _prev_now
 	_prev_now = now
-	
+
 	for pose in pose_nodes:
 		#print("pose array is : ", pose_nodes)
 		if not is_instance_valid(pose):
@@ -298,7 +298,7 @@ func _process(_dt: float) -> void:
 		var t: float = float(bar.get_meta("bar_time"))
 		bar.position.y = time_to_y(t)
 		bar.visible = bar.position.y > -200.0 and bar.position.y < get_viewport_rect().size.y + 200.0
-	
+
 	for n in notes:
 		if not is_instance_valid(n):
 			continue
@@ -329,7 +329,7 @@ func _process(_dt: float) -> void:
 			#print("we should be frozen")
 		#play sound when t_note is close enough
 		if(absf(t_note - _now()) <= hit_window_sec):
-			print("its close enough")
+			# print("its close enough")
 			if not n.has_meta("fx_done"):
 				if n.is_Hold:
 					if not n.has_meta("frozen"):
@@ -346,7 +346,7 @@ func _process(_dt: float) -> void:
 					n.set_meta("fx_done", true)
 		else:
 			n.set_meta("fx_done" , null)
-			
+
 			#if n.is_Hold:
 				#n.set_meta("frozen", null)
 		(n as Node2D).visible = (n as Node2D).position.y > -200.0 and (n as Node2D).position.y < get_viewport_rect().size.y + 200.0
@@ -380,7 +380,7 @@ func _process(_dt: float) -> void:
 	if select_mode:
 		ghost_enabled = false
 		pose_mode = false
-		print("pose mode should be " , pose_mode)
+		# print("pose mode should be " , pose_mode)
 
 
 func _unhandled_input(e: InputEvent) -> void:
@@ -561,7 +561,7 @@ func _notes_in_rect(r: Rect2) -> Array[Node2D]:
 		if r.has_point(pos):
 			res.append(pnode)
 	return res
-	
+
 func _apply_selected_visual(n: Node2D, selected: bool) -> void:
 	# arrows: try Polygon2D
 	var poly := n.get_node_or_null("Polygon2D") as Polygon2D
@@ -688,7 +688,7 @@ func _spawn_pose_from_event(ev: Dictionary) -> Node2D:
 
 	pose_nodes.append(pose)
 	return pose
-	
+
 func rebuild_poses() -> void:
 	_clear_nodes(pose_nodes)
 	pose_nodes.clear()
