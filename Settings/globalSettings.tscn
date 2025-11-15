@@ -16,7 +16,7 @@ position = Vector2(549.571, 311.842)
 scale = Vector2(0.81305, 0.792439)
 texture = ExtResource("2_tvu6k")
 
-[node name="HSlider" type="HSlider" parent="."]
+[node name="GameVolumeSlider" type="HSlider" parent="."]
 layout_mode = 0
 offset_left = 441.834
 offset_top = 361.605
@@ -116,7 +116,7 @@ theme_override_font_sizes/font_size = 42
 theme_override_styles/normal = ExtResource("4_tvu6k")
 text = "Exit"
 
-[connection signal="value_changed" from="HSlider" to="." method="_on_value_changed"]
+[connection signal="value_changed" from="GameVolumeSlider" to="." method="_on_value_changed"]
 [connection signal="value_changed" from="ScrollSpeedSlider" to="." method="_on_scroll_speed_slider_value_changed"]
 [connection signal="pressed" from="Cancel" to="." method="_on_cancel_pressed"]
 [connection signal="pressed" from="Cancel2" to="." method="offset_pressed"]

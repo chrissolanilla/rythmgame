@@ -59,19 +59,19 @@ func _get_default_songs() -> Array:
 			"name": "Bad Apple",
 			"image": "res://art/IMG_1269.jpg",
 			"audio": "res://mp3files/bad_apple.mp3",
-			"charts": {"Easy":"res://MapsJson/77bada_easy.json","Medium":"res://MapsJson/77bada_medium.json","Hard":"res://MapsJson/77bada_hard.json"}
+			"charts": {"Easy":"res://MapsJson/bad_apple_easy.json","Medium": "res://MapsJson/77bada.json","Hard": "res://MapsJson/bad_apple_hard.json"}
 		},
 		{
 			"name": "Song B",
 			"image": "res://art/IMG_4256.png",
 			"audio": "res://mp3files/togsk-ba.mp3",
-			"charts": {"Easy":"res://MapsJson/songB_easy.json","Hard":"res://MapsJson/songB_hard.json"}
+			"charts": {"Easy":"res://MapsJson/77bada.json","Hard": "res://MapsJson/77bada.json"}
 		},
 		{
 			"name": "RickRoll",
 			"image": "res://art/uniform_samurai.png",
 			"audio": "res://mp3files/rickroll.mp3",
-			"charts": {"Medium":"res://MapsJson/rick_medium.json","Hard":"res://MapsJson/rick_hard.json"}
+			"charts": {"Medium":"res://MapsJson/poses_rickroll.json","Hard": "res://MapsJson/poses_rickroll.json"}
 		}
 	]
 
