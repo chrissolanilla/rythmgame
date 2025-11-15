@@ -3,18 +3,22 @@ extends Control
 # ----------------------------
 # Node references
 # ----------------------------
-@onready var difficultyButton: Button = $Button
+@onready var difficultyButton: Button = $Difficulty
 @onready var Next: Button = $"next"
 @onready var Prev: Button = $"prev"
 @onready var TextureRectNode: TextureRect = $TextureRect
 @onready var SongLabel: RichTextLabel = $RichTextLabel
+@onready var play_map: Button = $PlayMap
 
 # ----------------------------
 # Lifecycle
 # ----------------------------
 func _ready() -> void:
+	for button in get_tree().get_nodes_in_group("themed_Buttons"):
+		if button is Button:
+			button.add_theme_color_override("font_focus_color", Color.RED)
 	GlobalSettings.test_play = false
-	Next.grab_focus()
+	play_map.grab_focus()
 
 	_update_song_display()
 	_update_difficulty_button()

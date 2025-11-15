@@ -10,6 +10,9 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	for button in get_tree().get_nodes_in_group("themed_Buttons"):
+		if button is Button:
+			button.add_theme_color_override("font_focus_color", Color.RED)
 	audio_stream_player.stream = load(GlobalSettings.current_song)
 	audio_stream_player.play(GlobalSettings.songTime)
 	perfect.text = "[rainbow freq=1.0 sat=0.8 val=0.8 speed=1.0][b][font_size=86][font=res://Fonts/Johnny Fever.otf]Perfect: %d[/font][/font_size][/b][/rainbow]\n" % GlobalSettings.perfectCounter
@@ -18,26 +21,12 @@ func _ready() -> void:
 	miss.text = "[b][color=red][font_size=86][font=res://Fonts/Johnny Fever.otf]Miss:        %d\n[/font][/font_size][/color][/b]\n" % GlobalSettings.missCounter
 	combo.text = "[b][font_size=86][font=res://Fonts/Johnny Fever.otf]Highest Combo: x%d[/font][/font_size][/b]\n" % GlobalSettings.highestComboAchieved
 	texture_rect.texture = load(GlobalSettings.startingChartImage)
-	show_stats()
 	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-
-
-func show_stats() -> void:
-	var perfectCounter = GlobalSettings.perfectCounter
-	var goodCounter = GlobalSettings.goodCounter
-	var badCounter = GlobalSettings.badCounter
-	var missCounter = GlobalSettings.missCounter
-	var highestComboShown = GlobalSettings.highestComboAchieved
-	#
-	#
-
-	#
-
 
 
 func _on_quit_pressed() -> void:

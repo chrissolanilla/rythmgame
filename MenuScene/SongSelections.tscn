@@ -36,7 +36,7 @@ offset_right = 293.0
 offset_bottom = -35.0
 expand_mode = 3
 
-[node name="PlayMap" type="Button" parent="."]
+[node name="PlayMap" type="Button" parent="." groups=["themed_Buttons"]]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -47,13 +47,13 @@ offset_right = 356.0
 offset_bottom = 449.0
 grow_horizontal = 2
 size_flags_horizontal = 4
-focus_neighbor_top = NodePath("../prev")
+focus_neighbor_top = NodePath("../Difficulty")
 theme_override_fonts/font = ExtResource("2_mq6oa")
 theme_override_font_sizes/font_size = 55
 theme_override_styles/normal = ExtResource("4_cblf6")
 text = "Play Game"
 
-[node name="next" type="Button" parent="."]
+[node name="next" type="Button" parent="." groups=["themed_Buttons"]]
 layout_mode = 0
 offset_left = 440.0
 offset_top = -148.0
@@ -61,34 +61,34 @@ offset_right = 601.0
 offset_bottom = -73.0
 scale = Vector2(1.6, 1.6)
 focus_neighbor_left = NodePath("../prev")
-focus_neighbor_bottom = NodePath("../PlayMap")
+focus_neighbor_bottom = NodePath("../Difficulty")
 theme_override_fonts/font = ExtResource("2_mq6oa")
 theme_override_styles/normal = ExtResource("4_cblf6")
 text = "Next
 "
 
-[node name="prev" type="Button" parent="."]
+[node name="prev" type="Button" parent="." groups=["themed_Buttons"]]
 layout_mode = 0
 offset_left = -684.0
 offset_top = -148.0
 offset_right = -523.0
 offset_bottom = -73.0
 scale = Vector2(1.6, 1.6)
+focus_neighbor_top = NodePath("../Main Menu")
 focus_neighbor_right = NodePath("../next")
-focus_neighbor_bottom = NodePath("../PlayMap")
+focus_neighbor_bottom = NodePath("../Difficulty")
 theme_override_fonts/font = ExtResource("2_mq6oa")
 theme_override_styles/normal = ExtResource("4_cblf6")
 text = "Previous"
 
-[node name="Quit" type="Button" parent="."]
+[node name="Main Menu" type="Button" parent="." groups=["themed_Buttons"]]
 layout_mode = 0
 offset_left = -684.0
 offset_top = -466.0
 offset_right = -523.0
 offset_bottom = -391.0
 scale = Vector2(1.6, 1.6)
-focus_neighbor_right = NodePath("../next")
-focus_neighbor_bottom = NodePath("../PlayMap")
+focus_neighbor_bottom = NodePath("../prev")
 theme_override_fonts/font = ExtResource("2_mq6oa")
 theme_override_styles/normal = ExtResource("4_cblf6")
 text = "Main Menu"
@@ -106,12 +106,14 @@ text = "test"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="."]
+[node name="Difficulty" type="Button" parent="." groups=["themed_Buttons"]]
 layout_mode = 0
 offset_left = -245.0
 offset_top = 108.0
 offset_right = 237.0
 offset_bottom = 248.0
+focus_neighbor_top = NodePath("../prev")
+focus_neighbor_bottom = NodePath("../PlayMap")
 theme_override_fonts/font = ExtResource("2_mq6oa")
 theme_override_font_sizes/font_size = 96
 theme_override_styles/normal = SubResource("StyleBoxFlat_cblf6")
@@ -120,5 +122,5 @@ text = "Easy"
 [connection signal="pressed" from="PlayMap" to="." method="_on_play_map_pressed"]
 [connection signal="pressed" from="next" to="." method="_on_next_pressed"]
 [connection signal="pressed" from="prev" to="." method="_on_prev_pressed"]
-[connection signal="pressed" from="Quit" to="." method="_on_menu_pressed"]
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Main Menu" to="." method="_on_menu_pressed"]
+[connection signal="pressed" from="Difficulty" to="." method="_on_button_pressed"]
