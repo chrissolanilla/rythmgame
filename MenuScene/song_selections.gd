@@ -80,6 +80,14 @@ func _update_difficulty_button_color() -> void:
 	var stylebox = StyleBoxFlat.new()
 	stylebox.bg_color = color
 	stylebox.set_corner_radius_all(25)
+	print("Color is : ", color)
+	if color == Color(1.0, 0.0, 0.0, 1.0):
+		print("making font white")
+		difficultyButton.add_theme_color_override("font_focus_color", Color.WHITE)
+		difficultyButton.add_theme_color_override("font_color", Color.WHITE)
+	elif color == Color(1.0, 1.0, 0.0, 1.0):
+		difficultyButton.add_theme_color_override("font_color", Color.BLACK)
+		difficultyButton.add_theme_color_override("font_focus_color", Color.RED)
 	difficultyButton.add_theme_stylebox_override("normal", stylebox)
 	difficultyButton.add_theme_stylebox_override("hover", stylebox)
 	difficultyButton.add_theme_stylebox_override("pressed", stylebox)
