@@ -64,7 +64,8 @@ func _on_difficulty_pressed() -> void:
 # ----------------------------
 func _update_song_display() -> void:
 	TextureRectNode.texture = load(GlobalSettings.startingChartImage)
-	SongLabel.text = parse_filename(GlobalSettings.current_song)
+	SongLabel.text = GlobalSettings.current_song_dict.get("name","")
+	#SongLabel.text = parse_filename(GlobalSettings.current_song)
 
 func _update_difficulty_button() -> void:
 	difficultyButton.text = GlobalSettings.difficulty

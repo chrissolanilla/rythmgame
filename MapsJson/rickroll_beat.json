@@ -1,10 +1,5 @@
 [
 	{
-		"direction": "center",
-		"time": 2.125,
-		"type": "arrow"
-	},
-	{
 		"direction": "up",
 		"time": 2.75,
 		"type": "arrow"
@@ -150,92 +145,102 @@
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "right",
 		"time": 16.5,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "left",
 		"time": 17.0,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "right",
 		"time": 17.5,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "left",
 		"time": 18.125,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "up",
 		"time": 18.625,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "down",
 		"time": 19.125,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "up",
 		"time": 19.625,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "down",
 		"time": 20.25,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "upLeft",
 		"time": 20.75,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "upRight",
+		"time": 20.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "downLeft",
 		"time": 21.25,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "downRight",
+		"time": 21.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
 		"time": 21.75,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "down",
 		"time": 22.375,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "up",
 		"time": 22.875,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "right",
 		"time": 23.375,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "upLeft",
 		"time": 23.875,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "downLeft",
 		"time": 24.375,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "left",
 		"time": 24.875,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "down",
 		"time": 25.5,
 		"type": "arrow"
 	},
@@ -245,12 +250,12 @@
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "up",
 		"time": 26.5,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "upRight",
 		"time": 26.75,
 		"type": "arrow"
 	},
@@ -260,42 +265,42 @@
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "down",
 		"time": 27.625,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "up",
 		"time": 28.125,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "left",
 		"time": 28.625,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "right",
 		"time": 29.125,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "downLeft",
 		"time": 29.75,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "downRight",
 		"time": 30.25,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "downLeft",
 		"time": 30.75,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "downRight",
 		"time": 31.0,
 		"type": "arrow"
 	},
@@ -305,42 +310,42 @@
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "down",
 		"time": 31.75,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "down",
 		"time": 32.375,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "up",
 		"time": 32.875,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "right",
 		"time": 33.375,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "left",
 		"time": 33.625,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "up",
 		"time": 33.875,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "downRight",
 		"time": 34.25,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "upRight",
 		"time": 34.5,
 		"type": "arrow"
 	},
@@ -350,12 +355,17 @@
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "down",
 		"time": 35.5,
 		"type": "arrow"
 	},
 	{
 		"direction": "center",
+		"time": 35.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
 		"time": 36.0,
 		"type": "arrow"
 	},
@@ -365,27 +375,32 @@
 		"type": "arrow"
 	},
 	{
+		"direction": "up",
+		"time": 36.625,
+		"type": "arrow"
+	},
+	{
 		"direction": "center",
 		"time": 37.0,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "upLeft",
 		"time": 37.625,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "left",
 		"time": 38.125,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "downLeft",
 		"time": 38.625,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "upLeft",
 		"time": 39.125,
 		"type": "arrow"
 	},
@@ -395,97 +410,112 @@
 		"type": "arrow"
 	},
 	{
+		"direction": "upRight",
+		"time": 39.75,
+		"type": "arrow"
+	},
+	{
 		"direction": "center",
 		"time": 40.25,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "up",
+		"time": 40.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
 		"time": 40.875,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "downRight",
 		"time": 41.25,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "downRight",
 		"time": 41.75,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "right",
 		"time": 42.375,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "upRight",
 		"time": 42.875,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "downLeft",
 		"time": 43.375,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "down",
 		"time": 43.625,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "up",
 		"time": 44.0,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "upRight",
+		"end_Time": 45.375,
 		"time": 44.375,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "downRight",
+		"end_Time": 45.35,
 		"time": 44.75,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "down",
 		"time": 45.5,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "up",
 		"time": 45.75,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "upRight",
 		"time": 46.125,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "upLeft",
+		"end_Time": 47.5,
 		"time": 46.5,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "downLeft",
+		"end_Time": 47.475,
 		"time": 46.875,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "right",
 		"time": 47.625,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "left",
 		"time": 47.875,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "up",
+		"end_Time": 48.525,
 		"time": 48.125,
 		"type": "arrow"
 	},
@@ -495,7 +525,7 @@
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "down",
 		"time": 49.0,
 		"type": "arrow"
 	},
@@ -505,17 +535,18 @@
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "downRight",
 		"time": 50.0,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "downRight",
+		"end_Time": 50.65,
 		"time": 50.25,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
+		"direction": "down",
 		"time": 50.875,
 		"type": "arrow"
 	},

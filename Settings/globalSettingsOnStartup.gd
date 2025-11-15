@@ -59,24 +59,24 @@ func _get_default_songs() -> Array:
 	return [
 		{
 			"name": "Bad Apple",
-			"image": "res://art/IMG_1269.jpg",
+			"image": "res://art/badapple.jpg",
 			"video": "res://mp3files/【東方】Bad Apple!! ＰＶ【影絵】 - kasidid2 (360p, h264).ogv",
 			"audio": "res://mp3files/bad_apple.mp3",
-			"charts": {"Easy":"res://MapsJson/bad_apple_easy.json","Medium": "res://MapsJson/77bada.json","Hard": "res://MapsJson/bad_apple_hard.json"}
+			"charts": {"Easy":"res://MapsJson/badapple_beat_remixed.json","Medium": "res://MapsJson/77bada.json","Hard": "res://MapsJson/bad_apple_hard.json"}
 		},
 		{
 			"name": "Song B",
-			"image": "res://art/IMG_4256.png",
+			"image": "res://art/blazingheart.jpg",
 			"video": "res://mp3files/blazingHeart.ogv",
 			"audio": "res://mp3files/togsk-ba.mp3",
 			"charts": {"Easy":"res://MapsJson/77bada.json","Hard": "res://MapsJson/77bada.json"}
 		},
 		{
 			"name": "RickRoll",
-			"image": "res://art/uniform_samurai.png",
+			"image": "res://art/rickroll.png",
 			"video": "res://mp3files/rickroll.ogv",
 			"audio": "res://mp3files/rickroll.MP3",
-			"charts": {"Medium":"res://MapsJson/poses_rickroll.json","Hard": "res://MapsJson/poses_rickroll.json"}
+			"charts": {"Medium":"res://MapsJson/poses_rickroll.json","Hard": "res://MapsJson/rickroll_beat_remixed.json"}
 		}
 	]
 
