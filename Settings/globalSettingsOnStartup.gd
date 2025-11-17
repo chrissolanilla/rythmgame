@@ -77,6 +77,20 @@ func _get_default_songs() -> Array:
 			"video": "res://mp3files/rickroll.ogv",
 			"audio": "res://mp3files/rickroll.MP3",
 			"charts": {"Medium":"res://MapsJson/poses_rickroll.json","Hard": "res://MapsJson/rickroll_beat_remixed.json"}
+		},
+		{
+			"name": "Crossing Field",
+			"image": "res://art/crossingfield.png",
+			"video": "res://mp3files/crossingfield.ogv",
+			"audio": "res://mp3files/crossingfield.mp3",
+			"charts": {"Hard": "res://MapsJson/crossingfieldremix.json"}
+		},
+		{
+			"name": "BBNO$ check feat Miku",
+			"image": "res://art/bbnocheck.jpg",
+			"video": "res://mp3files/bbnocheck.ogv",
+			"audio": "res://mp3files/bbnocheck.mp3",
+			"charts": {"Hard": "res://MapsJson/bbnocheck.json"}
 		}
 	]
 

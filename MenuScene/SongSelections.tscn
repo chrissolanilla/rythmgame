@@ -105,9 +105,9 @@ text = "Main Menu"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = -220.0
+offset_left = -637.0
 offset_top = 5.0
-offset_right = 217.0
+offset_right = 644.0
 offset_bottom = 129.0
 theme_override_fonts/normal_font = ExtResource("2_mq6oa")
 theme_override_font_sizes/normal_font_size = 72

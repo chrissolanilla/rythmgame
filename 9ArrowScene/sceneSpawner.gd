@@ -360,6 +360,8 @@ func spawn_note(note_data: Dictionary):
 	arrow.z_index = 2
 	if dir == "center":
 		arrow.scale = Vector2(0.1, 0.1)
+		print("arrow.rotation: ", arrow.rotation)
+		arrow.rotation_degrees = 180
 	else:
 		arrow.scale = Vector2(0.2, 0.2)
 
@@ -397,7 +399,7 @@ func get_color_for_direction(dir: String) -> Color:
 		"left": return Color("032cfc")
 		"right": return Color("fcf003")
 		"down": return Color("e66600")
-		"up": return Color("e66600")
+		"up": return Color("00bf4b")
 		"center", "middleNote": return Color("c671ff")
 		"downLeft", "downRight": return Color("c671ff")
 		_:

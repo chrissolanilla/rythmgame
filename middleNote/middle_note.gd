@@ -5,7 +5,7 @@ extends BaseArrow
 func _ready() -> void:
 	sprite_2d.z_index = 2
 	direction = "center"
-	baseColor = Color("c671ff", 0.85)
+	baseColor = Color("c671ff", 1)
 	pressedColor = Color("00fbff", 1.0)
 	is_receptor = true
 
