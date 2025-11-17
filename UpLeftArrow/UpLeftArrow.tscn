@@ -8,5 +8,5 @@ rotation = -0.959931
 script = ExtResource("2_iqel6")
 
 [node name="Tail" parent="." index="2"]
-position = Vector2(-180.603, 266.849)
+position = Vector2(-193.222, 248.828)
 rotation = 0.950147

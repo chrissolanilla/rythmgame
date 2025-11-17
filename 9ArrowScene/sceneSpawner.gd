@@ -1,6 +1,7 @@
 extends Node2D
 var judgement_tween: Tween
 
+# how long you can let go before the hold is considered dropped
 @export var arrow_scene: PackedScene
 var scroll_speed
 @export var chart_path: String
@@ -109,6 +110,7 @@ var active_holds := {}
 const START_WINDOW := 0.1   # seconds to hit the head
 const END_WINDOW   := 0.12  # seconds tolerance at the tail
 const BREAK_GRACE  := 0.05  # brief grace for micro unholds
+const HOLD_DROP_TIME := 0.5  # tweak this to feel like StepManiaX
 var bar_interval: float
 var next_bar_time: float
 @export var bar_offset :float =0.0
@@ -306,39 +308,127 @@ func _process(delta):
 	var dirs_to_erase: Array = []
 	for dir in active_holds.keys():
 		var data = active_holds[dir]
-		var n: BaseArrow = data.get("note")
-		if not is_instance_valid(n):
+
+		# Get the stored note without typing it yet
+		var raw_note = data.get("note")
+
+		# If it's already freed (or null), schedule removal and skip
+		if not is_instance_valid(raw_note):
+			dirs_to_erase.append(dir)
+			continue
+
+		# Now it's safe to treat it as a BaseArrow
+		var n := raw_note as BaseArrow
+		if n == null:
+			# somehow not the type we expect – just clean it up
 			dirs_to_erase.append(dir)
 			continue
 
 		var tail := n.get_node_or_null("Tail") as Sprite2D
-		var remaining = float(n.end_Time) - song_time_adj  # seconds left
+		var remaining: float = float(n.end_Time) - song_time_adj  # seconds left on this hold
+		var held: bool = pressed.get(dir, false)
 
-		# keep frozen while held; small grace for micro unholds
-		if pressed.get(dir, false):
+		# ----- HOLD CONTACT / BREAK LOGIC -----
+		if held:
+			# actively holding, reset break timer and keep frozen
 			data["break_timer"] = 0.0
 			data["frozen"] = true
 		else:
+			# not currently holding: accumulate break time
 			data["break_timer"] = data.get("break_timer", 0.0) + delta
 			if data["break_timer"] > BREAK_GRACE:
 				data["frozen"] = false
 
-		# shrink/update tail pixels
+			# if we let go too long *before* the tail time, count as a dropped hold
+			if data["break_timer"] > HOLD_DROP_TIME \
+			and not data.get("dropped", false) \
+			and song_time_adj < n.end_Time - END_WINDOW:
+				data["dropped"] = true
+				var pos = receptor_positions.get(dir, n.position)
+				show_judgement("Miss", pos)
+				misses += 1
+				reset_Combo()
+
+				if is_instance_valid(n):
+					n.queue_free()
+				dirs_to_erase.append(dir)
+				continue  # move to next active hold
+
+		# ----- SHRINK / UPDATE TAIL -----
 		if tail:
-			var remaining_px : float= max(0.0, remaining) * scroll_speed
+			var remaining_px: float = max(0.0, remaining) * scroll_speed
 			_set_tail_length_px(n, tail, remaining_px)
 			tail.visible = remaining_px > 0.5
 
-		# completion: tail reached
+		# ----- COMPLETION: TAIL REACHED -----
 		if remaining <= END_WINDOW:
-			# (optional: award if still holding)
-			# if pressed.get(dir, false): show_judgement("Hold OK!", receptor_positions[dir])
+			# Only give a completion judgement if we never dropped it
+			if not data.get("dropped", false):
+				var pos = receptor_positions.get(dir, n.position)
+
+				# Still holding at the end and didn't break too long -> nice bonus
+				if held and data.get("break_timer", 0.0) <= HOLD_DROP_TIME * 0.5:
+					show_judgement("Hold OK!", pos)
+					# tweak these numbers to taste
+					update_Shown_Acc(3)
+					update_Score(3)
+					# optional: uncomment if you WANT holds to add to combo
+					# update_Combo()
+				else:
+					# they broke for a bit but recovered before HOLD_DROP_TIME
+					show_judgement("Good!", pos)
+					update_Shown_Acc(1)
+					update_Score(1)
+					# I’d usually NOT change combo here
+
 			if is_instance_valid(n):
 				n.queue_free()
 			dirs_to_erase.append(dir)
 		else:
 			# write back updated data
 			active_holds[dir] = data
+
+	# remove finished/invalid holds outside the loop
+	for d in dirs_to_erase:
+		active_holds.erase(d)
+
+	## -------- ACTIVE HOLDS: shrink tails & finish --------
+	#var dirs_to_erase: Array = []
+	#for dir in active_holds.keys():
+		#var data = active_holds[dir]
+		#var n: BaseArrow = data.get("note")
+		#if not is_instance_valid(n):
+			#dirs_to_erase.append(dir)
+			#continue
+#
+		#var tail := n.get_node_or_null("Tail") as Sprite2D
+		#var remaining = float(n.end_Time) - song_time_adj  # seconds left
+#
+		## keep frozen while held; small grace for micro unholds
+		#if pressed.get(dir, false):
+			#data["break_timer"] = 0.0
+			#data["frozen"] = true
+		#else:
+			#data["break_timer"] = data.get("break_timer", 0.0) + delta
+			#if data["break_timer"] > BREAK_GRACE:
+				#data["frozen"] = false
+#
+		## shrink/update tail pixels
+		#if tail:
+			#var remaining_px : float= max(0.0, remaining) * scroll_speed
+			#_set_tail_length_px(n, tail, remaining_px)
+			#tail.visible = remaining_px > 0.5
+#
+		## completion: tail reached
+		#if remaining <= END_WINDOW:
+			## (optional: award if still holding)
+			## if pressed.get(dir, false): show_judgement("Hold OK!", receptor_positions[dir])
+			#if is_instance_valid(n):
+				#n.queue_free()
+			#dirs_to_erase.append(dir)
+		#else:
+			## write back updated data
+			#active_holds[dir] = data
 
 	# remove finished/invalid holds outside the loop
 	for d in dirs_to_erase:
@@ -430,7 +520,7 @@ func check_hits(direction: String):
 		show_judgement("Perfect!", closest_note.position)
 		update_Shown_Acc(10); update_Score(10); update_Combo(); perfects += 1; 
 		if closest_note.is_Hold:
-			active_holds[direction] = {"note": closest_note, "break_timer": 0.0, "frozen": true}
+			active_holds[direction] = {"note": closest_note, "break_timer": 0.0, "frozen": true, "dropped": false}
 			var head_poly := closest_note.get_node_or_null("Polygon2D") as Polygon2D
 			var head_sprite := closest_note.get_node_or_null("Sprite2D") as Sprite2D
 			if head_poly:   head_poly.visible = false
@@ -443,7 +533,7 @@ func check_hits(direction: String):
 		update_Shown_Acc(5); update_Score(5); update_Combo(); goods += 1; 
 
 		if closest_note.is_Hold:
-			active_holds[direction] = {"note": closest_note, "break_timer": 0.0, "frozen": true}
+			active_holds[direction] = {"note": closest_note, "break_timer": 0.0, "frozen": true, "dropped": false}
 			var head_poly := closest_note.get_node_or_null("Polygon2D") as Polygon2D
 			var head_sprite := closest_note.get_node_or_null("Sprite2D") as Sprite2D
 			if head_poly:   head_poly.visible = false
