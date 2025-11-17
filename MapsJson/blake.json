@@ -1,0 +1,379 @@
+[
+	{
+		"direction": "center",
+		"time": 6.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 9.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
+		"time": 11.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 14.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"time": 17.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 19.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 21.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 22.625,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 23.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "down",
+		"time": 25.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "down",
+		"time": 26.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "down",
+		"time": 27.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
+		"time": 29.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
+		"time": 30.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 31.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"time": 33.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"time": 34.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"time": 35.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 37.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
+		"time": 38.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"time": 39.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 41.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "down",
+		"time": 42.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 43.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 44.625,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 45.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 46.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"time": 47.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"time": 48.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"time": 49.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 50.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
+		"time": 51.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
+		"time": 51.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "down",
+		"time": 53.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "down",
+		"time": 53.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 54.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 55.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 55.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"time": 57.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"time": 57.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"time": 58.625,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 59.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 60.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 61.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 61.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 62.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 63.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 63.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 64.625,
+		"type": "arrow"
+	},
+	{
+		"direction": "down",
+		"time": 65.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 66.375,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
+		"time": 67.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
+		"time": 68.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
+		"time": 69.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
+		"time": 69.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
+		"time": 70.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 73.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"end_Time": 76.875,
+		"time": 75.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "left",
+		"end_Time": 79.5,
+		"time": 78.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "down",
+		"end_Time": 80.875,
+		"time": 79.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"end_Time": 82.25,
+		"time": 81.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"end_Time": 83.5,
+		"time": 82.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"end_Time": 84.875,
+		"time": 83.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"end_Time": 86.25,
+		"time": 85.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"end_Time": 88.0,
+		"time": 87.0,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 90.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 91.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 94.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 95.125,
+		"type": "arrow"
+	},
+	{
+		"countdown": 5.0,
+		"points": 10,
+		"pose": "What? Pose",
+		"time": 93.0,
+		"type": "pose",
+		"window": 0.25
+	},
+	{
+		"countdown": 5.0,
+		"points": 10,
+		"pose": "Muscle Man Pose",
+		"time": 102.0,
+		"type": "pose",
+		"window": 0.25
+	},
+	{
+		"countdown": 5.0,
+		"points": 10,
+		"pose": "Point Up Pose (R)",
+		"time": 5.0,
+		"type": "pose",
+		"window": 0.25
+	}
+]

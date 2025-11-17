@@ -89,3 +89,8 @@ func _update_feedback_label() -> void:
 
 func _on_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://MenuScene/Menu.tscn")
+
+
+func on_back_press():
+	if Input.is_action_just_pressed("down"):
+		$Button.grab_focus()

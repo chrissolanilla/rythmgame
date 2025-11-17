@@ -308,15 +308,12 @@ func _process(delta):
 	var dirs_to_erase: Array = []
 	for dir in active_holds.keys():
 		var data = active_holds[dir]
-
 		# Get the stored note without typing it yet
 		var raw_note = data.get("note")
-
 		# If it's already freed (or null), schedule removal and skip
 		if not is_instance_valid(raw_note):
 			dirs_to_erase.append(dir)
 			continue
-
 		# Now it's safe to treat it as a BaseArrow
 		var n := raw_note as BaseArrow
 		if n == null:
@@ -368,7 +365,7 @@ func _process(delta):
 
 				# Still holding at the end and didn't break too long -> nice bonus
 				if held and data.get("break_timer", 0.0) <= HOLD_DROP_TIME * 0.5:
-					show_judgement("Hold OK!", pos)
+					show_judgement("Perfect!", pos)
 					# tweak these numbers to taste
 					update_Shown_Acc(3)
 					update_Score(3)
