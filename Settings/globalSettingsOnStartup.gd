@@ -91,6 +91,20 @@ func _get_default_songs() -> Array:
 			"video": "res://mp3files/bbnocheck.ogv",
 			"audio": "res://mp3files/bbnocheck.mp3",
 			"charts": {"Hard": "res://MapsJson/bbnocheck.json"}
+		},
+		{
+			"name": "Winning The Soul",
+			"image": "res://art/winningTheSoul.jpg",
+			"video": "res://mp3files/winningTheSoul.ogv",
+			"audio": "res://mp3files/winningTheSoul.mp3",
+			"charts": {"Easy": "res://MapsJson/Winning_The_Soul.json"}
+		},
+		{
+			"name": "Rockerfeller Street Nightcore",
+			"image": "res://art/rockerFellerStreet.jpg",
+			"video": "res://mp3files/rockerfellerStreet.ogv",
+			"audio": "res://mp3files/ENG - Getter Jaani - AUDIO - Rockefeller Street ~ Nightcore Vers.mp3",
+			"charts": {"Impossible": "res://MapsJson/rockafellerstreetfinal.json"}
 		}
 	]
 
@@ -149,7 +163,7 @@ func _update_state_from_loaded() -> void:
 			difficulty = "None"
 
 	# Set currentDifficultyIndex according to desired order
-	var ordered = ["Easy","Medium","Hard"]
+	var ordered = ["Easy","Medium","Hard", "Impossible"]
 	var keys = current_song_dict["charts"].keys()
 	currentDifficultyIndex = 0
 	for i in range(ordered.size()):
@@ -202,7 +216,7 @@ func cycle_difficulty() -> void:
 		return
 
 	var available_diffs = current_song_dict["charts"].keys()
-	var ordered_diffs = ["Easy","Medium","Hard"]
+	var ordered_diffs = ["Easy","Medium","Hard", "Impossible"]
 	var diffs = []
 
 	for d in ordered_diffs:

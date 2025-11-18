@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://0vvhlblbt4wc"]
+[gd_scene load_steps=7 format=3 uid="uid://0vvhlblbt4wc"]
 
 [ext_resource type="Script" uid="uid://dhl6170xt1dvf" path="res://MenuScene/song_selections.gd" id="1_243wc"]
 [ext_resource type="FontFile" uid="uid://c5onj8ox0dd42" path="res://Fonts/Johnny Fever.otf" id="2_mq6oa"]
 [ext_resource type="Texture2D" uid="uid://dt6i738ugylis" path="res://art/neon_music_bg_1920x1080.png" id="2_uxnl6"]
 [ext_resource type="StyleBox" uid="uid://v2ee38t63vb7" path="res://Fonts/new_style_box_flat.tres" id="4_cblf6"]
+[ext_resource type="AudioStream" uid="uid://btqxe2d1ayh0p" path="res://mp3files/click.wav" id="5_5qb07"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cblf6"]
 bg_color = Color(0, 0.700429, 0.400595, 1)
@@ -135,6 +136,11 @@ theme_override_fonts/font = ExtResource("2_mq6oa")
 theme_override_font_sizes/font_size = 96
 theme_override_styles/normal = SubResource("StyleBoxFlat_cblf6")
 text = "Easy"
+
+[node name="click" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_5qb07")
+
+[node name="CurrentSongPreivew" type="AudioStreamPlayer" parent="."]
 
 [connection signal="pressed" from="PlayMap" to="." method="_on_play_map_pressed"]
 [connection signal="pressed" from="next" to="." method="_on_next_pressed"]

@@ -9,11 +9,28 @@ extends Control
 @onready var TextureRectNode: TextureRect = $TextureRect
 @onready var SongLabel: RichTextLabel = $RichTextLabel
 @onready var play_map: Button = $PlayMap
+@onready var current_song_preivew: AudioStreamPlayer = $CurrentSongPreivew
 
+@onready var click:AudioStreamPlayer = $click
 # ----------------------------
 # Lifecycle
 # ----------------------------
 func _ready() -> void:
+	#audio setting set
+	var config = ConfigFile.new()
+	var err = config.load("user://Settings.cfg")
+
+	if err == OK:
+		# Read values from the file (with defaults in case they are missing)
+		var vol := int(config.get_value("game", "volume", 50))  # 0..100
+		vol = clamp(vol, 0, 100)
+		var lin := pow(float(vol) / 100.0, 2.0)  # 0..1
+		var bus := AudioServer.get_bus_index("Master")
+		AudioServer.set_bus_volume_db(bus, linear_to_db(lin))
+
+	if GlobalSettings.current_song:
+		current_song_preivew.stream = load(GlobalSettings.current_song)
+		current_song_preivew.play(current_song_preivew.stream.get_length()/2.0)
 	for button in get_tree().get_nodes_in_group("themed_Buttons"):
 		if button is Button:
 			button.add_theme_color_override("font_focus_color", Color.RED)
@@ -31,30 +48,38 @@ func _ready() -> void:
 # Play / Menu buttons
 # ----------------------------
 func _on_play_map_pressed() -> void:
+	click.play()
 	get_tree().change_scene_to_file("res://9ArrowScene/Game.tscn")
 
 func _on_menu_pressed() -> void:
+	click.play()
 	get_tree().change_scene_to_file("res://MenuScene/Menu.tscn")
 
 # ----------------------------
 # Next / Previous Songs
 # ----------------------------
 func _on_next_pressed() -> void:
+	click.play()
 	GlobalSettings.startingChartPath = get_Next_Song()
 	_update_song_display()
 	_update_difficulty_button()
 	_update_difficulty_button_color()
+	current_song_preivew.stream = load(GlobalSettings.current_song)
+	current_song_preivew.play(current_song_preivew.stream.get_length()/2.0)
 
 func _on_prev_pressed() -> void:
+	click.play()
 	GlobalSettings.startingChartPath = get_Prev_Song()
 	_update_song_display()
 	_update_difficulty_button()
 	_update_difficulty_button_color()
-
+	current_song_preivew.stream = load(GlobalSettings.current_song)
+	current_song_preivew.play(current_song_preivew.stream.get_length()/2.0)
 # ----------------------------
 # Difficulty button pressed
 # ----------------------------
 func _on_difficulty_pressed() -> void:
+	click.play()
 	GlobalSettings.cycle_difficulty()
 	_update_difficulty_button()
 	_update_difficulty_button_color()
@@ -68,6 +93,7 @@ func _update_song_display() -> void:
 	#SongLabel.text = parse_filename(GlobalSettings.current_song)
 
 func _update_difficulty_button() -> void:
+	click.play()
 	difficultyButton.text = GlobalSettings.difficulty
 
 func _update_difficulty_button_color() -> void:
@@ -76,6 +102,7 @@ func _update_difficulty_button_color() -> void:
 		"Easy": color = Color(0,1,0)
 		"Medium": color = Color(1,1,0)
 		"Hard": color = Color(1,0,0)
+		"Impossible": color = Color(Color.PURPLE)
 		_: color = Color.GRAY
 
 	var stylebox = StyleBoxFlat.new()
@@ -101,7 +128,7 @@ func get_Next_Song() -> String:
 	GlobalSettings.current_song_dict = GlobalSettings.songs[GlobalSettings.song_index]
 
 	var charts = GlobalSettings.current_song_dict.get("charts", {})
-	var ordered = ["Easy","Medium","Hard"]
+	var ordered = ["Easy","Medium","Hard", "Impossible"]
 	var diffs = []
 	for d in ordered:
 		if d in charts.keys():
@@ -125,7 +152,7 @@ func get_Prev_Song() -> String:
 	GlobalSettings.current_song_dict = GlobalSettings.songs[GlobalSettings.song_index]
 
 	var charts = GlobalSettings.current_song_dict.get("charts", {})
-	var ordered = ["Easy","Medium","Hard"]
+	var ordered = ["Easy","Medium","Hard", "Impossible"]
 	var diffs = []
 	for d in ordered:
 		if d in charts.keys():

@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://c2kbthwlyples"]
+[gd_scene load_steps=8 format=3 uid="uid://c2kbthwlyples"]
 
 [ext_resource type="Script" uid="uid://buy408k8jbr78" path="res://MenuScene/menu.gd" id="1_j1mvo"]
 [ext_resource type="Texture2D" uid="uid://dt6i738ugylis" path="res://art/neon_music_bg_1920x1080.png" id="2_kbsdp"]
 [ext_resource type="FontFile" uid="uid://c5onj8ox0dd42" path="res://Fonts/Johnny Fever.otf" id="2_qtwcp"]
 [ext_resource type="Texture2D" uid="uid://cydcmhb1mh35n" path="res://art/StepsLogo.png" id="3_vfo63"]
 [ext_resource type="StyleBox" uid="uid://v2ee38t63vb7" path="res://Fonts/new_style_box_flat.tres" id="5_0c12v"]
+[ext_resource type="AudioStream" uid="uid://btqxe2d1ayh0p" path="res://mp3files/click.wav" id="6_5cwhk"]
+[ext_resource type="AudioStream" uid="uid://wa4ak3nxxnyu" path="res://mp3files/mainMenuLoop.wav" id="7_dkfru"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -106,6 +108,13 @@ theme_override_font_sizes/font_size = 55
 theme_override_styles/focus = ExtResource("5_0c12v")
 theme_override_styles/normal = ExtResource("5_0c12v")
 text = "Chart Creator"
+
+[node name="click" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_5cwhk")
+
+[node name="menu_loop" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_dkfru")
+autoplay = true
 
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="Settings" to="." method="_on_settings_pressed"]

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c72qdiep6f8sp"
+path="res://.godot/imported/ENG - Getter Jaani - AUDIO - Rockefeller Street ~ Nightcore Vers.mp3-ecad77756d453a721c3cdea76f10e9fd.mp3str"
+
+[deps]
+
+source_file="res://mp3files/ENG - Getter Jaani - AUDIO - Rockefeller Street ~ Nightcore Vers.mp3"
+dest_files=["res://.godot/imported/ENG - Getter Jaani - AUDIO - Rockefeller Street ~ Nightcore Vers.mp3-ecad77756d453a721c3cdea76f10e9fd.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
