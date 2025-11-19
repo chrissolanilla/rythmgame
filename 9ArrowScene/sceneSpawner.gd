@@ -230,6 +230,7 @@ func _process(delta):
 			GlobalSettings.badCounter = bads
 			GlobalSettings.missCounter = misses
 			GlobalSettings.highestComboAchieved = highestCombo
+			GlobalSettings.score = globalScore
 			
 			get_tree().change_scene_to_file("res://MenuScene/SongEnd.tscn")
 	if spawn_index == chart_data.size():
@@ -368,14 +369,14 @@ func _process(delta):
 					show_judgement("Perfect!", pos)
 					# tweak these numbers to taste
 					update_Shown_Acc(3)
-					update_Score(3)
+					update_Score(10*globalCombo)
 					# optional: uncomment if you WANT holds to add to combo
 					# update_Combo()
 				else:
 					# they broke for a bit but recovered before HOLD_DROP_TIME
 					show_judgement("Good!", pos)
-					update_Shown_Acc(1)
-					update_Score(1)
+					update_Shown_Acc(5*globalCombo)
+					update_Score(1*globalCombo)
 					# I’d usually NOT change combo here
 
 			if is_instance_valid(n):
@@ -515,7 +516,7 @@ func check_hits(direction: String):
 	# HEAD judgement window
 	if closest_diff <= 0.050:
 		show_judgement("Perfect!", closest_note.position)
-		update_Shown_Acc(10); update_Score(10); update_Combo(); perfects += 1; 
+		update_Shown_Acc(10); update_Score(10*globalCombo); update_Combo(); perfects += 1; 
 		if closest_note.is_Hold:
 			active_holds[direction] = {"note": closest_note, "break_timer": 0.0, "frozen": true, "dropped": false}
 			var head_poly := closest_note.get_node_or_null("Polygon2D") as Polygon2D
@@ -527,7 +528,7 @@ func check_hits(direction: String):
 
 	elif closest_diff <= 0.1:
 		show_judgement("Good!", closest_note.position)
-		update_Shown_Acc(5); update_Score(5); update_Combo(); goods += 1; 
+		update_Shown_Acc(5); update_Score(5*globalCombo); update_Combo(); goods += 1; 
 
 		if closest_note.is_Hold:
 			active_holds[direction] = {"note": closest_note, "break_timer": 0.0, "frozen": true, "dropped": false}
@@ -541,7 +542,7 @@ func check_hits(direction: String):
 	#instead of making it bad if within 0.2 and miss after that, make it else bad and dont do miss for early or late press
 	elif closest_diff <= 0.2:
 		show_judgement("Bad!", closest_note.position)
-		update_Shown_Acc(1); update_Score(1); reset_Combo(); bads += 1; 
+		update_Shown_Acc(1); update_Score(1*globalCombo);  bads += 1; 
 		
 		closest_note.queue_free()
 	#actually dont give them misses for hitting it too early or late at this time
@@ -646,7 +647,7 @@ func _on_pose_judged(success: bool, at_position: Vector2, points: int):
 		correct.visible = true
 		timer.start()
 		update_Shown_Acc(points)
-		update_Score(points)
+		update_Score(points*globalCombo)
 		update_Combo()
 	else:
 		sfx_fail.play()

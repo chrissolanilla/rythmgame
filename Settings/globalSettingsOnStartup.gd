@@ -24,6 +24,7 @@ var perfectCounter: int = 0
 var goodCounter: int = 0
 var badCounter: int = 0
 var missCounter: int = 0
+var score:int = 0
 
 var songTime: float = 0.0
 var highestComboAchieved: int = 0

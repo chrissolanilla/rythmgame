@@ -6,6 +6,7 @@ extends Control
 @onready var miss: RichTextLabel = $Miss
 @onready var combo: RichTextLabel = $Combo
 @onready var texture_rect: TextureRect = $TextureRect
+@onready var score: RichTextLabel = $Score
 
 
 # Called when the node enters the scene tree for the first time.
@@ -20,6 +21,7 @@ func _ready() -> void:
 	bad.text = "[b][color=yellow][font_size=86][font=res://Fonts/Johnny Fever.otf]Bad:         %d\n[/font][/font_size][/color][/b]" % GlobalSettings.badCounter
 	miss.text = "[b][color=red][font_size=86][font=res://Fonts/Johnny Fever.otf]Miss:        %d\n[/font][/font_size][/color][/b]\n" % GlobalSettings.missCounter
 	combo.text = "[b][font_size=86][font=res://Fonts/Johnny Fever.otf]Highest Combo: x%d[/font][/font_size][/b]\n" % GlobalSettings.highestComboAchieved
+	score.text = "[b][font_size=86][font=res://Fonts/Johnny Fever.tf]Score: %d" % GlobalSettings.score
 	texture_rect.texture = load(GlobalSettings.startingChartImage)
 	pass # Replace with function body.
 

@@ -279,7 +279,7 @@ func _process(_dt: float) -> void:
 	var now := _now()
 	var prev_now := _prev_now
 	_prev_now = now
-
+	
 	for pose in pose_nodes:
 		#print("pose array is : ", pose_nodes)
 		if not is_instance_valid(pose):
@@ -303,58 +303,256 @@ func _process(_dt: float) -> void:
 		var t: float = float(bar.get_meta("bar_time"))
 		bar.position.y = time_to_y(t)
 		bar.visible = bar.position.y > -200.0 and bar.position.y < get_viewport_rect().size.y + 200.0
-
+	
 	for n in notes:
 		if not is_instance_valid(n):
 			continue
+
 		var ba: BaseArrow = n as BaseArrow
 		var dir: String = "center"
 		if ba != null:
 			dir = ba.direction
 		elif n.has_meta("direction"):
 			dir = str(n.get_meta("direction"))
+
 		if receptors.has(dir):
 			var rec_local: Vector2 = to_local((receptors[dir] as Node2D).global_position)
 			(n as Node2D).position.x = rec_local.x
+
 		var t_note: float = 0.0
 		if ba != null:
 			t_note = ba.note_time
 		elif n.has_meta("note_time"):
 			t_note = float(n.get_meta("note_time"))
+
+				# --- HOLD METADATA (if this is a hold) ---
+		var is_hold := (ba != null and ba.is_Hold)
+		var head_t := t_note
+		var end_t := t_note
+		var total_px := 0.0
+		if is_hold:
+			head_t = float(n.get_meta("head_time", t_note))
+			end_t = float(n.get_meta("end_time", head_t))
+			total_px = float(n.get_meta("tail_total_px", 0.0))
+
+				# --- EARLY RESET: if time is before the hold starts, pretend it was never hit ---
+		if is_hold and _now() < head_t:
+			# clear hold state
+			n.set_meta("frozen", null)
+			n.set_meta("fx_done", null)
+
+			var tail_full := n.get_node_or_null("Tail") as Sprite2D
+			var poly      := n.get_node_or_null("Polygon2D") as Polygon2D
+
+			# restore full tail length
+			if tail_full and total_px > 0.0:
+				_set_tail_length_px(n, tail_full, total_px)
+
+			# restore base colors (head + tail)
+			if ba != null and poly:
+				poly.color = ba.baseColor
+			if ba != null and tail_full:
+				tail_full.self_modulate = ba.baseColor
+
+			# head scrolls normally again
+			var node2d := n as Node2D
+			if node2d:
+				node2d.position.y = time_to_y(t_note)
+				# also recompute visibility here so it doesn't stay hidden
+				node2d.visible = (
+					node2d.position.y > -200.0 and
+					node2d.position.y < get_viewport_rect().size.y + 200.0
+				)
+
+			# no further processing (no hit / freeze logic) this frame
+			continue
+
+		## --- EARLY RESET: if time is before the hold starts, pretend it was never hit ---
+		#if is_hold and _now() < head_t:
+			#n.set_meta("frozen", null)
+			#n.set_meta("fx_done", null)
+#
+			#var tail_full := n.get_node_or_null("Tail") as Sprite2D
+			#if tail_full and total_px > 0.0:
+				## restore to full length
+				#_set_tail_length_px(n, tail_full, total_px)
+#
+			## head scrolls normally again
+			#(n as Node2D).position.y = time_to_y(t_note)
+			## no further processing needed this frame
+			#continue
+
+		# --- POSITION / FREEZE LOGIC ---
 		if not n.has_meta("frozen"):
 			(n as Node2D).position.y = time_to_y(t_note)
 		else:
+			# keep the head parked where it was when the hold started
 			(n as Node2D).position.y = n.position.y
-			var remaining_s :float = max(0.0, n.end_Time- _now())
-			var remaining_px := remaining_s * pixels_per_second
-			var tail : Sprite2D= n.get_node_or_null("Tail")
-			_set_tail_length_px(n, tail, remaining_px)
-			if remaining_s <=0.01:
-				n.set_meta("frozen", null)
-			#print("we should be frozen")
-		#play sound when t_note is close enough
-		if(absf(t_note - _now()) <= hit_window_sec):
-			# print("its close enough")
+
+			var tail := n.get_node_or_null("Tail") as Sprite2D
+			if tail and is_hold:
+				var clamped_t: float = clamp(_now(), head_t, end_t)
+				var remaining_s = max(0.0, end_t - clamped_t)
+				var filled_px   = clamp(remaining_s * pixels_per_second, 0.0, total_px)
+
+				_set_tail_length_px(n, tail, filled_px)
+
+				# color while hold is active
+				var poly := n.get_node_or_null("Polygon2D") as Polygon2D
+				if ba != null and poly:
+					if clamped_t > head_t and clamped_t < end_t:
+						poly.color = ba.pressedColor
+						tail.self_modulate = ba.pressedColor
+					else:
+						poly.color = ba.baseColor
+						tail.self_modulate = ba.baseColor
+
+				# when we reach the end, unfreeze so it returns to normal behaviour
+				if clamped_t >= end_t - 0.01:
+					n.set_meta("frozen", null)
+
+		## --- HOLD METADATA (if this is a hold) ---
+		#var is_hold := (ba != null and ba.is_Hold)
+		#var head_t := t_note
+		#var end_t := t_note
+		#var total_px := 0.0
+		#if is_hold:
+			#head_t = float(n.get_meta("head_time", t_note))
+			#end_t = float(n.get_meta("end_time", head_t))
+			#total_px = float(n.get_meta("tail_total_px", 0.0))
+#
+		## --- POSITION / FREEZE LOGIC ---
+		#if not n.has_meta("frozen"):
+			#(n as Node2D).position.y = time_to_y(t_note)
+		#else:
+			## if we've scrubbed back BEFORE the hold actually starts → reset this note
+			#if is_hold and _now() < head_t:
+				#n.set_meta("frozen", null)
+				#n.set_meta("fx_done", null)
+#
+				#var tail_reset := n.get_node_or_null("Tail") as Sprite2D
+				#if tail_reset and total_px > 0.0:
+					#_set_tail_length_px(n, tail_reset, total_px)
+#
+				#(n as Node2D).position.y = time_to_y(t_note)
+				#continue  # go to next note
+#
+			## otherwise keep the head parked
+			#(n as Node2D).position.y = n.position.y
+#
+			#var tail := n.get_node_or_null("Tail") as Sprite2D
+			#if tail and is_hold:
+				#var clamped_t: float = clamp(_now(), head_t, end_t)
+				#var remaining_s = max(0.0, end_t - clamped_t)
+				#var filled_px   = clamp(remaining_s * pixels_per_second, 0.0, total_px)
+
+				_set_tail_length_px(n, tail, filled_px)
+
+				# color while hold is active
+				#var poly := n.get_node_or_null("Polygon2D") as Polygon2D
+				if ba != null and poly:
+					if clamped_t > head_t and clamped_t < end_t:
+						poly.color = ba.pressedColor  # "held" blue
+						tail.self_modulate = ba.pressedColor
+					else:
+						poly.color = ba.baseColor
+						tail.self_modulate = ba.baseColor
+
+				# when we reach the end, unfreeze so it returns to normal behaviour
+				if clamped_t >= end_t - 0.01:
+					n.set_meta("frozen", null)
+
+		# --- HIT / TRIGGER LOGIC (this is what you lost) ---
+		if absf(t_note - _now()) <= hit_window_sec:
 			if not n.has_meta("fx_done"):
-				if n.is_Hold:
+				if is_hold:
+					# First frame we "hit" the hold: freeze it and play SFX
 					if not n.has_meta("frozen"):
 						print("freezing the hold")
 						_flash_note(n)
 						_hit_player.play()
 						n.set_meta("frozen", true)
-					else:
-						_flash_note(n)
-					#somehow make it frozen until end_Time is over
+					n.set_meta("fx_done", true)
 				else:
 					_hit_player.play()
 					_flash_note(n)
 					n.set_meta("fx_done", true)
 		else:
-			n.set_meta("fx_done" , null)
+			# out of window → allow triggering again next time we pass near
+			n.set_meta("fx_done", null)
 
-			#if n.is_Hold:
-				#n.set_meta("frozen", null)
-		(n as Node2D).visible = (n as Node2D).position.y > -200.0 and (n as Node2D).position.y < get_viewport_rect().size.y + 200.0
+		# visibility cull so we don't draw infinite off-screen stuff
+		(n as Node2D).visible = (
+			(n as Node2D).position.y > -200.0 and
+			(n as Node2D).position.y < get_viewport_rect().size.y + 200.0
+		)
+
+	#for n in notes:
+		#if not is_instance_valid(n):
+			#continue
+		#var ba: BaseArrow = n as BaseArrow
+		#var dir: String = "center"
+		#if ba != null:
+			#dir = ba.direction
+		#elif n.has_meta("direction"):
+			#dir = str(n.get_meta("direction"))
+		#if receptors.has(dir):
+			#var rec_local: Vector2 = to_local((receptors[dir] as Node2D).global_position)
+			#(n as Node2D).position.x = rec_local.x
+		#var t_note: float = 0.0
+		#if ba != null:
+			#t_note = ba.note_time
+		#elif n.has_meta("note_time"):
+			#t_note = float(n.get_meta("note_time"))
+		#if not n.has_meta("frozen"):
+			#(n as Node2D).position.y = time_to_y(t_note)
+		#else:
+			## keep the head parked where it was when the hold started
+			#(n as Node2D).position.y = n.position.y
+#
+			#var tail := n.get_node_or_null("Tail") as Sprite2D
+			#if tail:
+				#var head_t  : float = float(n.get_meta("head_time", t_note))
+				#var end_t   : float = float(n.get_meta("end_time", head_t))
+				#var total_px: float = float(n.get_meta("tail_total_px", 0.0))
+#
+				## how far into the hold are we, in seconds?
+				#var clamped_t: float = clamp(_now(), head_t, end_t)
+				#var elapsed_s: float = head_t - clamped_t - head_t
+				##var filled_px: float = clamp(elapsed_s * pixels_per_second, 0.0, total_px)
+				#var remaining_s = max(0.0, end_t - clamped_t)
+				#var filled_px   = clamp(remaining_s * pixels_per_second, 0.0, total_px)
+#
+#
+				#_set_tail_length_px(n, tail, filled_px)
+#
+				## when we reach the end, unfreeze so it returns to normal behaviour
+				#if clamped_t >= end_t - 0.01:
+					#n.set_meta("frozen", null)
+#
+		#if(absf(t_note - _now()) <= hit_window_sec):
+			## print("its close enough")
+			#if not n.has_meta("fx_done"):
+				#if n.is_Hold:
+					#if not n.has_meta("frozen"):
+						#print("freezing the hold")
+						#_flash_note(n)
+						#_hit_player.play()
+						#n.set_meta("frozen", true)
+						#n.set_meta("fx_done", true)
+					##else:
+						##_flash_note(n)
+					##somehow make it frozen until end_Time is over
+				#else:
+					#_hit_player.play()
+					#_flash_note(n)
+					#n.set_meta("fx_done", true)
+		#else:
+			#n.set_meta("fx_done" , null)
+#
+			##if n.is_Hold:
+				##n.set_meta("frozen", null)
+		#(n as Node2D).visible = (n as Node2D).position.y > -200.0 and (n as Node2D).position.y < get_viewport_rect().size.y + 200.0
 
 	# hover ghost preview (direction-specific + recolor + 0.2 scale)
 	if ghost_enabled:
@@ -730,3 +928,17 @@ func rebuild_poses() -> void:
 	pose_nodes.clear()
 	for ev in pose_events:
 		_spawn_pose_from_event(ev)
+
+func reset_preview_state() -> void:
+	for n in notes:
+		if not is_instance_valid(n):
+			continue
+
+		n.set_meta("frozen", null)
+		n.set_meta("fx_done", null)
+
+		if n is BaseArrow and n.is_Hold:
+			var tail := n.get_node_or_null("Tail") as Sprite2D
+			if tail and n.has_meta("tail_total_px"):
+				var total_px: float = float(n.get_meta("tail_total_px"))
+				_set_tail_length_px(n, tail, total_px)

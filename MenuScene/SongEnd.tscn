@@ -101,6 +101,18 @@ bbcode_enabled = true
 text = "Miss: 478"
 vertical_alignment = 1
 
+[node name="Score" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 645.0
+offset_top = -8.0
+offset_right = 1336.0
+offset_bottom = 128.0
+theme_override_fonts/normal_font = ExtResource("2_3q6t4")
+theme_override_font_sizes/normal_font_size = 86
+bbcode_enabled = true
+text = "SCORE: 999999"
+vertical_alignment = 1
+
 [node name="Combo" type="RichTextLabel" parent="."]
 layout_mode = 0
 offset_left = 1416.0
