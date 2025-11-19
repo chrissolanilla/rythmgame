@@ -7,6 +7,7 @@ extends Control
 @onready var combo: RichTextLabel = $Combo
 @onready var texture_rect: TextureRect = $TextureRect
 @onready var score: RichTextLabel = $Score
+@onready var play_again: Button = $"Play Again"
 
 
 # Called when the node enters the scene tree for the first time.
@@ -23,6 +24,8 @@ func _ready() -> void:
 	combo.text = "[b][font_size=86][font=res://Fonts/Johnny Fever.otf]Highest Combo: x%d[/font][/font_size][/b]\n" % GlobalSettings.highestComboAchieved
 	score.text = "[b][font_size=86][font=res://Fonts/Johnny Fever.tf]Score: %d" % GlobalSettings.score
 	texture_rect.texture = load(GlobalSettings.startingChartImage)
+	
+	play_again.grab_focus()
 	pass # Replace with function body.
 
 

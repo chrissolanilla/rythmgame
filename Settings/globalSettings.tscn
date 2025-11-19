@@ -23,6 +23,7 @@ offset_top = 361.605
 offset_right = 675.834
 offset_bottom = 377.605
 scale = Vector2(1.2, 1.2)
+focus_neighbor_top = NodePath("../ScrollSpeedSlider")
 
 [node name="ScrollSpeedSlider" type="HSlider" parent="."]
 layout_mode = 0
@@ -31,11 +32,12 @@ offset_top = 261.891
 offset_right = 670.676
 offset_bottom = 277.891
 scale = Vector2(1.2, 1.2)
+focus_neighbor_top = NodePath("../Recreate Settings File")
 min_value = 1.0
 max_value = 1000.0
 value = 300.0
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
+[node name="Game Volume" type="RichTextLabel" parent="."]
 layout_mode = 0
 offset_left = 480.229
 offset_top = 296.848
@@ -50,7 +52,7 @@ text = "[b][font=res://Fonts/Johnny Fever.otf][color=green]Game Volume[/color][/
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RichTextLabel2" type="RichTextLabel" parent="."]
+[node name="Scoll Speed" type="RichTextLabel" parent="."]
 layout_mode = 0
 offset_left = 475.645
 offset_top = 196.562
@@ -71,20 +73,22 @@ offset_left = 691.0
 offset_top = 477.0
 offset_right = 907.0
 offset_bottom = 549.0
-focus_neighbor_top = NodePath("../Exit")
-focus_neighbor_bottom = NodePath("../Confirm")
+focus_neighbor_left = NodePath("../Confirm")
+focus_neighbor_top = NodePath("../GameVolumeSlider")
+focus_neighbor_right = NodePath("../Exit")
 theme_override_fonts/font = ExtResource("2_ds7ha")
 theme_override_font_sizes/font_size = 42
 theme_override_styles/normal = ExtResource("4_tvu6k")
 text = "Cancel"
 
-[node name="Cancel2" type="Button" parent="." groups=["themed_Buttons"]]
+[node name="Callibrate Offset" type="Button" parent="." groups=["themed_Buttons"]]
 layout_mode = 0
 offset_left = 92.8367
 offset_top = 201.719
 offset_right = 308.837
 offset_bottom = 305.719
-focus_neighbor_top = NodePath("../Exit")
+focus_neighbor_top = NodePath("../Recreate Settings File")
+focus_neighbor_right = NodePath("../ScrollSpeedSlider")
 focus_neighbor_bottom = NodePath("../Confirm")
 theme_override_fonts/font = ExtResource("2_ds7ha")
 theme_override_font_sizes/font_size = 42
@@ -92,14 +96,15 @@ theme_override_styles/normal = ExtResource("4_tvu6k")
 text = "Callibrate 
 Offset"
 
-[node name="Cancel3" type="Button" parent="." groups=["themed_Buttons"]]
+[node name="Recreate Settings File" type="Button" parent="." groups=["themed_Buttons"]]
 layout_mode = 0
 offset_left = 318.0
 offset_top = 40.0
 offset_right = 779.0
 offset_bottom = 156.0
-focus_neighbor_top = NodePath("../Exit")
-focus_neighbor_bottom = NodePath("../Confirm")
+focus_neighbor_left = NodePath("../Callibrate Offset")
+focus_neighbor_right = NodePath("../Exit")
+focus_neighbor_bottom = NodePath("../ScrollSpeedSlider")
 theme_override_fonts/font = ExtResource("2_ds7ha")
 theme_override_font_sizes/font_size = 42
 theme_override_styles/normal = ExtResource("4_tvu6k")
@@ -111,7 +116,9 @@ offset_left = 272.0
 offset_top = 475.0
 offset_right = 488.0
 offset_bottom = 547.0
-focus_neighbor_top = NodePath("../Cancel")
+focus_neighbor_left = NodePath("../Callibrate Offset")
+focus_neighbor_top = NodePath("../GameVolumeSlider")
+focus_neighbor_right = NodePath("../Cancel")
 theme_override_fonts/font = ExtResource("2_ds7ha")
 theme_override_font_sizes/font_size = 42
 theme_override_styles/normal = ExtResource("4_tvu6k")
@@ -123,6 +130,7 @@ offset_left = 841.834
 offset_top = 89.3983
 offset_right = 1031.83
 offset_bottom = 152.398
+focus_neighbor_left = NodePath("../Recreate Settings File")
 focus_neighbor_bottom = NodePath("../Cancel")
 theme_override_fonts/font = ExtResource("2_ds7ha")
 theme_override_font_sizes/font_size = 42
@@ -132,7 +140,7 @@ text = "Exit"
 [connection signal="value_changed" from="GameVolumeSlider" to="." method="_on_value_changed"]
 [connection signal="value_changed" from="ScrollSpeedSlider" to="." method="_on_scroll_speed_slider_value_changed"]
 [connection signal="pressed" from="Cancel" to="." method="_on_cancel_pressed"]
-[connection signal="pressed" from="Cancel2" to="." method="offset_pressed"]
-[connection signal="pressed" from="Cancel3" to="." method="recreate_pressed"]
+[connection signal="pressed" from="Callibrate Offset" to="." method="offset_pressed"]
+[connection signal="pressed" from="Recreate Settings File" to="." method="recreate_pressed"]
 [connection signal="pressed" from="Confirm" to="." method="_on_confirm_pressed"]
 [connection signal="pressed" from="Exit" to="." method="_on_exit_pressed"]

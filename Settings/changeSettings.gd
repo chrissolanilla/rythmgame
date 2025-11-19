@@ -6,8 +6,10 @@ extends Control
 @onready var Confirm: Button = $Confirm
 @onready var slider: HSlider = $GameVolumeSlider
 @onready var ScrollSpeedSlider: HSlider = $ScrollSpeedSlider
-@onready var RichTextLabelVol: RichTextLabel = $RichTextLabel
-@onready var RichTextLabelSpeed: RichTextLabel = $RichTextLabel2
+@onready var game_volume: RichTextLabel = $"Game Volume"
+@onready var scoll_speed: RichTextLabel = $"Scoll Speed"
+
+
 
 # ----------------------------
 # Lifecycle
@@ -74,10 +76,10 @@ func _on_scroll_speed_slider_value_changed(value: float) -> void:
 # Helper UI updates
 # ----------------------------
 func _update_volume_label(value: float) -> void:
-	RichTextLabelVol.text = "[b][color=green]Game Volume[/color][/b]: %d" % int(value)
+	game_volume.text = "[b][color=green]Game Volume[/color][/b]: %d" % int(value)
 
 func _update_scroll_label(value: float) -> void:
-	RichTextLabelSpeed.text = "[b][color=green]Scroll Speed[/color][/b]: %d" % int(value)
+	scoll_speed.text = "[b][color=green]Scroll Speed[/color][/b]: %d" % int(value)
 
 # ----------------------------
 # Offset button
