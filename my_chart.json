@@ -1,138 +1,283 @@
 [
 	{
-		"direction": "center",
-		"time": 4.125,
+		"direction": "downRight",
+		"time": 8.0,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
-		"end_Time": 9.125,
-		"time": 8.125,
+		"direction": "right",
+		"time": 8.25,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
-		"time": 9.625,
+		"direction": "upRight",
+		"time": 8.5,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
-		"time": 11.5,
+		"direction": "up",
+		"time": 8.75,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
-		"time": 13.375,
+		"direction": "down",
+		"time": 9.0,
 		"type": "arrow"
 	},
 	{
-		"direction": "center",
-		"time": 15.125,
+		"direction": "upLeft",
+		"time": 9.25,
 		"type": "arrow"
 	},
 	{
 		"direction": "left",
-		"end_Time": 18.625,
-		"time": 17.625,
+		"time": 9.5,
 		"type": "arrow"
 	},
 	{
-		"countdown": 5.0,
-		"points": 10,
-		"pose": "Point Up Pose (L)",
-		"time": 20.6825399398804,
-		"type": "pose",
-		"window": 0.25
+		"direction": "downLeft",
+		"time": 9.75,
+		"type": "arrow"
 	},
 	{
 		"direction": "right",
-		"end_Time": 23.25,
-		"time": 22.25,
-		"type": "arrow"
-	},
-	{
-		"countdown": 5.0,
-		"points": 10,
-		"pose": "Point Up Pose (R)",
-		"time": 28.0840816497803,
-		"type": "pose",
-		"window": 0.25
-	},
-	{
-		"countdown": 5.0,
-		"points": 10,
-		"pose": "Samurai Pose",
-		"time": 36.0340137481689,
-		"type": "pose",
-		"window": 0.25
-	},
-	{
-		"countdown": 5.0,
-		"points": 10,
-		"pose": "Stop Pose",
-		"time": 39.3999099731445,
-		"type": "pose",
-		"window": 0.25
-	},
-	{
-		"direction": "center",
-		"time": 32.625,
+		"time": 10.0,
 		"type": "arrow"
 	},
 	{
 		"direction": "center",
-		"time": 34.375,
+		"time": 10.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "down",
+		"time": 10.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 10.75,
 		"type": "arrow"
 	},
 	{
 		"direction": "downRight",
-		"time": 41.125,
+		"time": 11.0,
 		"type": "arrow"
 	},
 	{
-		"countdown": 5.0,
-		"points": 10,
-		"pose": "What? Pose",
-		"time": 49.3042182922363,
-		"type": "pose",
-		"window": 0.25
+		"direction": "downLeft",
+		"time": 11.25,
+		"type": "arrow"
 	},
 	{
-		"countdown": 5.0,
-		"points": 10,
-		"pose": "Muscle Man Pose",
-		"time": 58.8073463439941,
-		"type": "pose",
-		"window": 0.25
+		"direction": "upLeft",
+		"time": 11.5,
+		"type": "arrow"
 	},
 	{
-		"countdown": 5.0,
-		"points": 10,
-		"pose": "What? Pose",
-		"time": 68.8860778808594,
-		"type": "pose",
-		"window": 0.25
+		"direction": "down",
+		"time": 11.75,
+		"type": "arrow"
 	},
 	{
-		"countdown": 5.0,
-		"points": 10,
-		"pose": "Tough Guy Pose",
-		"time": 75.8172340393066,
-		"type": "pose",
-		"window": 0.25
+		"direction": "right",
+		"time": 12.0,
+		"type": "arrow"
 	},
 	{
-		"countdown": 5.0,
-		"points": 10,
-		"pose": "Stop Pose",
-		"time": 89.8600463867188,
-		"type": "pose",
-		"window": 0.25
+		"direction": "upRight",
+		"time": 12.25,
+		"type": "arrow"
 	},
 	{
 		"direction": "center",
-		"end_Time": 63.625,
-		"time": 62.625,
+		"end_Time": 13.5,
+		"time": 12.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "upLeft",
+		"time": 12.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "down",
+		"time": 13.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 14.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "up",
+		"time": 14.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "upRight",
+		"time": 15.625,
+		"type": "arrow"
+	},
+	{
+		"direction": "right",
+		"time": 16.375,
+		"type": "arrow"
+	},
+	{
+		"direction": "downLeft",
+		"time": 17.0,
+		"type": "arrow"
+	},
+	{
+		"direction": "downRight",
+		"time": 17.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 18.375,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 19.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 19.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 20.625,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 21.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 22.0,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 22.625,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 23.0,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 23.375,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 23.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 24.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 24.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 25.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 25.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 25.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 26.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 26.625,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 26.875,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 27.5,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 28.25,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 28.625,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 29.0,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 29.375,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 29.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 30.375,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 31.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 31.75,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 32.125,
+		"type": "arrow"
+	},
+	{
+		"direction": "center",
+		"time": 32.5,
 		"type": "arrow"
 	}
 ]

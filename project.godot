@@ -31,10 +31,6 @@ window/vsync/vsync_mode=0
 
 version_control/autoload_on_startup=true
 
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/godot-vim/plugin.cfg")
-
 [global_group]
 
 themed_Buttons=""

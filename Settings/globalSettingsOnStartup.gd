@@ -106,6 +106,13 @@ func _get_default_songs() -> Array:
 			"video": "res://mp3files/rockerfellerStreet.ogv",
 			"audio": "res://mp3files/ENG - Getter Jaani - AUDIO - Rockefeller Street ~ Nightcore Vers.mp3",
 			"charts": {"Impossible": "res://MapsJson/rockafellerstreetfinal.json"}
+		},
+		{
+			"name": "Charlie Kirk Tagalog Nightcore",
+			"image": "res://art/rockerFellerStreet.jpg",
+			"video": "res://mp3files/rockerfellerStreet.ogv",
+			"audio": "res://mp3files/tagalogCharlie.mp3",
+			"charts": {"Medium": "res://charlie.json"}
 		}
 	]
 
